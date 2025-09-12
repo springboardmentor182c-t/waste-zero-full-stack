@@ -1,1 +1,0 @@
-# waste-zero-full-stack
