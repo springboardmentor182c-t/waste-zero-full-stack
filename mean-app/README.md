@@ -1,27 +1,28 @@
 # waste-zero-full-stack
 WasteZero Project - Milestone 1 API List
 
-Authentication APIs
-Endpoint               Method      Request Body
-/api/auth/register      POST        {name,email,password,role,skills,
+Authentication APIs:
+Endpoint               Method      Request Body:
+1)./api/auth/register      POST        {name,email,password,role,skills,
                                     location,bio}   
-/api/auth/login         POST        {email,password}
+2)./api/auth/login         POST        {email,password}
 /api/auth/logout        POST           ---
 
-User Profile APIs
-Endpoint                Method       Request Body
-/api/users/:id           GET            ---
+User Profile APIs:
+Endpoint                Method       Request Body:
+1)./api/users/:id           GET            ---
                                        
-/api/users               GET             ---
+2)./api/users               GET             ---
 
-/api/users           POST       {name,skills,location,bio
+3)./api/users           POST       {name,skills,location,bio
                                    password?},(updates profile of
                                     user with id)
                                       
-/api/users/:id           PUT       {name,skills,location,bio
+4)./api/users/:id           PUT       {name,skills,    
+                                     location, bio
                                    password?},(updates profile of
                                     user with id)
 
-/api/users/:id           DELETE           ---
+5)./api/users/:id           DELETE           ---
                                    
                                 
