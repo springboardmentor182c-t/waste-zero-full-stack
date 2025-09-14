@@ -1,4 +1,4 @@
-# waste-zero-full-stack
+## waste-zero-full-stack
 Wastezero folder Structure
 ├── frontend/ # Angular project
 ├── backend/ # Node.js/Express API
