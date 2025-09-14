@@ -1,4 +1,5 @@
 ## waste-zero-full-stack
+This project is a full-stack web application for waste management, including frontend, backend, and admin features.
 Wastezero folder Structure
 ├── frontend/ # Angular project
 ├── backend/ # Node.js/Express API
