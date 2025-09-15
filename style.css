@@ -1,0 +1,354 @@
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #fafbfc;
+    margin: 0;
+    color: #222;
+}
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    width: 250px;
+    background: #81c784;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+     justify-content: flex-start;                           
+    padding: 0 0 20px 0;
+    min-width: 220px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.3em;
+    padding: 24px 24px 0 24px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px 0 24px;
+    margin-bottom: 32px; 
+}
+.avatar {
+    background: #e0e7ef;
+    color: #3a4a6b;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+.username {
+    font-weight: 600;
+}
+.role {
+    font-size: 0.9em;
+    color: #414342;
+}
+nav ul {
+    list-style: none;
+    padding: 0 0 0 24px;
+    margin: 0;
+}
+nav ul li {
+    padding: 10px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    transition: bg 0.2s;
+}
+nav ul li.active, nav ul li:hover {
+    background: #f0f4fa;
+}
+.settings-title {
+    font-size: 0.8em;
+    color: #aaa;
+    margin: 20px 0 0 24px;
+    letter-spacing: 1px;
+}
+.bottom-bar {
+    padding: 0 24px;
+}
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.signout-btn {
+    width: 100%;
+    padding: 8px 0;
+    background: #f5f6fa;
+    border: none;
+    border-radius: 6px;
+    color: #3a4a6b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: bg 0.2s;
+}
+.signout-btn:hover {
+    background: #e0e7ef;
+}
+main {
+    flex: 1;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+     min-height: 100vh;
+}
+header {
+    width: 100%;
+    max-width: 700px; /* Same as .profile-section */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 0 0 0;
+    box-sizing: border-box;
+    
+}
+.search-bar {
+    width: 320px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #e0e7ef;
+    font-size: 1em;
+   
+}
+.header-icons {
+    display: flex;
+    align-items: left;
+    gap:18px;
+}
+.bell {
+    font-size: 1.3em;
+    cursor: pointer;
+}
+.user-initial {
+    background: #e0e7ef;
+    color: #3a4a6b;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1em;
+}
+.profile-section {
+   background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 40px 32px;
+    margin-top: 40px;
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile-section h2,.profile-section h3 {
+   text-align: center;
+    margin-top: 0;
+}
+.subtitle {
+    color: #292424;
+    margin-bottom: 24px;
+    font-size: 20px;
+}
+.tab-buttons {
+   display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    justify-content: center;
+    width: 100%;
+}
+.tab-buttons button {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 6px 6px 0 0;
+    background: #f5f6fa;
+    color: #3a4a6b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: bg 0.2s;
+}
+.tab-buttons button.active {
+    background: #43a047;           
+    color: #fff;                   
+    border-bottom: 2px solid #388e3c;
+}
+.tab-content {
+    display: none;
+      width: 100%;
+}
+.tab-content.active {
+    display: block;
+  
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+form label {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+form input {
+    padding: 8px 12px;
+    border: 1px solid #e0e7ef;
+    border-radius: 6px;
+    font-size: 1em;
+    background: #f5f6fa;
+}
+form small {
+    color: #110b0b;
+    margin-bottom: 8px;
+}
+
+.save-btn{
+    margin-top: 12px;
+    padding: 10px 0;
+    background: #057512;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: bg 0.2s;
+}
+.change-btn {
+    margin-top: 12px;
+    padding: 10px 0;
+    background: #057512;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: bg 0.2s;
+}
+.change-btn:hover {
+    background: #18af04;
+}
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+    main {
+        padding: 0 10px;
+    }
+    .profile-section {
+        padding: 16px;
+          min-height: 100vh;
+        border-radius: 0;
+    }
+}
+.logo {
+    display: flex;
+    align-items: center;   /* Vertically center items */
+    gap: 10px;             /* Space between logo and text */
+    font-weight: 600;
+    font-size: 1.3em;
+    padding: 24px 24px 0 24px;
+}
+.logo img {
+    width: 32px;           
+    object-fit: contain;   /* Keep aspect ratio */
+}.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.3em;
+    padding: 24px 24px 0 24px;
+}
+
+.logo img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    display: block;
+}
+form select {
+    padding: 8px 12px;
+    border: 1px solid #e0e7ef;
+    border-radius: 6px;
+    font-size: 1em;
+    background: #f5f6fa;
+    appearance: none; 
+}
+
+body {
+    background: url("../assets/zero-waste(background).jpg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Inter', Arial, sans-serif;
+    margin: 0;
+    color: #222;
+   
+}
+.profile-section input[type="Bio"] {
+    min-height: 60px;
+}
+.profile-section small {
+    color: #888;
+    margin-bottom: 8px;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(72, 71, 71, 0.45);  
+    z-index: 0;
+    pointer-events: none;
+    
+}
+.container, .sidebar, main, .profile-section {
+    position: relative;
+    z-index: 1;
+}
+h2{
+    color: #09580d;
+    font-size: 2.5rem;   /* Increase this value for even bigger text */
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+form label {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #1e2e1f; /
+}
+form .info-text {
+    color: #101210 !important; 
+    font-size: 0.95em;
+}
+.logo span {
+    font-size: 1.5rem;           
+font-family: 'Inter', Arial, sans-serif;
+    font-weight: 800;          
+    letter-spacing: 2px;       
+    color:#222;            
+    text-transform: uppercase; 
+}

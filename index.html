@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WasteZero-My Profile</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">        
+            <div class="logo">
+                <img src="assets/recycle_bin_logo.jpeg"  />
+                <span>WasteZero</span>
+            </div>
+            <div class="user-info">
+                <div class="avatar">S</div>
+                <div>
+                    <div class="username">Samiksha</div>
+                    <div class="role">Admin</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><span class="icon">🏠</span> Dashboard</li>
+                    <li><span class="icon">📦</span> Schedule Pickup</li>
+                    <li><span class="icon">💡</span> Opportunities</li>
+                    <li><span class="icon">💬</span> Messages</li>
+                    <li><span class="icon">🌱</span> My Impact</li>
+                </ul>
+                <div class="settings-title">SETTINGS</div>
+                <ul>
+                    <li class="active"><span class="icon">👤</span> My Profile</li>
+                    <li><span class="icon">⚙️</span> Settings</li>
+                    <li><span class="icon">❓</span> Help & Support</li>
+                    <li><span class="icon">🛠️</span> Admin Panel</li>
+                </ul>
+            </nav>
+            <div class="bottom-bar">
+                <div class="dark-mode-toggle">
+                    <span>Dark Mode</span>
+                    <input type="checkbox" id="darkModeSwitch">
+                </div>
+                <button class="signout-btn">Sign Out</button>
+            </div>
+        </aside>
+
+        <main>
+            <header>
+                <input type="text" placeholder="Search pickups, opportunities..." class="search-bar">
+                <div class="header-icons">
+                    <span class="bell">🔔</span>
+                    <span class="user-initial">S</span>
+                </div>                
+            </header>
+            <section class="profile-section">
+                <h2>My Profile</h2>
+                <p class="subtitle">Manage your account information and settings</p>
+                <div class="tab-buttons">
+                    <button id="profileTab" class="active">Profile</button>
+                    <button id="passwordTab">Password</button>
+                </div>
+                <div id="profileContent" class="tab-content active">
+                    <h3>Personal Information</h3>
+                    <form>
+                        <label>Full Name</label>
+                        <input type="text" value="" required>
+                        <label>Email</label>
+                        <input type="email" value="" required>
+                        <label>Location</label>
+                        <select required>
+                          <option value="" disabled selected>Select your location</option>
+                          <option value="mumbai">Mumbai</option>
+                         <option value="pune">Pune</option>
+                         <option value="delhi">Delhi</option>
+                         <option value="bangalore">Bangalore</option>
+                         <option value="hyderabad">Hyderabad</option>
+                          <option value="chennai">Chennai</option>
+                         <option value="kolkata">Kolkata</option>
+                         <option value="other">Other</option>
+                          </select>
+                        <label>Skills</label>
+                        <input type="text" value="" required>
+                        <small class="info-text">This helps match you with nearby opportunities.</small>
+                        <label>Bio</label>
+                        <input type="Bio" value="" required>
+                        <button type="Save Changes" class="save-btn">Save Changes </button>
+                        
+                    </form>
+                </div>
+                <div id="passwordContent" class="tab-content">
+                    <h3>Change Password</h3>
+                    <form id="passwordForm">
+                        <label>Current Password</label>
+                        <input type="password" required>
+                        <label>New Password</label>
+                        <input type="password" minlength="6" required>
+                        <small class="info-text">Password must be at least 6 characters long.</small>
+                        <label>Confirm New Password</label>
+                        <input type="password" minlength="6" required>
+                        <button type="submit" class="change-btn">Change Password</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+       
+    
+    <script src="scripts/main.js"></script>
+</body>
+</html>
