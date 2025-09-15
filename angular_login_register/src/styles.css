@@ -1,0 +1,27 @@
+/* Simple styles for login/register */
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+body, html, app-root { height: 100%; margin: 0; }
+.centered {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg,#f8fafc,#e6eef8);
+}
+.card {
+  background: white;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(20,20,50,0.08);
+  width: 380px;
+}
+.h1 { font-size: 20px; margin: 0 0 12px 0; }
+.form-row { margin-bottom: 12px; }
+input[type=text], input[type=password], input[type=email] {
+  width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;
+}
+button.primary {
+  width: 100%; padding: 10px; border-radius: 8px; border: none; background: #2563eb; color: white; cursor: pointer;
+}
+a.link { color: #2563eb; text-decoration: none; display: inline-block; margin-top: 8px; }
+.small { font-size: 13px; color: #666; }
