@@ -1,0 +1,35 @@
+<div class="auth-page-container">
+  <div class="auth-card">
+    <!-- Header -->
+    <div class="auth-header">
+      <img src="assets/logo.png" alt="logo" class="logo" />
+      <h2>Waste Zero</h2>
+      <p>Smart Waste Pickup & Recycling Platform</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button 
+        [class.active]="activeTab === 'login'" 
+        (click)="setActiveTab('login')">
+        Sign In
+      </button>
+      <button 
+        [class.active]="activeTab === 'register'" 
+        (click)="setActiveTab('register')">
+        Sign Up
+      </button>
+    </div>
+
+    <!-- Forms -->
+    <div class="auth-form">
+      <app-login-form *ngIf="activeTab === 'login'"></app-login-form>
+      <app-register-form *ngIf="activeTab === 'register'"></app-register-form>
+    </div>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      Together, we can make a difference for our planet 🌱
+    </div>
+  </div>
+</div>
