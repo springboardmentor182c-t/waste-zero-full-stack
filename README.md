@@ -8,7 +8,8 @@ Wastezero folder Structure
 ├── package.json # For root dependencies if needed
 ├── docker-compose.yml # Op􀆟onal: for running both apps together
 ├── .env # Environment variables
-frontend/
+
+frontend:
 ├── src/
 │ ├── app/
 │ │ ├── core/ # Services, interceptors, guards, models
@@ -26,6 +27,7 @@ frontend/
 ├── angular.json
 ├── package.json
 ├── tsconfig.json
+
 Backend Node Js:
 ├── src/
 │ ├── controllers/ # Business logic
