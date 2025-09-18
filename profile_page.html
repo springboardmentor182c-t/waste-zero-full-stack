@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WasteZero Dashboard</title>
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body class="light">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">WasteZero</div>
+    <div class="user">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Logo">
+      <div class="user-info">
+        <h4>UserProfile</h4>
+        <p>Admin</p>
+      </div>
+    </div>
+
+    <div class="menu">
+      <h5>MAIN MENU</h5>
+      <ul>
+        <li class="active">Dashboard</li>
+        <li>Schedule Pickup</li>
+        <li>Opportunities</li>
+        <li>Messages</li>
+        <li>My Impact</li>
+      </ul>
+      <h5>SETTINGS</h5>
+      <ul>
+        <li id="menu-profile">My Profile</li>
+        <li>Settings</li>
+        <li>Help & Support</li>
+        <li>Admin Panel</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="header">
+      <div class="search">
+        <input type="text" placeholder="Search pickups, opportunities...">
+      </div>
+      <button class="theme-toggle" id="themeBtn">Switch Theme</button>
+    </div>
+
+    <div class="content">
+      <!-- Dashboard loads by default -->
+      <h2>Dashboard</h2>
+      <p>Welcome to your WasteZero dashboard. Track pickups, opportunities, and your impact here.</p>
+    </div>
+  </div>
+
+  <!-- Link to JS -->
+  <script src="profile.js"></script>
+</body>
+</html>
