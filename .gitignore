@@ -8,3 +8,7 @@ dist/
 build/
 .vscode/
 *.zip
+node_modules/
+.env
+dist/
+build/
