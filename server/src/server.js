@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
-import authRoutes from "./routes/auth.js";
-import errorHandler from "./middleware/errorHandler.js";
+import authRoutes from "./api/modules/user/user.routes.js";
+import errorHandler from "./api/middleware/errorHandler.js";
 
 dotenv.config();
 const app = express();
