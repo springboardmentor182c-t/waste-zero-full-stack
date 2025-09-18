@@ -1,0 +1,142 @@
+<div class="profile-container" [class.dark-mode]="isDarkMode">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <h2>♻️ WasteZero</h2>
+    </div>
+
+    <div class="search-section">
+      <div class="search-box">
+        <input type="text" placeholder="Search pickups, opportunities..." />
+        <span class="search-icon">🔍</span>
+      </div>
+    </div>
+
+    <div class="header-nav">
+      <span class="notification-icon">🔔</span>
+      <span class="user-dropdown">A</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="user-info">
+        <div class="avatar">A</div>
+        <span>Admin User</span>
+        
+      </div>
+
+      <div class="menu-section">
+        <h4>MAIN MENU</h4>
+        <ul>
+          <li>📊 Dashboard</li>
+          <li>📅 Schedule Pickup</li>
+          <li>💼 Opportunities</li>
+          <li>💬 Messages</li>
+          <li>📈 My Impact</li>
+        </ul>
+      </div>
+
+      <div class="settings-section">
+        <h4>SETTINGS</h4>
+        <ul>
+          <li 
+            [class.active]="activeTab === 'profile'" 
+            (click)="switchTab('profile')">👤 My Profile</li>
+          <li>⚙️ Settings</li>
+          <li>❓ Help & Support</li>
+          <li>🔧 Admin Panel</li>
+        </ul>
+      </div>
+
+      <div class="theme-toggle">
+        <span>Dark Mode</span>
+        <div class="toggle-switch">
+          <input
+            type="checkbox"
+            id="theme-toggle"
+            [checked]="isDarkMode"
+            (change)="toggleTheme()" />
+          <label for="theme-toggle"></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+      <div class="profile-header">
+        <h2>My Profile</h2>
+        <p>Manage your account information and settings</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="profile-tabs">
+        <button 
+          class="tab"
+          [class.active]="activeTab === 'profile'"
+          (click)="switchTab('profile')">
+          Profile
+        </button>
+        <button 
+          class="tab"
+          [class.active]="activeTab === 'password'"
+          (click)="switchTab('password')">
+          Password
+        </button>
+      </div>
+
+      <!-- Profile Form -->
+      <div class="profile-form" *ngIf="activeTab === 'profile'">
+        <h3>Personal Information</h3>
+        <p>Update your personal information and profile details</p>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Enter your full name" />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Enter your email" />
+          <small>This is the email address used for account notifications.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" placeholder="Enter your location" />
+          <small>This helps match you with nearby opportunities.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Skills</label>
+          <input type="text" placeholder="Add your skills..." />
+        </div>
+      </div>
+
+      <!-- Password Form -->
+      <div class="profile-form" *ngIf="activeTab === 'password'">
+        <h3>Change Password</h3>
+        <p>Update your password to keep your account secure</p>
+
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" placeholder="Enter current password" />
+        </div>
+
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" placeholder="Enter new password" />
+        </div>
+
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input type="password" placeholder="Confirm new password" />
+        </div>
+
+        <button class="save-btn">Update Password</button>
+      </div>
+    </div>
+  </div>
+</div>
