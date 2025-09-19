@@ -26,6 +26,51 @@ export const registerUser = async (data) => {
   return userObj;
 };
 
+// Get user by ID
+export const getUserById = async (id) => {
+  const user = await User.findById(id).select("-password").lean();
+  if (!user) throw new Error("User not found");
+  return user;
+};
+
+// Get all users
+export const getAllUsers = async () => {
+  const users = await User.find().select("-password").lean();
+  return users;
+};
+
+// Create user (profile, not register)
+export const createUser = async (data) => {
+  const { name, skills, location, bio, password } = data;
+  let userData = { name, skills, location, bio };
+  if (password) {
+    userData.password = await bcrypt.hash(password, 10);
+  }
+  const user = await User.create(userData);
+  const userObj = user.toObject();
+  delete userObj.password;
+  return userObj;
+};
+
+// Update user profile
+export const updateUser = async (id, data) => {
+  const { name, skills, location, bio, password } = data;
+  let updateData = { name, skills, location, bio };
+  if (password) {
+    updateData.password = await bcrypt.hash(password, 10);
+  }
+  const user = await User.findByIdAndUpdate(id, updateData, { new: true }).select("-password").lean();
+  if (!user) throw new Error("User not found");
+  return user;
+};
+
+// Delete user
+export const deleteUser = async (id) => {
+  const user = await User.findByIdAndDelete(id).select("-password").lean();
+  if (!user) throw new Error("User not found");
+  return user;
+};
+
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found");
