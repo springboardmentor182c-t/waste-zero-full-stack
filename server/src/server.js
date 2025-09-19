@@ -23,19 +23,22 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// Routes
-app.use("/api/v1/auth", authRoutes);
+// Routes (auth + profile dono yahi mount honge)
+app.use("/api/v1", authRoutes);
 
 // Health Check
-app.get("/api/v1/health", (req, res) => res.json({ status: "ok", uptime: process.uptime() }));
+app.get("/api/v1/health", (req, res) =>
+  res.json({ status: "ok", uptime: process.uptime() })
+);
 
 // Error Handling
 app.use(errorHandler);
 
 // DB Connection
-mongoose.connect(process.env.DB_URI)
+mongoose
+  .connect(process.env.DB_URI)
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error("❌ DB Connection Error:", err));
+  .catch((err) => console.error("❌ DB Connection Error:", err));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
