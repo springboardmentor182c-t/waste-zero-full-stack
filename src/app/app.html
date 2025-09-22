@@ -1,0 +1,43 @@
+<div class="auth-container">
+  <div class="form-wrapper" [class.signup-active]="isSignup">
+    <!-- Login Form -->
+    <form class="form login-form">
+      <h2>Login</h2>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" placeholder="Enter your email" required />
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <p class="switch-text">
+        Don’t have an account?
+        <a (click)="isSignup = true">Sign up</a>
+      </p>
+    </form>
+
+    <!-- Signup Form -->
+    <form class="form signup-form">
+      <h2>Sign Up</h2>
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your name" required />
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" placeholder="Enter your email" required />
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" placeholder="Create a password" required />
+      </div>
+      <button type="submit" class="btn">Sign Up</button>
+      <p class="switch-text">
+        Already have an account?
+        <a (click)="isSignup = false">Login</a>
+      </p>
+    </form>
+  </div>
+</div>
