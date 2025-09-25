@@ -1,0 +1,32 @@
+<div class="background-wrapper">
+    <div class="form-wrapper">
+        <div class="form-card">
+            <h2>Edit Opportunity</h2>
+
+            <form (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input id="title" [(ngModel)]="opportunity.title" name="title" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <input id="skills" [(ngModel)]="opportunity.skills" name="skills" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input id="duration" [(ngModel)]="opportunity.duration" name="duration" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" [(ngModel)]="opportunity.description" name="description" rows="4"
+                        required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Update Opportunity</button>
+            </form>
+        </div>
+    </div>
+</div>
