@@ -1,0 +1,26 @@
+.background-wrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.background-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/assets/dummy.jpg') center/cover no-repeat;
+  filter: blur(12px) brightness(0.7);
+  z-index: 0;
+}
+
+.form-wrapper,
+.profile-card {
+  position: relative;
+  z-index: 1; /* keep form/cards above background */
+}

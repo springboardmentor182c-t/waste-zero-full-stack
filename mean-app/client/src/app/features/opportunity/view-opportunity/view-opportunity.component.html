@@ -1,0 +1,20 @@
+<div class="background-wrapper">
+    <div class="profile-card">
+        <h2>Available Opportunities</h2>
+
+        <ul class="opportunity-list">
+            <li *ngFor="let opp of opportunities" class="opportunity-item">
+                <h4>{{ opp.title }} <span class="duration">({{ opp.duration }})</span></h4>
+                <p><strong>Skills:</strong> {{ opp.skills }}</p>
+                <p>{{ opp.description }}</p>
+
+                <div class="action-buttons">
+                    <button class="edit-btn" (click)="editOpportunity(opp.id)">Edit</button>
+                    <button class="delete-btn" (click)="deleteOpportunity(opp.id)">Delete</button>
+                </div>
+            </li>
+        </ul>
+
+        <a routerLink="/opportunity/add" class="add-btn">+ Add New Opportunity</a>
+    </div>
+</div>

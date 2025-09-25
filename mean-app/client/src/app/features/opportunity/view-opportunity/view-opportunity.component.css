@@ -1,0 +1,78 @@
+@import url("../opportunity.css");
+
+.opportunity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.opportunity-item {
+  background: #fff;
+  border: 1px solid #e0f2e9;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.opportunity-item h4 {
+  margin: 0 0 8px;
+  color: #2e7d32;
+}
+
+.opportunity-item .duration {
+  color: #666;
+  font-weight: normal;
+}
+
+.opportunity-item p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.action-buttons {
+  margin-top: 12px;
+}
+
+.action-buttons button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: #125d40;
+}
+
+.delete-btn {
+  background: #d9534f;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #c9302c;
+}
+
+.add-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 18px;
+  background: #178457;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.add-btn:hover {
+  background: #125d40;
+}
