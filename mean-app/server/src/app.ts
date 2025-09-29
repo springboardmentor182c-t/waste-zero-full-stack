@@ -1,5 +1,5 @@
 import express from "express";
-import messageRoutes from "./messages/messages.routes";
+import messageRoutes from "./api/modules/messages/messages.routes";
 
 const app = express();
 
