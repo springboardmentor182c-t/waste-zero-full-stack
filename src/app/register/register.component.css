@@ -1,0 +1,20 @@
+/* Register box container */
+.register-container {
+  width: 90%; /* Increase width (default might be 70% or 80%) */
+  max-width: 1200px; /* Optional: limit max width */
+  margin: 0 auto; /* Keep it centered */
+  display: flex;
+  justify-content: space-between; /* Keep equal alignment */
+}
+
+/* Left explaining section */
+.register-left {
+  flex: 1; /* Take equal space */
+  padding: 20px;
+}
+
+/* Right register form */
+.register-right {
+  flex: 1; /* Take equal space */
+  padding: 20px;
+}
