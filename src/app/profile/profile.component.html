@@ -1,5 +1,4 @@
 <div class="profile-layout">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="logo">
       <h3>WasteZero</h3>
@@ -8,18 +7,17 @@
     <ul class="menu">
       <li><a routerLink="/dashboard">📊 Dashboard</a></li>
       <li><a routerLink="/schedule">🚚 Schedule Pickup</a></li>
-      <li><a routerLink="/opportunities">💡 Opportunities</a></li>
-      <li><a routerLink="/messages">✉️ Messages</a></li>
-      <li><a routerLink="/impact">🌍 My Impact</a></li>
+      <li><a routerLink="/opportunities">💡 Volunteer Opportunities</a></li>
+      <li><a routerLink="/messages">✉️ Inbox</a></li>
+      <li><a routerLink="/impact">🌍 My Impact Score</a></li>
     </ul>
     <div class="settings">
-      <a routerLink="/profile">⚙️ My Profile</a>
-      <a routerLink="/settings">🔧 Settings</a>
+      <a routerLink="/profile">⚙️ Profile Settings</a>
+      <a routerLink="/settings">🔧 App Preferences</a>
       <a routerLink="/help">❓ Help & Support</a>
       <a routerLink="/admin">🛠️ Admin Panel</a>
     </div>
 
-    <!-- Dark/Light Theme Toggle -->
     <div class="theme-toggle">
       <button (click)="toggleTheme()">
         {{ isDarkTheme ? '🌙 Dark Mode' : '☀️ Light Mode' }}
@@ -27,23 +25,20 @@
     </div>
   </aside>
 
-  <!-- Main Content -->
   <main class="content">
     <div class="profile-container">
-      <h2>My Profile</h2>
+      <h2>Profile Settings</h2>
 
-      <!-- Tabs -->
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab==='profile'" (click)="setActiveTab('profile')">Profile</a>
+          <a class="nav-link" [class.active]="activeTab==='profile'" (click)="setActiveTab('profile')">Update Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab==='password'" (click)="setActiveTab('password')">Password</a>
+          <a class="nav-link" [class.active]="activeTab==='password'" (click)="setActiveTab('password')">Change Password</a>
         </li>
       </ul>
 
       <div class="tab-content p-3">
-        <!-- Profile Tab -->
         <div *ngIf="activeTab==='profile'">
           <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
             <div class="form-group">
@@ -59,14 +54,13 @@
               <input class="form-control" formControlName="location" placeholder="Enter location">
             </div>
             <div class="form-group">
-              <label>Skills</label>
-              <input class="form-control" formControlName="skills" placeholder="Enter skills">
+              <label>Skills/Interests</label>
+              <input class="form-control" formControlName="skills" placeholder="e.g. Angular, Node.js, Recycling, Volunteering">
             </div>
-            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-primary" type="submit">Save Changes</button>
           </form>
         </div>
 
-        <!-- Password Tab -->
         <div *ngIf="activeTab==='password'">
           <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
             <div class="form-group">
@@ -85,7 +79,6 @@
           </form>
         </div>
 
-        <!-- Messages -->
         <div *ngIf="successMessage" class="alert alert-success mt-3">{{successMessage}}</div>
         <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{errorMessage}}</div>
       </div>

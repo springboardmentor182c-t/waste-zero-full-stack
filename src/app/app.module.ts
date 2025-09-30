@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -12,6 +13,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
+import { OpportunitiesComponent } from './opportunities/opportunities.component';
+import { CreateoppComponent } from './create-opp/createopp.component'; // add this
+import { OpportunityDetailComponent } from './opportunity-detail/opportunity-detail.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +23,12 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'opportunities', component: OpportunitiesComponent },
+  {
+  path: 'opportunities/create',
+  component: CreateoppComponent
+},
+ { path: 'opportunities/:id', component: OpportunityDetailComponent },
   { path: '**', redirectTo: '' }
 ];
 
@@ -31,6 +41,8 @@ const routes: Routes = [
     LoginComponent,
     DashboardComponent,
     ProfileComponent,
+    OpportunitiesComponent,
+    CreateoppComponent // add here
   ],
   imports: [
     BrowserModule,

@@ -9,20 +9,28 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  /* background and color inherited from .light-theme or .dark-theme in styles.css */
+  border-right: 1px solid rgba(0, 0, 0, 0.1); /* Subtle divider */
 }
 
 .sidebar .logo {
   margin-bottom: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle logo separator */
+  padding-bottom: 15px;
 }
 
-.sidebar .logo h3 {
-  margin: 0;
-  font-size: 20px;
+/* Adjust logo colors to be primary green (overridden in styles.css body classes) */
+.light-theme .sidebar .logo h3 {
+  color: var(--green-primary);
+}
+.dark-theme .sidebar .logo h3 {
+  color: var(--green-light);
 }
 
 .sidebar .logo small {
   font-size: 14px;
-  color: #bbb;
+  color: inherit; /* Use inherited color for consistency */
+  opacity: 0.8;
 }
 
 .sidebar .menu,
@@ -34,66 +42,92 @@
 
 .sidebar .menu li,
 .sidebar .settings a {
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .sidebar a {
   text-decoration: none;
   font-size: 15px;
   display: block;
-}
-
-.sidebar a:hover {
-  color: #fff;
+  padding: 8px 10px; /* Added padding for better click area */
+  border-radius: 4px;
 }
 
 /* Theme toggle button */
 .theme-toggle {
-  margin-top: auto; /* bottom-left corner */
+  margin-top: auto; /* push to bottom */
   text-align: left;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .theme-toggle button {
-  background: #444;
-  color: #fff;
+  background: var(--green-primary); /* Primary Green */
+  color: var(--text-light);
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  transition: background 0.3s ease;
 }
 
 .theme-toggle button:hover {
-  background: #555;
+  background: var(--green-dark); /* Darker green on hover */
 }
 
 /* Content */
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 40px; /* Increased padding */
 }
 
 .profile-container {
-  max-width: 700px;
+  max-width: 900px; /* Increased max width */
   margin: 0 auto;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 30px; /* Increased padding */
+  border-radius: 10px; /* Smoother corners */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* Lighter shadow */
+  /* background and color inherited from .light-theme or .dark-theme in styles.css */
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 h2 {
-  margin-bottom: 20px;
-  text-align: center;
+  margin-bottom: 25px;
+  text-align: left; /* Aligned left for cleaner layout */
+  color: var(--green-dark); /* Dark Green Heading */
 }
 
+/* Custom tab styles for green theme */
 .nav-tabs .nav-link {
   cursor: pointer;
+  color: var(--text-dark); /* Default tab link text color */
+  border: none;
+  background-color: transparent;
+  margin-right: 5px;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--green-primary); /* Active tab text color */
+  border-bottom: 3px solid var(--green-primary); /* Green underline for active tab */
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.tab-content {
+  padding-top: 20px !important;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 button {
-  min-width: 120px;
+  min-width: 150px;
+  font-weight: bold;
 }

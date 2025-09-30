@@ -3,10 +3,9 @@
   <div class="container">
     <div class="row">
       
-      <!-- Left side box (Benefits) -->
       <div class="col-md-6 d-flex align-items-center">
-        <div class="p-4 bg-white rounded shadow-sm w-100">
-          <h4 class="text-center text-primary">Why Join WasteZero?</h4>
+        <div class="p-4 rounded shadow-sm w-100" style="background-color: var(--bg-secondary-light); color: var(--green-dark);">
+          <h4 class="text-center text-primary" style="color: var(--green-dark) !important;">Why Join WasteZero?</h4>
           <ul class="mt-3">
             <li>Schedule pickups easily</li>
             <li>Track your environmental impact</li>
@@ -16,15 +15,13 @@
         </div>
       </div>
 
-      <!-- Register Form -->
       <div class="col-md-6 register-sec">
       
 
         <h2 class="text-center">Create a new account</h2>
 
         <form class="register-form" action="" #f="ngForm" novalidate (ngSubmit)="f.form.valid&&onSubmit()">
-          <!-- Username -->
-<div class="form-group">
+          <div class="form-group">
   <label class="text-uppercase">Username</label>
   <input type="text" class="form-control" name="username" [(ngModel)]="formdata.username" #username="ngModel" required minlength="3">
   <span class="text-danger" *ngIf="this.submit && username.errors?.['required']">Username is required.</span>
@@ -33,28 +30,24 @@
 
 
           
-          <!-- Full Name -->
           <div class="form-group">
             <label class="text-uppercase">Full Name</label>
             <input type="text" class="form-control" name="name" [(ngModel)]="formdata.name" #name="ngModel" required>
             <span class="text-danger" *ngIf="this.submit&&name.errors?.['required']">Full Name is required.</span>
           </div>
 
-          <!-- Email -->
           <div class="form-group">
             <label class="text-uppercase">Email</label>
             <input type="email" class="form-control" name="email" [(ngModel)]="formdata.email" #email="ngModel" required>
             <span class="text-danger" *ngIf="this.submit&&email.errors?.['required']">Email is required.</span>
           </div>
 
-          <!-- Phone Number -->
           <div class="form-group">
             <label class="text-uppercase">Phone Number</label>
             <input type="text" class="form-control" name="phone" [(ngModel)]="formdata.phone" #phone="ngModel" required>
             <span class="text-danger" *ngIf="this.submit&&phone.errors?.['required']">Phone Number is required.</span>
           </div>
 
-          <!-- Role -->
           <div class="form-group">
             <label class="text-uppercase">Role</label>
             <select class="form-control" name="role" [(ngModel)]="formdata.role" #role="ngModel" required>
@@ -66,28 +59,24 @@
             <span class="text-danger" *ngIf="this.submit&&role.errors?.['required']">Role is required.</span>
           </div>
 
-          <!-- Full Address -->
           <div class="form-group">
             <label class="text-uppercase">Full Address</label>
             <textarea class="form-control" name="address" [(ngModel)]="formdata.address" #address="ngModel" required></textarea>
             <span class="text-danger" *ngIf="this.submit&&address.errors?.['required']">Address is required.</span>
           </div>
 
-          <!-- City -->
           <div class="form-group">
             <label class="text-uppercase">City</label>
             <input type="text" class="form-control" name="city" [(ngModel)]="formdata.city" #city="ngModel" required>
             <span class="text-danger" *ngIf="this.submit&&city.errors?.['required']">City is required.</span>
           </div>
 
-          <!-- Pincode -->
           <div class="form-group">
             <label class="text-uppercase">Pincode</label>
             <input type="text" class="form-control" name="pincode" [(ngModel)]="formdata.pincode" #pincode="ngModel" required>
             <span class="text-danger" *ngIf="this.submit&&pincode.errors?.['required']">Pincode is required.</span>
           </div>
 
-          <!-- Password -->
           <div class="form-group">
             <label class="text-uppercase">Password</label>
             <input type="password" class="form-control" name="password" [(ngModel)]="formdata.password" #password="ngModel" required minlength="8">
@@ -95,7 +84,6 @@
             <span class="text-danger" *ngIf="this.submit&&password.errors?.['minlength']">Minimum length is 8 characters.</span>
           </div>
 
-          <!-- Confirm Password -->
           <div class="form-group">
             <label class="text-uppercase">Confirm Password</label>
             <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="formdata.confirmPassword" #confirmPassword="ngModel" required>
@@ -103,19 +91,16 @@
             <span class="text-danger" *ngIf="this.submit && formdata.password !== formdata.confirmPassword">Passwords do not match.</span>
           </div>
 
-          <!-- Terms and Conditions -->
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="terms" [(ngModel)]="formdata.terms" name="terms" required>
-            <label class="form-check-label" for="terms">I agree to the Terms and Conditions</label>
+            <label class="form-check-label" for="terms">I agree to the <a href="javascript:void(0);" class="text-primary">Terms and Conditions</a></label>
             <span class="text-danger" *ngIf="this.submit && !formdata.terms">You must accept the terms.</span>
           </div>
 
-          <!-- Quote -->
           <div class="form-group text-center mt-3">
-            <blockquote class="text-muted">"Together, we can make a difference for our planet 🌱"</blockquote>
+            <blockquote class="text-primary">"Together, we can make a difference for our planet 🌱"</blockquote>
           </div>
 
-          <!-- Error + Loader + Submit -->
           <div class="form-group">
             <span class="text-danger" *ngIf="this.errorMessage">
               <p [innerText]="this.errorMessage"></p>
@@ -130,7 +115,7 @@
 
           <div class="clearfix"></div>
           <div class="form-group">
-            Already have account ? Please <a href="javascript:void(0);" routerLink="/login">Login</a>
+            Already have account ? Please <a href="javascript:void(0);" routerLink="/login" class="text-primary">Login</a>
           </div>
 
         </form>

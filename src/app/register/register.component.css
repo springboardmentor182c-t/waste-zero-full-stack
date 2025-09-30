@@ -11,10 +11,34 @@
 .register-left {
   flex: 1; /* Take equal space */
   padding: 20px;
+  /* Relying on inline style in HTML and global CSS for theme */
 }
 
 /* Right register form */
 .register-right {
   flex: 1; /* Take equal space */
   padding: 20px;
+}
+
+/* Added container styling from login, adjusted for register padding */
+.register-block .container{
+  padding : 50px 0;
+}
+
+.register-sec{
+  padding: 50px 30px; 
+  position:relative;
+}
+
+/* Apply button style to btn-login which is used in register form (Overridden in global CSS as well, but kept here for specificity if needed) */
+.register-sec .btn-login {
+  background: var(--green-primary);
+  color: var(--text-light);
+  font-weight: 600;
+  border: none;
+  transition: background 0.3s ease;
+}
+
+.register-sec .btn-login:hover {
+  background: var(--green-dark);
 }

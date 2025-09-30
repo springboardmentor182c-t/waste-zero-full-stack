@@ -9,3 +9,5 @@ Run `npm install` for installing packages for the project
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+# waste-zero-full-stack
+

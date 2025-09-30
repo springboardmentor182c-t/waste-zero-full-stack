@@ -6,7 +6,6 @@
               <h2 class="text-center">WASTEZERO</h2>
               <form class="login-form" action="" #f="ngForm" novalidate (ngSubmit)="f.form.valid&&onSubmit()" >
               
-              <!-- Username field -->
               <div class="form-group">
                   <label for="username" class="text-uppercase">Username</label>
                   <input type="text"  class="form-control" name="username"  id="username" placeholder="username" [(ngModel)]="formdata.username" #username="ngModel" required>
@@ -15,7 +14,6 @@
                   </span>
               </div>
 
-              <!-- Password field -->
               <div class="form-group">
                   <label for="password" class="text-uppercase">Password</label>
                   <input  class="form-control" type="password"  name="password" placeholder="password" id="password" [(ngModel)]="formdata.password" #password="ngModel" required >
@@ -24,18 +22,16 @@
                   </span>
               </div>
 
-              <!-- Remember Me + Forgot Password -->
               <div class="form-group d-flex justify-content-between align-items-center">
                   <div class="form-check">
                       <input class="form-check-input" type="checkbox" id="rememberMe" [(ngModel)]="formdata.rememberMe" name="rememberMe">
                       <label class="form-check-label" for="rememberMe">Remember Me</label>
                   </div>
                   <div>
-                      <a href="javascript:void(0);" routerLink="/forgot-password">Forgot Password?</a>
+                      <a href="javascript:void(0);" routerLink="/forgot-password" class="text-primary">Forgot Password?</a>
                   </div>
               </div>
 
-              <!-- Loader + Error + Submit -->
               <div class="form-group">
                   <div  class="text-center" *ngIf="this.loading">
                       <div class="spinner-border text-primary " role="status">
@@ -50,14 +46,12 @@
 
               <div class="clearfix"></div>
               
-              <!-- Register -->
               <div class="form-group">
-              Create new account ? Please <a  href="javascript:void(0);" routerLink="/register">Register</a>
+              Create new account ? Please <a  href="javascript:void(0);" routerLink="/register" class="text-primary">Register</a>
               </div>
 
-              <!-- Quote -->
               <div class="form-group text-center mt-3">
-                <blockquote class="text-muted">"Together we all can make a difference 🌱"</blockquote>
+                <blockquote class="text-primary">"Together we all can make a difference 🌱"</blockquote>
               </div>
 
               </form>

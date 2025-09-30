@@ -1,0 +1,45 @@
+<div class="opportunity-detail-layout">
+  <div class="opportunity-detail-main">
+    <a routerLink="/opportunities" class="back-link">&larr; Back to Opportunities</a>
+    <h1>{{ opportunity?.title }}</h1>
+    <span class="subtitle">Volunteer opportunity details</span>
+    
+
+    <!--<img *ngIf="opportunity?.imageUrl" [src]="opportunity.imageUrl" alt="Opportunity Image" class="main-image" />-->
+
+    <section class="description-section">
+      <h2>Description</h2>
+      <p>{{ opportunity?.description }}</p>
+      <p>
+        This opportunity is a great way to make an impact on your community, help the environment, and meet like-minded people!
+        All volunteers will receive instructions and materials on arrival, and work together to achieve the event’s goals.
+      </p>
+    </section>
+
+    <section class="skills-section">
+      <h2>Required Skills</h2>
+     
+      <p>
+        This opportunity is a great way to make an impact on your community, help the environment, and meet like-minded people!
+        All volunteers will receive instructions and materials on arrival, and work together to achieve the event’s goals.
+      </p>
+      <ul>
+        <li *ngFor="let skill of opportunity?.required_skills">{{ skill }}</li>
+      </ul>
+    </section>
+  </div>
+  <div class="opportunity-detail-sidebox">
+    <div class="detail-card">
+      <h2>Opportunity Details</h2>
+      <p><strong>Date:</strong> {{ opportunity?.date }}</p>
+      <p><strong>Duration:</strong> {{ opportunity?.duration }}</p>
+      <p><strong>Location:</strong> {{ opportunity?.location }}</p>
+      <p><strong>Posted By:</strong> NGO ID: {{ opportunity?.ngo_id }}</p>
+      <span class="opp-status" [class.closed]="opportunity?.status === 'Closed'">{{ opportunity?.status }}</span>
+      <div class="detail-actions">
+        <button class="btn btn-primary" (click)="editOpportunity()">Edit</button>
+        <button class="btn btn-danger" (click)="deleteOpportunity()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
