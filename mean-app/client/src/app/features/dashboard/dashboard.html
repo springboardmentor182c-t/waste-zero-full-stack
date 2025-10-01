@@ -1,14 +1,14 @@
 <header class="nav-bar">
-    <div class="company-logo">
-      <img src="assets/logo-img.png" alt="WasteZero Logo" class="logo-img" />
-      <span>WasteZero</span>
-    </div>
-    <nav class="nav-links">
-      <a href="#">HOME</a>
-      <a (click)="scrollTo('footer-about')">ABOUT</a>
-      <a (click)="scrollTo('footer-services')">SERVICES</a>
-      <a (click)="scrollTo('footer-contact')">CONTACT</a>
-    </nav>
+  <div class="company-logo">
+    <img src="assets/logo-img.png" alt="WasteZero Logo" class="logo-img" />
+    <span>WasteZero</span>
+  </div>
+  <nav class="nav-links">
+    <a href="#">HOME</a>
+    <a (click)="scrollTo('footer-about')">ABOUT</a>
+    <a (click)="scrollTo('footer-services')">SERVICES</a>
+    <a (click)="scrollTo('footer-contact')">CONTACT</a>
+  </nav>
 </header>
 <div class="dashboard-wrapper">
   <aside class="sidebar">
@@ -45,126 +45,145 @@
 
     <!-- Dynamic content -->
     <section *ngIf="activeMenu !== 'profile'" [innerHTML]="pages[activeMenu]"></section>
+    <!-- Opportunities container (embedded components) -->
+    <section *ngIf="activeMenu === 'opportunities'">
+      <!-- List -->
+      <app-opportunities *ngIf="opportunityView === 'list'" (createRequested)="setOpportunityView('create')"
+        (viewDetails)="setOpportunityView('details', $event)" (editRequested)="setOpportunityView('create', $event)">
+      </app-opportunities>
+
+      <!-- Create/Edit -->
+      <app-opportunity-form *ngIf="opportunityView === 'create'" [editId]="selectedOpportunityId"
+        (back)="setOpportunityView('list')">
+      </app-opportunity-form>
+
+      <!-- Details -->
+      <app-opportunity-detail *ngIf="opportunityView === 'details'" [id]="selectedOpportunityId"
+        (back)="setOpportunityView('list')" (editRequested)="setOpportunityView('create', $event)">
+      </app-opportunity-detail>
+    </section>
 
     <!-- Profile Section -->
     <!-- Profile Section -->
     <section class="profile-section" *ngIf="activeMenu === 'profile'">
-    <h1>My Profile</h1>
-    <p>Manage your account information and settings</p>
+      <h1>My Profile</h1>
+      <p>Manage your account information and settings</p>
 
-    <div class="tab-buttons">
+      <div class="tab-buttons">
         <button [class.active]="activeProfileTab==='profile'" (click)="setProfileTab('profile')">Profile</button>
         <button [class.active]="activeProfileTab==='password'" (click)="setProfileTab('password')">Password</button>
-    </div>
+      </div>
 
-    <div class="profile-card">
+      <div class="profile-card">
         <ng-container *ngIf="activeProfileTab==='profile'">
-        <h2>Personal Information</h2>
-        <div class="form-group">
+          <h2>Personal Information</h2>
+          <div class="form-group">
             <label>Full Name</label>
             <input type="text" [(ngModel)]="userProfile.name" placeholder="Enter your name" />
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="form-group">
             <label>Email</label>
             <input type="email" [(ngModel)]="userProfile.email" placeholder="Enter your email" />
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="form-group">
             <label>Location</label>
             <input type="text" [(ngModel)]="userProfile.location" placeholder="Enter your Location" />
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="form-group">
             <label>Skills</label>
             <input type="text" [(ngModel)]="skillsString" placeholder="Add your skills, comma separated" />
-        </div>
-        <button class="save-btn" (click)="updateProfile()">Update Profile</button>
-        <button class="save-btn" style="background:red;" (click)="deleteProfile()">Delete Profile</button>
+          </div>
+          <button class="save-btn" (click)="updateProfile()">Update Profile</button>
+          <button class="save-btn" style="background:red;" (click)="deleteProfile()">Delete Profile</button>
         </ng-container>
         <ng-container *ngIf="activeProfileTab==='password'">
-        <h2>Change Password</h2>
-        <div class="form-group">
+          <h2>Change Password</h2>
+          <div class="form-group">
             <label>Current Password</label>
             <input type="password" [(ngModel)]="passwordData.currentPassword" placeholder="Enter current password" />
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="form-group">
             <label>New Password</label>
             <input type="password" [(ngModel)]="passwordData.newPassword" placeholder="Enter new password" />
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="form-group">
             <label>Confirm New Password</label>
             <input type="password" [(ngModel)]="passwordData.confirmPassword" placeholder="Confirm new password" />
-        </div>
-        <button class="save-btn" (click)="updatePassword()">Update Password</button>
+          </div>
+          <button class="save-btn" (click)="updatePassword()">Update Password</button>
         </ng-container>
 
-    </div>
+      </div>
 
     </section>
 
 
     <section *ngIf="activeMenu === 'settings'" class="settings-section">
-    <div class="settings-form">
+      <div class="settings-form">
         <h1>Settings</h1>
         <h3>General</h3>
         <label><input type="checkbox" id="notifToggle"> Enable Notifications</label>
         <label>Language
-        <select id="languageSelect">
+          <select id="languageSelect">
             <option>English</option>
             <option>Spanish</option>
             <option>French</option>
             <option>German</option>
-        </select>
+          </select>
         </label>
         <h3>Privacy</h3>
         <label><input type="checkbox" id="profileVisibility"> Make Profile Public</label>
         <h3>Theme</h3>
         <select id="themeOption">
-        <option>Light</option>
-        <option>Dark</option>
-        <option>Auto</option>
+          <option>Light</option>
+          <option>Dark</option>
+          <option>Auto</option>
         </select>
         <h3>Data Preferences</h3>
         <button id="downloadData">Download My Data</button>
         <button id="clearCache">Clear Cache</button>
-    </div>
+      </div>
     </section>
   </main>
 </div>
 <footer class="page-footer">
-    <div class="footer-container">
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Services</a></li>
-        </ul>
-      </div>
-      <div class="footer-col" id="footer-about">
-        <h4>About Us</h4>
-        <p>
-          WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner communities through intelligent pickup scheduling and comprehensive waste management solutions.
-        </p>
-      </div>
-      <div class="footer-col" id="footer-services">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="#">Smart Pickup Scheduling</a></li>
-          <li><a href="#">Community Recycling</a></li>
-          <li><a href="#">Volunteer Coordination</a></li>
-          <li><a href="#">Waste Analytics</a></li>
-          <li><a href="#">NGO Partnerships</a></li>
-        </ul>
-      </div>
-      <div class="footer-col" id="footer-contact">
-        <h4>Contact Us</h4>
-        <p>123 AI Street, Tech City, 12345</p>
-        <div class="footer-social">
-          <a href="#" title="Facebook"><span class="footer-icon">📘</span></a>
-          <a href="#" title="Twitter"><span class="footer-icon">🐦</span></a>
-          <a href="#" title="Instagram"><span class="footer-icon">📸</span></a>
-          <a href="#" title="LinkedIn"><span class="footer-icon">💼</span></a>
-        </div>
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-about">
+      <h4>About Us</h4>
+      <p>
+        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to
+        streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner
+        communities through intelligent pickup scheduling and comprehensive waste management solutions.
+      </p>
+    </div>
+    <div class="footer-col" id="footer-services">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Smart Pickup Scheduling</a></li>
+        <li><a href="#">Community Recycling</a></li>
+        <li><a href="#">Volunteer Coordination</a></li>
+        <li><a href="#">Waste Analytics</a></li>
+        <li><a href="#">NGO Partnerships</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-contact">
+      <h4>Contact Us</h4>
+      <p>123 AI Street, Tech City, 12345</p>
+      <div class="footer-social">
+        <a href="#" title="Facebook"><span class="footer-icon">📘</span></a>
+        <a href="#" title="Twitter"><span class="footer-icon">🐦</span></a>
+        <a href="#" title="Instagram"><span class="footer-icon">📸</span></a>
+        <a href="#" title="LinkedIn"><span class="footer-icon">💼</span></a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
