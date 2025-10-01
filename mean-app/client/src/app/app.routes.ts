@@ -21,22 +21,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard')
       .then(m => m.Dashboard) 
   },
-  // 🔹 New Opportunity Routes
-  { 
-    path: 'opportunity/view', 
-    loadComponent: () => import('./features/opportunity/view-opportunity/view-opportunity')
-      .then(m => m.ViewOpportunity) 
-  },
-  { 
-    path: 'opportunity/edit/:id', 
-    loadComponent: () => import('./features/opportunity/edit-opportunity/edit-opportunity')
-      .then(m => m.EditOpportunity) 
-  },
-  { 
-    path: 'opportunity/add', 
-    loadComponent: () => import('./features/opportunity/add-opportunity/add-opportunity')
-      .then(m => m.AddOpportunity) 
-  },
   { 
     path: '**', 
     redirectTo: '' 
