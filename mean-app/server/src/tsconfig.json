@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es2019",
+    "types": ["node", "express"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true   
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
