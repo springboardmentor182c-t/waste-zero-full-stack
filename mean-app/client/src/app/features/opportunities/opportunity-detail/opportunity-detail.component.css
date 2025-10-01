@@ -1,0 +1,149 @@
+/* Light Mode Defaults */
+.opportunity-detail-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 2rem 3rem;
+  background: #fff;
+  color: #1a1a1a;
+  transition: background 0.3s, color 0.3s;
+}
+
+.opportunity-detail-main {
+  flex: 2;
+  padding-right: 2.8rem;
+}
+
+.opportunity-detail-main h1 {
+  font-weight: 700;
+  font-size: 2.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.subtitle {
+  color: #747474;
+  font-size: 1.1rem;
+  margin-bottom: 1.1rem;
+}
+
+.main-image {
+  width: 97%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 7px;
+  margin-bottom: 1.6rem;
+  border: 1px solid #e7e7e7;
+}
+
+.description-section h2,
+.skills-section h2 {
+  font-size: 1.28rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.description-section p {
+  font-size: 1.06rem;
+  margin-bottom: 1.1rem;
+}
+
+.skills-section ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.skills-section li {
+  background: #ececec;
+  border-radius: 5px;
+  padding: 5px 14px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.opportunity-detail-sidebox {
+  flex: 1;
+  min-width: 310px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.detail-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 30px 22px 22px 22px;
+  min-width: 270px;
+  margin-left: 0;
+  box-shadow: 0 2px 19px #e1e1e1a6;
+  font-size: 1.1rem;
+  position: sticky;
+  top: 2.2rem;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.detail-card h2 {
+  font-size: 1.23rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.opp-status {
+  display: inline-block;
+  margin-top: 12px;
+  background: #d7ffd7;
+  color: #149500;
+  font-weight: 600;
+  padding: 5px 18px;
+  border-radius: 17px;
+  font-size: 1.12rem;
+}
+
+.opp-status.closed {
+  color: #e73232;
+  background: #ffeaea;
+}
+
+.detail-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  background: #2186eb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-danger {
+  background: #e73232;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.back-link {
+  color: #2186eb;
+  text-decoration: none;
+  margin-bottom: 15px;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.back-link:hover { 
+  text-decoration: underline; 
+}
+

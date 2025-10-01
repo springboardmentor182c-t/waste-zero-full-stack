@@ -1,7 +1,0 @@
-@import url("../opportunity.css");
-/* Reuse styles from add-opportunity for consistency */
-@import '../add-opportunity/add-opportunity.component.css';
-
-.form-card h2 {
-  color: #178457;
-}
