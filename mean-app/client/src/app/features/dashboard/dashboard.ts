@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // <-- add this
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'; 
+import { Opportunities } from '../view-opportunities/opportunities';  // ✅ Import your Opportunities component
 
 @Component({
   selector: 'dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, Opportunities],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
