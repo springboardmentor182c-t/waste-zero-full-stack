@@ -1,0 +1,172 @@
+<header class="nav-bar">
+  <div class="company-logo">
+    <img src="assets/logo-img.png" alt="WasteZero Logo" class="logo-img" />
+    <span>WasteZero</span>
+  </div>
+  <nav class="nav-links">
+    <a href="#">HOME</a>
+    <a (click)="scrollTo('footer-about')">ABOUT</a>
+    <a (click)="scrollTo('footer-services')">SERVICES</a>
+    <a (click)="scrollTo('footer-contact')">CONTACT</a>
+  </nav>
+</header>
+
+<div class="dashboard-wrapper">
+  <aside class="sidebar">
+    <div class="profile">
+      <img src="https://i.ibb.co/PGv8ZzG/user.png" alt="User Profile" />
+      <h3>UserProfile</h3>
+    </div>
+
+    <nav class="menu">
+      <h4>Main Menu</h4>
+      <ul>
+        <li [class.active]="activeMenu === 'dashboard'" (click)="setActive('dashboard')">Dashboard</li>
+        <li [class.active]="activeMenu === 'schedule'" (click)="setActive('schedule')">Schedule Pickup</li>
+        <li [class.active]="activeMenu === 'opportunities'" (click)="setActive('opportunities')">Opportunities</li>
+        <li [class.active]="activeMenu === 'messages'" (click)="setActive('messages')">Messages</li>
+        <li [class.active]="activeMenu === 'impact'" (click)="setActive('impact')">My Impact</li>
+      </ul>
+
+      <h4>Settings</h4>
+      <ul>
+        <li [class.active]="activeMenu === 'profile'" (click)="setActive('profile')">My Profile</li>
+        <li [class.active]="activeMenu === 'settings'" (click)="setActive('settings')">Settings</li>
+        <li [class.active]="activeMenu === 'support'" (click)="setActive('support')">Help & Support</li>
+        <li [class.active]="activeMenu === 'admin'" (click)="setActive('admin')">Admin Panel</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="top-bar">
+      <input type="text" placeholder="Search pickups, opportunities..." />
+      <button class="theme-toggle" (click)="toggleTheme()">Switch Theme</button>
+    </div>
+
+    <!-- Dashboard content -->
+    <section *ngIf="activeMenu === 'dashboard'">
+      <h1>Welcome to Dashboard</h1>
+      <p>This is the main dashboard view.</p>
+    </section>
+
+    <!-- Schedule Pickup -->
+    <section *ngIf="activeMenu === 'schedule'">
+      <h1>Schedule Pickup</h1>
+      <p>Pickup scheduling content goes here...</p>
+    </section>
+
+    <!-- Opportunities -->
+    <section *ngIf="activeMenu === 'opportunities'">
+      <app-opportunities></app-opportunities>
+    </section>
+
+    <!-- Messages -->
+    <section *ngIf="activeMenu === 'messages'">
+      <h1>Messages</h1>
+      <p>Your messages will appear here.</p>
+    </section>
+
+    <!-- Impact -->
+    <section *ngIf="activeMenu === 'impact'">
+      <h1>My Impact</h1>
+      <p>Impact tracking content goes here...</p>
+    </section>
+
+    <!-- Profile Section -->
+    <section class="profile-section" *ngIf="activeMenu === 'profile'">
+      <h1>My Profile</h1>
+      <p>Manage your account information and settings</p>
+
+      <div class="tab-buttons">
+        <button [class.active]="activeProfileTab==='profile'" (click)="setProfileTab('profile')">Profile</button>
+        <button [class.active]="activeProfileTab==='password'" (click)="setProfileTab('password')">Password</button>
+      </div>
+
+      <div class="profile-card">
+        <ng-container *ngIf="activeProfileTab==='profile'">
+          <h2>Personal Information</h2>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" [(ngModel)]="userProfile.name" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="userProfile.email" placeholder="Enter your email" />
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" [(ngModel)]="userProfile.location" placeholder="Enter your Location" />
+          </div>
+          <div class="form-group">
+            <label>Skills</label>
+            <input type="text" [(ngModel)]="skillsString" placeholder="Add your skills, comma separated" />
+          </div>
+          <button class="save-btn" (click)="updateProfile()">Update Profile</button>
+          <button class="save-btn" style="background:red;" (click)="deleteProfile()">Delete Profile</button>
+        </ng-container>
+
+        <ng-container *ngIf="activeProfileTab==='password'">
+          <h2>Change Password</h2>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" [(ngModel)]="passwordData.currentPassword" placeholder="Enter current password" />
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" [(ngModel)]="passwordData.newPassword" placeholder="Enter new password" />
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" [(ngModel)]="passwordData.confirmPassword" placeholder="Confirm new password" />
+          </div>
+          <button class="save-btn" (click)="updatePassword()">Update Password</button>
+        </ng-container>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section *ngIf="activeMenu === 'settings'" class="settings-section">
+      <div class="settings-form">
+        <h1>Settings</h1>
+        <h3>General</h3>
+        <label><input type="checkbox" id="notifToggle"> Enable Notifications</label>
+        <label>Language
+          <select id="languageSelect">
+            <option>English</option>
+            <option>Spanish</option>
+            <option>French</option>
+            <option>German</option>
+          </select>
+        </label>
+        <h3>Privacy</h3>
+        <label><input type="checkbox" id="profileVisibility"> Make Profile Public</label>
+        <h3>Theme</h3>
+        <select id="themeOption">
+          <option>Light</option>
+          <option>Dark</option>
+          <option>Auto</option>
+        </select>
+        <h3>Data Preferences</h3>
+        <button id="downloadData">Download My Data</button>
+        <button id="clearCache">Clear Cache</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="page-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-about">
+      <h4>About Us</h4>
+      <p>
+        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner communities
