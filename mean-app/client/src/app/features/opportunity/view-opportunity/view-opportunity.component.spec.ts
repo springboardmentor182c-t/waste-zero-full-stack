@@ -44,5 +44,6 @@ describe('ViewOpportunityComponent', () => {
 
     const list = fixture.debugElement.query(By.css('.opportunity-list'));
     expect(list.children.length).toBe(0);
+    
 });
 });
