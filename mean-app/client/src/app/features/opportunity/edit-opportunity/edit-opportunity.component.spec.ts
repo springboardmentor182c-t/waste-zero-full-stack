@@ -59,5 +59,6 @@ describe('EditOpportunityComponent', () => {
     // onSubmit should still be called, but form invalid logic can be checked here
     expect(component.onSubmit).toHaveBeenCalled();
     expect(component.opportunity.title).toBe('');
+    
   });
 });
