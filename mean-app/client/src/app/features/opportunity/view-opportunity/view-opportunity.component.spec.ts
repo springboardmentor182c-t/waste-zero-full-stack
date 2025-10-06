@@ -19,7 +19,7 @@ describe('ViewOpportunityComponent', () => {
     component = fixture.componentInstance;
   });
 
-  //  TC_01 - Should display the list of opportunities correctly
+  //  TC_01 
   it('should display all opportunities with title, duration, skills, and description', () => {
     component.opportunities = [
       { id: 1, title: 'Web Developer', duration: '3 months', skills: 'Angular, HTML', description: 'Build frontend components' },
@@ -37,7 +37,7 @@ describe('ViewOpportunityComponent', () => {
     expect(firstItemText).toContain('Build frontend components');
   });
 
-  //TC_02 - Should show message when no opportunities are available
+  //TC_02 
   it('should display "No opportunities available" message when list is empty', () => {
     component.opportunities = [];
     fixture.detectChanges();
