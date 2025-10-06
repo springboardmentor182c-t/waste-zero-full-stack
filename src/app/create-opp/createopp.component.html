@@ -1,47 +1,83 @@
-<div class="create-opportunity-container">
-  <a routerLink="/opportunities" class="back-link">&larr; Back to Opportunities</a>
-  <h2>Create New Opportunity</h2>
-  <p>Post a volunteer opportunity for waste management and recycling</p>
-
+<div class="create-opportunity-container container mt-4">
+  <a routerLink="/opportunities" class="back-link d-block mb-3">
+    &larr; Back to Opportunities
+  </a>
+  <h2 class="mb-2">Create New Opportunity</h2>
+  <p class="text-muted mb-4">
+    Post a volunteer opportunity for waste management and recycling
+  </p>
   <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()" novalidate>
-    <fieldset>
-      <legend>Opportunity Details</legend>
-
-      <div class="form-group">
-        <label>Title</label>
-        <input formControlName="title" placeholder="E.g., Beach Cleanup Drive" class="form-control" />
+    <fieldset class="border p-3 rounded">
+      <legend class="w-auto px-2">Opportunity Details</legend>
+      <div class="form-group mb-3">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          class="form-control"
+          placeholder="E.g., Beach Cleanup Drive"
+        />
       </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea formControlName="description" placeholder="Provide details about the volunteer opportunity" rows="4" class="form-control"></textarea>
+      <div class="form-group mb-3">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          placeholder="Provide details about the volunteer opportunity"
+          rows="4"
+        ></textarea>
       </div>
-
-      <div class="form-row">
-        <div class="form-group half-width">
-          <label>Date</label>
-          <input type="date" formControlName="date" class="form-control" />
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="date">Date</label>
+          <input
+            id="date"
+            type="date"
+            formControlName="date"
+            class="form-control"
+          />
         </div>
-
-        <div class="form-group half-width">
-          <label>Duration</label>
-          <input formControlName="duration" placeholder="E.g., 2 hours, 3-4 hours" class="form-control" />
+        <div class="col-md-6 mb-3">
+          <label for="duration">Duration</label>
+          <input
+            id="duration"
+            type="text"
+            formControlName="duration"
+            class="form-control"
+            placeholder="E.g., 2 hours, 3-4 hours"
+          />
         </div>
       </div>
-
-      <div class="form-group">
-        <label>Location</label>
-        <input formControlName="location" placeholder="E.g., Ocean Beach, San Francisco" class="form-control" />
+      <div class="form-group mb-3">
+        <label for="required_skills">Required Skills (comma separated)</label>
+        <input
+          id="required_skills"
+          type="text"
+          formControlName="required_skills"
+          class="form-control"
+          placeholder="E.g., Teamwork, Physical Endurance"
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label for="location">Location</label>
+        <input
+          id="location"
+          type="text"
+          formControlName="location"
+          class="form-control"
+          placeholder="E.g., Ocean Beach, San Francisco"
+        />
       </div>
     </fieldset>
-
-    <button type="submit" class="btn btn-success">Create Opportunity</button>
+    <button type="submit" class="btn btn-success mt-3">
+      Create Opportunity
+    </button>
   </form>
-
   <div *ngIf="successMessage" class="alert alert-success mt-3">
     {{ successMessage }}
   </div>
-
   <div *ngIf="errorMessage" class="alert alert-danger mt-3">
     {{ errorMessage }}
   </div>

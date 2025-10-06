@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Opportunity {
-  id: number;
-  ngo_id: number;
-  title: string;
-  description: string;
-  required_skills: string[];
-  duration: string;
-  location: string;
-  status: string;
-}
+import { Router, Event, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { OpportunityService, Opportunity } from '../_services/opportunity.service';
 
 @Component({
   selector: 'app-opportunities',
@@ -19,45 +11,41 @@ interface Opportunity {
 export class OpportunitiesComponent implements OnInit {
   searchTerm: string = '';
   selectedStatus: string = 'All Statuses';
+  opportunities: Opportunity[] = [];
 
-  opportunities: Opportunity[] = [
-    {
-      id: 1,
-      ngo_id: 101,
-      title: "Beach Cleanup Drive",
-      description: "Join in cleaning the city beach with other volunteers.",
-      required_skills: ["Teamwork", "Physical Endurance"],
-      duration: "3 hours",
-      location: "Marina Beach, Chennai",
-      status: "Open"
-    },
-    {
-      id: 2,
-      ngo_id: 103,
-      title: "Plastic Segregation Workshop",
-      description: "Help teaching proper segregation methods for plastics.",
-      required_skills: ["Teaching", "Communication"],
-      duration: "2 hours",
-      location: "Community Hall, Bengaluru",
-      status: "Closed"
-    }
-    // Add more as required
-  ];
+  constructor(private oppService: OpportunityService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadOpportunities();
+
+    this.router.events.pipe(
+      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      if (event.url === '/opportunities') {
+        this.loadOpportunities();
+      }
+    });
+  }
+
+  loadOpportunities() {
+    this.oppService.getAllOpportunities().subscribe({
+      next: (data: Opportunity[]) => {
+        this.opportunities = data;
+      },
+      error: (err) => {
+        console.error('Error fetching opportunities:', err);
+      }
+    });
+  }
 
   get filteredOpportunities(): Opportunity[] {
     return this.opportunities.filter(
       opp =>
-        (this.selectedStatus === 'All Statuses' || opp.status.toLowerCase() === this.selectedStatus.toLowerCase())
-        && (
-          opp.title.toLowerCase().includes(this.searchTerm.toLowerCase())
-          || opp.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-          || opp.location.toLowerCase().includes(this.searchTerm.toLowerCase())
-          || opp.required_skills.some(s => s.toLowerCase().includes(this.searchTerm.toLowerCase()))
-        )
+        (this.selectedStatus === 'All Statuses' || opp.status.toLowerCase() === this.selectedStatus.toLowerCase()) &&
+        (opp.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          opp.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          opp.location.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          opp.required_skills.some(s => s.toLowerCase().includes(this.searchTerm.toLowerCase())))
     );
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

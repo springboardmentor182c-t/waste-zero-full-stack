@@ -1,19 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-interface Opportunity {
-  id: number;
-  ngo_id: number;
-  title: string;
-  description: string;
-  required_skills: string[];
-  duration: string;
-  location: string;
-  status: string;
-  date: string;
-  imageUrl?: string;
-}
+import { OpportunityService, Opportunity } from '../_services/opportunity.service';
 
 @Component({
   selector: 'app-opportunity-detail',
@@ -22,48 +9,72 @@ interface Opportunity {
 })
 export class OpportunityDetailComponent implements OnInit {
   opportunity?: Opportunity;
+  editMode = false;
+  editData: Partial<Opportunity> = {};
 
-  allOpportunities: Opportunity[] = [
-    {
-      id: 1,
-      ngo_id: 101,
-      title: "Beach Cleanup Drive",
-      description: "Join in cleaning the city beach with other volunteers. You will work in teams to help protect local wildlife and keep the shoreline clean and healthy. Snacks and drinks will be provided for all volunteers!",
-      required_skills: ["Teamwork", "Physical Endurance"],
-      duration: "3 hours",
-      location: "Marina Beach, Chennai",
-      status: "Open",
-      date: "2025-06-20",
-      imageUrl: "assets/beach-cleanup.jpg"
-    },
-    {
-      id: 2,
-      ngo_id: 103,
-      title: "Plastic Segregation Workshop",
-      description: "Help teaching proper segregation methods for plastics.",
-      required_skills: ["Teaching", "Communication"],
-      duration: "2 hours",
-      location: "Community Hall, Bengaluru",
-      status: "Closed",
-      date: "2025-07-10"
-    }
-  ];
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private oppService: OpportunityService
+  ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.opportunity = this.allOpportunities.find(o => o.id === id);
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.oppService.getOpportunityById(id).subscribe({
+          next: (data) => {
+            this.opportunity = data;
+          },
+          error: () => {
+            this.router.navigate(['/opportunities']);
+          }
+        });
+      } else {
+        this.router.navigate(['/opportunities']);
+      }
+    });
   }
 
   editOpportunity() {
-    alert('Edit functionality coming soon!');
+    if (!this.opportunity) return;
+    this.editMode = true;
+    this.editData = { ...this.opportunity, required_skills: [...(this.opportunity.required_skills || [])] };
+  }
+
+  cancelEdit() {
+    this.editMode = false;
+    this.editData = {};
+  }
+  onSkillsInput(event: string) {
+  // Converts comma separated string to array
+  this.editData.required_skills = event.split(',').map(s => s.trim()).filter(s => !!s);
+}
+
+
+  saveEdit() {
+    if (!this.opportunity) return;
+    this.oppService.updateOpportunity(this.opportunity._id, this.editData).subscribe({
+      next: () => {
+        this.oppService.getOpportunityById(this.opportunity!._id).subscribe({
+          next: updated => {
+            this.opportunity = updated;
+            this.editMode = false;
+          }
+        });
+      },
+      error: () => alert('Update failed!')
+    });
   }
 
   deleteOpportunity() {
-    if (confirm('Are you sure you want to delete this opportunity?')) {
-      alert('Opportunity deleted!');
-      this.router.navigate(['/opportunities']);
+    if (this.opportunity && confirm('Are you sure you want to delete this opportunity?')) {
+      this.oppService.deleteOpportunity(this.opportunity._id).subscribe({
+        next: () => {
+          this.router.navigate(['/opportunities']);
+        },
+        error: () => alert('Delete failed!')
+      });
     }
   }
 }
