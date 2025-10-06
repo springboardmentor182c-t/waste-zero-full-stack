@@ -21,4 +21,20 @@ describe('POST /api/opportunities', () => {
     expect(res.statusCode).toBe(400);
   });
 });
+describe('DELETE /api/opportunities/:id', () => {
+  it('should delete opportunity if NGO is owner', async () => {
+    const res = await request(app)
+      .delete('/api/opportunities/1')
+      .set('Authorization', 'Bearer valid_token');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('Opportunity deleted successfully');
+  });
+
+  it('should return 403 if user unauthorized', async () => {
+    const res = await request(app)
+      .delete('/api/opportunities/2')
+      .set('Authorization', 'Bearer invalid_token');
+    expect(res.statusCode).toBe(403);
+  });
+});
 
