@@ -1,0 +1,61 @@
+
+<section class="login-block">
+  <div class="container">
+      <div class="row ">
+          <div class="col login-sec">
+              <h2 class="text-center">WASTEZERO</h2>
+              <form class="login-form" action="" #f="ngForm" novalidate (ngSubmit)="f.form.valid&&onSubmit()" >
+              
+              <div class="form-group">
+                  <label for="username" class="text-uppercase">Username</label>
+                  <input type="text"  class="form-control" name="username"  id="username" placeholder="username" [(ngModel)]="formdata.username" #username="ngModel" required>
+                  <span class="text-danger" *ngIf="this.submit&&username.errors?.['required']" >
+                      Username is required.
+                  </span>
+              </div>
+
+              <div class="form-group">
+                  <label for="password" class="text-uppercase">Password</label>
+                  <input  class="form-control" type="password"  name="password" placeholder="password" id="password" [(ngModel)]="formdata.password" #password="ngModel" required >
+                  <span class="text-danger" *ngIf="this.submit&&password.errors?.['required']">
+                      Password is required.
+                  </span>
+              </div>
+
+              <div class="form-group d-flex justify-content-between align-items-center">
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="rememberMe" [(ngModel)]="formdata.rememberMe" name="rememberMe">
+                      <label class="form-check-label" for="rememberMe">Remember Me</label>
+                  </div>
+                  <div>
+                      <a href="javascript:void(0);" routerLink="/forgot-password" class="text-primary">Forgot Password?</a>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <div  class="text-center" *ngIf="this.loading">
+                      <div class="spinner-border text-primary " role="status">
+                      <span class="sr-only">Loading...</span>
+                      </div>
+                  </div>
+                  <span class="text-danger" *ngIf="this.errorMessage" >
+                  <p [innerText]="this.errorMessage"></p>
+                  </span>
+                  <input  type="submit" class="btn btn-login float-right" [disabled]="this.loading"  value="Login" (click)="submit=true">
+              </div>
+
+              <div class="clearfix"></div>
+              
+              <div class="form-group">
+              Create new account ? Please <a  href="javascript:void(0);" routerLink="/register" class="text-primary">Register</a>
+              </div>
+
+              <div class="form-group text-center mt-3">
+                <blockquote class="text-primary">"Together we all can make a difference 🌱"</blockquote>
+              </div>
+
+              </form>
+          </div>
+      </div>
+  </div>
+</section>

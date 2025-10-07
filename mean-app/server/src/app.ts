@@ -1,4 +1,5 @@
-import express from "express";
+import express, { Request, Response } from "express";
+
 import messageRoutes from "./api/modules/messages/messages.routes";
 
 const app = express();
