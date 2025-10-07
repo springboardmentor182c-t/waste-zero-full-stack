@@ -1,4 +1,3 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -44,6 +43,5 @@ describe('ViewOpportunityComponent', () => {
 
     const list = fixture.debugElement.query(By.css('.opportunity-list'));
     expect(list.children.length).toBe(0);
-    
-});
+    });
 });
