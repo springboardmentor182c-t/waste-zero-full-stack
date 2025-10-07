@@ -1,3 +1,7 @@
+# Unified Backend for Auth and Profile APIs
+
+This repository contains a unified backend API implementation combining authentication and profile management functionalities for the Waste Zero full stack application.
+
 This project is a full-stack web application for waste management, including frontend, backend, and admin features.
 Wastezero folder Structure
 ├── frontend/ # Angular project
