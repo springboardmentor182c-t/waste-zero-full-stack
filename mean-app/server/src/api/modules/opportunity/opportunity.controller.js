@@ -1,4 +1,4 @@
-const Opportunity = require("../models/opportunityModel");
+const Opportunity = require("./opportunity.model.js");
 
 // CREATE
 exports.createOpportunity = async (req, res) => {
