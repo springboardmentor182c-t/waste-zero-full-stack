@@ -22,6 +22,10 @@ export const routes: Routes = [
       .then(m => m.Dashboard)
   },
   {
+    path: 'post',
+    loadComponent: () => import('./features/post/post-edit/post-edit.component').then(m=>m.PostEditComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
