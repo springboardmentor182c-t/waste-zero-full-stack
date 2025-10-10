@@ -1,7 +1,7 @@
-const Opportunity = require("./opportunity.model.js");
+import Opportunity from "./opportunity.model.js";
 
 // CREATE
-exports.createOpportunity = async (req, res) => {
+export const createOpportunity = async (req, res) => {
   try {
     const opportunity = await Opportunity.create(req.body);
     res.status(201).json(opportunity);
@@ -11,7 +11,7 @@ exports.createOpportunity = async (req, res) => {
 };
 
 // READ ALL
-exports.getOpportunities = async (req, res) => {
+export const getOpportunities = async (req, res) => {
   try {
     const list = await Opportunity.find().sort({ createdAt: -1 });
     res.json(list);
@@ -21,7 +21,7 @@ exports.getOpportunities = async (req, res) => {
 };
 
 // READ ONE
-exports.getOpportunityById = async (req, res) => {
+export const getOpportunityById = async (req, res) => {
   try {
     const opportunity = await Opportunity.findById(req.params.id);
     if (!opportunity) return res.status(404).json({ message: "Not found" });
@@ -32,7 +32,7 @@ exports.getOpportunityById = async (req, res) => {
 };
 
 // UPDATE
-exports.updateOpportunity = async (req, res) => {
+export const updateOpportunity = async (req, res) => {
   try {
     const updated = await Opportunity.findByIdAndUpdate(
       req.params.id,
@@ -46,7 +46,7 @@ exports.updateOpportunity = async (req, res) => {
 };
 
 // DELETE
-exports.deleteOpportunity = async (req, res) => {
+export const deleteOpportunity = async (req, res) => {
   try {
     const deleted = await Opportunity.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ message: "Not found" });

@@ -2,13 +2,17 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'; 
-import { Opportunities } from '../view-opportunities/opportunities';  // ✅ Your view-only Opportunities component
+import { Router } from '@angular/router';
+
+// standalone components
+import { OpportunitiesComponent } from '../opportunities/opportunities.component';
+import { OpportunityDetailComponent } from '../opportunities/opportunity-detail/opportunity-detail.component';
+import { OpportunityFormComponent } from '../opportunities/opportunity-form/opportunity-form.component';
 
 @Component({
   selector: 'dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, Opportunities],
+  imports: [CommonModule, HttpClientModule, FormsModule, OpportunitiesComponent, OpportunityDetailComponent, OpportunityFormComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })

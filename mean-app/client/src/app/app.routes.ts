@@ -22,11 +22,6 @@ export const routes: Routes = [
       .then(m => m.Dashboard)
   },
   {
-    path: 'opportunities',
-    loadComponent: () => import('./features/view-opportunities/opportunities')
-      .then(m => m.Opportunities)
-  },
-  {
     path: '**',
     redirectTo: ''
   }

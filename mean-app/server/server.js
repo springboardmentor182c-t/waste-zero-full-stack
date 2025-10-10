@@ -6,7 +6,7 @@ import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import authRoutes from "./src/api/modules/user/user.routes.js";
-const opportunityRoutes = require("./src/api/modules/opportunity/opportunity.routes.js");
+import opportunityRoutes from "./src/api/modules/opportunity/opportunity.routes.js";
 import errorHandler from "./src/api/middleware/errorHandler.js";
 
 dotenv.config();

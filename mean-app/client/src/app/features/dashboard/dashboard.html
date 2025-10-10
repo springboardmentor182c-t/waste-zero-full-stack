@@ -10,7 +10,6 @@
     <a (click)="scrollTo('footer-contact')">CONTACT</a>
   </nav>
 </header>
-
 <div class="dashboard-wrapper">
   <aside class="sidebar">
     <div class="profile">
@@ -44,35 +43,27 @@
       <button class="theme-toggle" (click)="toggleTheme()">Switch Theme</button>
     </div>
 
-    <!-- Dashboard content -->
-    <section *ngIf="activeMenu === 'dashboard'">
-      <h1>Welcome to Dashboard</h1>
-      <p>This is the main dashboard view.</p>
-    </section>
-
-    <!-- Schedule Pickup -->
-    <section *ngIf="activeMenu === 'schedule'">
-      <h1>Schedule Pickup</h1>
-      <p>Pickup scheduling content goes here...</p>
-    </section>
-
-    <!-- Opportunities -->
+    <!-- Dynamic content -->
+    <section *ngIf="activeMenu !== 'profile'" [innerHTML]="pages[activeMenu]"></section>
+    <!-- Opportunities container (embedded components) -->
     <section *ngIf="activeMenu === 'opportunities'">
-      <app-opportunities></app-opportunities>
+      <!-- List -->
+      <app-opportunities *ngIf="opportunityView === 'list'" (createRequested)="setOpportunityView('create')"
+        (viewDetails)="setOpportunityView('details', $event)" (editRequested)="setOpportunityView('create', $event)">
+      </app-opportunities>
+
+      <!-- Create/Edit -->
+      <app-opportunity-form *ngIf="opportunityView === 'create'" [editId]="selectedOpportunityId"
+        (back)="setOpportunityView('list')">
+      </app-opportunity-form>
+
+      <!-- Details -->
+      <app-opportunity-detail *ngIf="opportunityView === 'details'" [id]="selectedOpportunityId"
+        (back)="setOpportunityView('list')" (editRequested)="setOpportunityView('create', $event)">
+      </app-opportunity-detail>
     </section>
 
-    <!-- Messages -->
-    <section *ngIf="activeMenu === 'messages'">
-      <h1>Messages</h1>
-      <p>Your messages will appear here.</p>
-    </section>
-
-    <!-- Impact -->
-    <section *ngIf="activeMenu === 'impact'">
-      <h1>My Impact</h1>
-      <p>Impact tracking content goes here...</p>
-    </section>
-
+    <!-- Profile Section -->
     <!-- Profile Section -->
     <section class="profile-section" *ngIf="activeMenu === 'profile'">
       <h1>My Profile</h1>
@@ -105,7 +96,6 @@
           <button class="save-btn" (click)="updateProfile()">Update Profile</button>
           <button class="save-btn" style="background:red;" (click)="deleteProfile()">Delete Profile</button>
         </ng-container>
-
         <ng-container *ngIf="activeProfileTab==='password'">
           <h2>Change Password</h2>
           <div class="form-group">
@@ -122,10 +112,12 @@
           </div>
           <button class="save-btn" (click)="updatePassword()">Update Password</button>
         </ng-container>
+
       </div>
+
     </section>
 
-    <!-- Settings Section -->
+
     <section *ngIf="activeMenu === 'settings'" class="settings-section">
       <div class="settings-form">
         <h1>Settings</h1>
@@ -154,7 +146,6 @@
     </section>
   </main>
 </div>
-
 <footer class="page-footer">
   <div class="footer-container">
     <div class="footer-col">
@@ -169,4 +160,30 @@
     <div class="footer-col" id="footer-about">
       <h4>About Us</h4>
       <p>
-        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner communities
+        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to
+        streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner
+        communities through intelligent pickup scheduling and comprehensive waste management solutions.
+      </p>
+    </div>
+    <div class="footer-col" id="footer-services">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Smart Pickup Scheduling</a></li>
+        <li><a href="#">Community Recycling</a></li>
+        <li><a href="#">Volunteer Coordination</a></li>
+        <li><a href="#">Waste Analytics</a></li>
+        <li><a href="#">NGO Partnerships</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-contact">
+      <h4>Contact Us</h4>
+      <p>123 AI Street, Tech City, 12345</p>
+      <div class="footer-social">
+        <a href="#" title="Facebook"><span class="footer-icon">📘</span></a>
+        <a href="#" title="Twitter"><span class="footer-icon">🐦</span></a>
+        <a href="#" title="Instagram"><span class="footer-icon">📸</span></a>
+        <a href="#" title="LinkedIn"><span class="footer-icon">💼</span></a>
+      </div>
+    </div>
+  </div>
+</footer>
