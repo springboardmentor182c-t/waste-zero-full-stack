@@ -1,0 +1,13 @@
+<div class="cards-container">
+  <div class="stat-card" *ngFor="let card of cards">
+    <div class="card-content">
+      <div class="icon-wrapper" [style.background-color]="card.bgColor">
+        <mat-icon [style.color]="card.color">{{card.icon}}</mat-icon>
+      </div>
+      <div class="card-info">
+        <h3 class="card-title">{{card.title}}</h3>
+        <p class="card-value">{{card.value}}</p>
+      </div>
+    </div>
+  </div>
+</div>

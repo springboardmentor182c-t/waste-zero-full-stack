@@ -1,0 +1,150 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  background: white;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 24px;
+  padding: 8px 16px;
+  width: 400px;
+}
+
+.search-bar mat-icon {
+  color: #999;
+  margin-right: 8px;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dashboard-content {
+  padding: 32px;
+}
+
+.page-title h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.page-title p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 32px 0;
+}
+
+.reports-section,
+.users-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.reports-section h2,
+.users-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.report-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.report-buttons button {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.report-buttons button:hover {
+  background-color: #f5f5f5;
+  border-color: #4CAF50;
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+.search-bar-users {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+}
+
+.search-bar-users mat-icon {
+  color: #999;
+  margin-right: 8px;
+}
+
+.search-bar-users input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.users-table {
+  min-height: 200px;
+}
+
+.no-users {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+  font-size: 14px;
+}
