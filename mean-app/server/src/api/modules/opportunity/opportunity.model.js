@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const opportunitySchema = new mongoose.Schema({
   ngo_id: Number,
@@ -12,4 +12,4 @@ const opportunitySchema = new mongoose.Schema({
   imageUrl: String
 }, { timestamps: true });
 
-module.exports = mongoose.model("Opportunity", opportunitySchema);
+export default mongoose.model("Opportunity", opportunitySchema);

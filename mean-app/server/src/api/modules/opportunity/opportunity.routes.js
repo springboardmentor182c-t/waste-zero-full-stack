@@ -1,11 +1,11 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createOpportunity,
   getOpportunities,
   getOpportunityById,
   updateOpportunity,
   deleteOpportunity
-} = require("./opportunity.controller.js");
+} from "./opportunity.controller.js";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get("/:id", getOpportunityById);
 router.put("/:id", updateOpportunity);
 router.delete("/:id", deleteOpportunity);
 
-module.exports = router;
+export default router;
