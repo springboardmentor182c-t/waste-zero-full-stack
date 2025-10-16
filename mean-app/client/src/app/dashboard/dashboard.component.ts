@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../_services/auth.service';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,27 +6,40 @@ import { AuthService } from '../_services/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  totalUsers = 0;
+  completedPickups = 0;
+  pendingPickups = 0;
+  activeOpportunities = 0;
 
-  user = { localId: "someid", displayName: "somename" };
+  // theme flag
+  isDarkTheme = false;
 
-  constructor(private auth: AuthService) {}
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    this.auth.canAccess();
+    this.setTheme();
+  }
 
-    if (this.auth.isAuthenticated()) {
-      this.auth.detail().subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            // Set user data from response
-            this.user.localId = response.data._id;
-            this.user.displayName = response.data.name || response.data.username || '';
-          }
-        },
-        error: (err) => {
-          console.error('Error fetching profile details', err);
-        }
-      });
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    this.setTheme();
+  }
+
+  setTheme() {
+    if (this.isDarkTheme) {
+      this.renderer.removeClass(document.body, 'light-theme');
+      this.renderer.addClass(document.body, 'dark-theme');
+    } else {
+      this.renderer.removeClass(document.body, 'dark-theme');
+      this.renderer.addClass(document.body, 'light-theme');
     }
+  }
+
+  onReportDownload(reportType: string) {
+    alert(`Download ${reportType} report`);
+  }
+
+  onManageUsers() {
+    alert('Manage users clicked.');
   }
 }
