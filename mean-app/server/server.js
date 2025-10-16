@@ -7,6 +7,7 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import authRoutes from "./src/api/modules/user/user.routes.js";
 import errorHandler from "./src/api/middleware/errorHandler.js";
+import dashboardRoutes from "./src/api/modules/dashboard/dashboard.routes.js";
 
 dotenv.config();
 const app = express();
@@ -105,6 +106,7 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ DB Connection Error:", err));
 
+app.use("/api/v1", dashboardRoutes);
 // -------------------- SERVER --------------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
