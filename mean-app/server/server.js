@@ -1,14 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
-import{ MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+
 import authRoutes from "./src/api/modules/user/user.routes.js";
 import opportunityRoutes from "./src/api/modules/opportunity/opportunity.routes.js";
-import errorHandler from "./src/api/middleware/errorHandler.js";
 import dashboardRoutes from "./src/api/modules/dashboard/dashboard.routes.js";
+import errorHandler from "./src/api/middleware/errorHandler.js";
+import pickupRoutes from "./src/api/modules/pickup/pickup.routes.js"; // <-- Pickup routes
 
 dotenv.config();
 const app = express();
@@ -27,7 +29,7 @@ const limiter = rateLimit({
 app.use("/api/", limiter);
 
 // -------------------- ROUTES --------------------
-// Mount user routes under /api/v1/users
+// User routes
 app.use("/api/v1", authRoutes);
 
 // Health Check
@@ -35,7 +37,14 @@ app.get("/api/v1/health", (req, res) => {
   res.json({ status: "ok", uptime: process.uptime() });
 });
 
+// Opportunity routes
 app.use("/api/opportunities", opportunityRoutes);
+
+// Pickup routes
+app.use("/api/pickup", pickupRoutes);  // <-- Added Schedule Pickup API
+
+// Dashboard routes
+app.use("/api/v1", dashboardRoutes);
 
 // -------------------- ERROR HANDLER --------------------
 app.use(errorHandler);
@@ -46,7 +55,6 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ DB Connection Error:", err));
 
-app.use("/api/v1", dashboardRoutes);
 // -------------------- SERVER --------------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
