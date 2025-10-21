@@ -1,10 +1,36 @@
 const mongoose = require("mongoose");
 
-const messageSchema = new mongoose.Schema({
-  senderId: { type: String, required: true },
-  receiverId: { type: String, required: true },
-  content: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now }
-});
+const messageSchema = new mongoose.Schema(
+  {
+    sender_id: {
+      type: String,
+      required: true,
+      index: true,
+    },
+    receiver_id: {
+      type: String,
+      required: true,
+      index: true,
+    },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+      index: true,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
+
+// Compound index for fast querying
+messageSchema.index({ sender_id: 1, receiver_id: 1, timestamp: -1 });
 
 module.exports = mongoose.model("Message", messageSchema);
