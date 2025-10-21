@@ -54,8 +54,21 @@ export class DashboardCardsComponent implements OnInit {
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
-    this.stats = this.adminService.getStats();
-    this.updateCardValues();
+    this.loadStats();
+  }
+
+  loadStats(): void {
+    this.adminService.getStats().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.stats = response.data;
+          this.updateCardValues();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading stats:', error);
+      }
+    });
   }
 
   updateCardValues() {

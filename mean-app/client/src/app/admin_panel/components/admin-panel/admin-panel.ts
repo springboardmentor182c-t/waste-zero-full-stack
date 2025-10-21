@@ -38,8 +38,21 @@ export class AdminPanelComponent implements OnInit {
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
-    this.users = this.adminService.getUsers();
-    this.filteredUsers = this.users;
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.adminService.getUsers().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.users = response.data;
+          this.filteredUsers = this.users;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+      }
+    });
   }
 
   onSearch() {
@@ -47,7 +60,21 @@ export class AdminPanelComponent implements OnInit {
   }
 
   searchUsers() {
-    this.filteredUsers = this.adminService.searchUsers(this.userSearchQuery);
+    if (!this.userSearchQuery.trim()) {
+      this.filteredUsers = this.users;
+      return;
+    }
+
+    this.adminService.searchUsers(this.userSearchQuery).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.filteredUsers = response.data;
+        }
+      },
+      error: (error) => {
+        console.error('Error searching users:', error);
+      }
+    });
   }
 
   generateReport(reportType: string) {
