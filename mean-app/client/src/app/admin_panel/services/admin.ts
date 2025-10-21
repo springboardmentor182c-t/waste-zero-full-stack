@@ -1,34 +1,54 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { User, DashboardStats } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private stats: DashboardStats = {
-    totalUsers: 0,
-    completedPickups: 0,
-    pendingPickups: 0,
-    activeOpportunities: 0
-  };
+  private apiUrl = environment.apiUrl + '/admin';
 
-  private users: User[] = [];
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
-
-  getStats(): DashboardStats {
-    return this.stats;
+  // Get Dashboard Statistics
+  getStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stats`);
   }
 
-  getUsers(): User[] {
-    return this.users;
+  // Get All Users
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users`);
   }
 
-  searchUsers(query: string): User[] {
-    if (!query) return this.users;
-    return this.users.filter(user => 
-      user.name.toLowerCase().includes(query.toLowerCase()) ||
-      user.email.toLowerCase().includes(query.toLowerCase())
-    );
+  // Search Users
+  searchUsers(query: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/search?query=${query}`);
+  }
+
+  // Get User by ID
+  getUserById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/${id}`);
+  }
+
+  // Create User
+  createUser(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users`, data);
+  }
+
+  // Update User
+  updateUser(id: string, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/users/${id}`, data);
+  }
+
+  // Delete User
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/users/${id}`);
+  }
+
+  // Get Admin Logs
+  getAdminLogs(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/logs`);
   }
 }
