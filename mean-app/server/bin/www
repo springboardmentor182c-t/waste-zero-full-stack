@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
- */
+* Module dependencies.
+  */
 var app = require('../app');
 var debug = require('debug')('yourapp:server');
 var http = require('http');
 var { Server } = require('socket.io');
-var { sendMessage } = require('../modules/message/message.controller');
+var Message = require('../modules/message/message.model');      //Use model directly
 
 /**
  * Get port from environment and store in Express.
@@ -25,24 +25,52 @@ var server = http.createServer(app);
  */
 var io = new Server(server, {
   cors: {
-    origin: '*', // change to frontend URL later
+    origin: '*',                           // Change this to your frontend URL later
     methods: ['GET', 'POST']
   }
 });
 
-// Socket.IO logic
+//SOCKET.IO logic
 io.on('connection', (socket) => {
-  console.log(' New user connected:', socket.id);
+  console.log('🟢 New user connected:', socket.id);
 
+  // User joins their own room
+  socket.on('join', (userId) => {
+    socket.join(userId);
+    console.log(`👤 User ${userId} joined their room`);
+  });
+
+  // Send + save message
   socket.on('sendMessage', async (data) => {
     try {
-      const message = await sendMessage(data);
-      io.emit('receiveMessage', message);
+      const { sender_id, receiver_id, content } = data;
+
+      if (!sender_id || !receiver_id || !content) {
+        console.log("❌ Missing fields in message data");
+        return;
+      }
+
+      // Save message to DB
+      const message = new Message({
+        sender_id,
+        receiver_id,
+        content,
+      });
+      await message.save();
+
+      // Emit message to receiver (their private room)
+      io.to(receiver_id).emit('receiveMessage', message);
+
+      // Also emit to sender for confirmation
+      io.to(sender_id).emit('messageSent', message);
+
+      console.log(`✅ Message sent from ${sender_id} to ${receiver_id}`);
     } catch (err) {
       console.error('❌ Error saving message:', err.message);
     }
   });
 
+  // When user disconnects
   socket.on('disconnect', () => {
     console.log('🔴 User disconnected:', socket.id);
   });
@@ -82,3 +110,6 @@ function onListening() {
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+//Export io instance so controllers can use it later if needed
+module.exports = io;
