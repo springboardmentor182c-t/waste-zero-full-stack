@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WasteZero — Messages</title>
+
+  <!-- Link compiled CSS (from style.scss) -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">WZ</div>
+        <div class="brand-text">
+          <div class="brand-title">WasteZero</div>
+          <div class="brand-sub">Admin</div>
+        </div>
+      </div>
+
+      <div class="profile">
+        <div class="avatar">A</div>
+        <div class="profile-info">
+          <div class="name">Admin User</div>
+          <div class="role">Admin</div>
+        </div>
+      </div>
+
+      <nav class="main-menu">
+        <ul>
+          <li class="menu-item">Dashboard</li>
+          <li class="menu-item">Schedule Pickup</li>
+          <li class="menu-item">Opportunities</li>
+          <li class="menu-item active" id="messagesMenuItem">Messages</li>
+          <li class="menu-item" id="contactsMenuItem">Contacts</li>
+          <li class="menu-item" id="archivedContactsMenuItem">Archived</li>
+          <li class="menu-item">My Impact</li>
+        </ul>
+      </nav>
+
+      <div class="settings">
+        <ul>
+          <li class="settings-item" id="profileBtn">
+            <span class="settings-icon">👤</span>
+            <span>My Profile</span>
+          </li>
+          <li class="settings-item" id="settingsBtn">
+            <span class="settings-icon">⚙️</span>
+            <span>Settings</span>
+          </li>
+          <li class="settings-item" id="helpBtn">
+            <span class="settings-icon">❓</span>
+            <span>Help & Support</span>
+          </li>
+          <li class="settings-item" id="adminBtn">
+            <span class="settings-icon">🔒</span>
+            <span>Admin Panel</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="dark-mode-toggle">
+        <label class="switch">
+          <input id="darkToggle" type="checkbox" />
+          <span class="slider"></span>
+        </label>
+        <span class="dm-label">Dark Mode</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <header class="topbar">
+        <input class="top-search" placeholder="Search pickups, opportunities..." />
+        <div class="top-actions">
+          <button class="icon">🔔</button>
+          <button class="icon">A</button>
+        </div>
+      </header>
+
+      <section class="content" id="mainContent">
+        <!-- Messages Page (default) -->
+        <div id="messagesPage">
+          <h1 class="page-title">Messages</h1>
+          <p class="page-sub">Chat with volunteers, NGOs, and waste management partners</p>
+
+          <div class="messages-layout">
+            <!-- conversation list -->
+            <aside class="convo-list">
+              <div class="search-box">
+                <input id="convoSearch" placeholder="Search messages..." />
+              </div>
+              <div class="convo-actions">
+                <button id="newContactBtn" class="action-btn">+ New Contact</button>
+              </div>
+              <ul id="convoItems" class="convo-items">
+                <!-- JS inject -->
+              </ul>
+            </aside>
+
+            <!-- chat pane -->
+            <section class="chat-pane">
+              <div class="chat-header">
+                <div id="chatTitle">Select a conversation</div>
+                <div class="chat-header-actions">
+                  <div class="dropdown">
+                    <button class="dropdown-btn" id="optionsBtn">⋯</button>
+                    <div class="dropdown-content" id="optionsDropdown">
+                      <div class="dropdown-item" id="archiveOption">
+                        <span class="dropdown-icon">📦</span>
+                        <span>Archive</span>
+                      </div>
+                      <div class="dropdown-item" id="starOption">
+                        <span class="dropdown-icon">⭐</span>
+                        <span>Star</span>
+                      </div>
+                      <div class="dropdown-item" id="editOption">
+                        <span class="dropdown-icon">✏️</span>
+                        <span>Edit</span>
+                      </div>
+                      <div class="dropdown-item" id="deleteOption">
+                        <span class="dropdown-icon">🗑️</span>
+                        <span>Delete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="chatArea" class="chat-area">
+                <!-- messages injected here -->
+              </div>
+
+              <form id="messageForm" class="chat-input" onsubmit="return false;">
+                <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off" />
+                <button id="sendBtn" class="send-btn" type="button" title="Send">✈️</button>
+              </form>
+            </section>
+          </div>
+        </div>
+
+        <!-- Contacts Page -->
+        <div id="contactsPage" style="display: none;">
+          <h1 class="page-title">Contacts</h1>
+          <p class="page-sub">Manage your contacts</p>
+          
+          <div class="contacts-layout">
+            <div class="convo-list">
+              <div class="search-box">
+                <input id="contactsSearch" placeholder="Search contacts..." />
+              </div>
+              <div class="convo-actions">
+                <button id="newContactBtn2" class="action-btn">+ New Contact</button>
+              </div>
+              <ul id="contactsList" class="convo-items">
+                <!-- Contacts will be injected here -->
+              </ul>
+            </div>
+            
+            <div class="contact-details-pane">
+              <div class="contact-header">
+                <h2 id="contactNameHeader">Select a contact</h2>
+                <div class="chat-header-actions">
+                  <div class="dropdown">
+                    <button class="dropdown-btn" id="contactOptionsBtn">⋯</button>
+                    <div class="dropdown-content" id="contactOptionsDropdown">
+                      <div class="dropdown-item" id="contactArchiveOption">
+                        <span class="dropdown-icon">📦</span>
+                        <span>Archive</span>
+                      </div>
+                      <div class="dropdown-item" id="contactStarOption">
+                        <span class="dropdown-icon">⭐</span>
+                        <span>Star</span>
+                      </div>
+                      <div class="dropdown-item" id="contactEditOption">
+                        <span class="dropdown-icon">✏️</span>
+                        <span>Edit</span>
+                      </div>
+                      <div class="dropdown-item" id="contactDeleteOption">
+                        <span class="dropdown-icon">🗑️</span>
+                        <span>Delete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="contact-details-content">
+                <div id="contactInfo">
+                  <p>Select a contact to view details</p>
+                </div>
+                
+                <div id="contactChatArea" class="chat-area">
+                  <!-- Messages will be injected here -->
+                </div>
+                
+                <form id="contactMessageForm" class="chat-input" onsubmit="return false;">
+                  <input id="contactMessageInput" type="text" placeholder="Type a message..." autocomplete="off" />
+                  <button id="contactSendBtn" class="send-btn" type="button" title="Send">✈️</button>
+                </form>
+                
+                <div class="contact-actions">
+                  <button id="archiveContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">📦</span>
+                    <span>Archive</span>
+                  </button>
+                  <button id="favoriteContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">⭐</span>
+                    <span>Favorite</span>
+                  </button>
+                  <button id="editContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">✏️</span>
+                    <span>Edit</span>
+                  </button>
+                  <button id="deleteContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">🗑️</span>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Archived Contacts Page -->
+        <div id="archivedContactsPage" style="display: none;">
+          <h1 class="page-title">Archived Contacts</h1>
+          <p class="page-sub">Manage your archived contacts</p>
+          
+          <div class="contacts-layout">
+            <div class="convo-list">
+              <div class="search-box">
+                <input id="archivedContactsSearch" placeholder="Search archived contacts..." />
+              </div>
+              <div class="convo-actions">
+                <button id="unarchiveAllBtn" class="action-btn">Unarchive All</button>
+              </div>
+              <ul id="archivedContactsList" class="convo-items">
+                <!-- Archived contacts will be injected here -->
+              </ul>
+            </div>
+            
+            <div class="contact-details-pane">
+              <div class="contact-header">
+                <h2 id="archivedContactNameHeader">Select an archived contact</h2>
+              </div>
+              
+              <div class="contact-details-content">
+                <div id="archivedContactInfo">
+                  <p>Select an archived contact to view details</p>
+                </div>
+                
+                <div class="contact-actions">
+                  <button id="unarchiveContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">📦</span>
+                    <span>Unarchive</span>
+                  </button>
+                  <button id="deleteArchivedContactBtn" class="contact-action-btn">
+                    <span class="btn-icon">🗑️</span>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Link compiled JS (from script.ts) -->
+  <script src="script.js"></script>
+</body>
+</html>
