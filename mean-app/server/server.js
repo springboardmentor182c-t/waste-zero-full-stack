@@ -1,16 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
-import{ MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+
 import authRoutes from "./src/api/modules/user/user.routes.js";
-import errorHandler from "./src/api/middleware/errorHandler.js";
+import opportunityRoutes from "./src/api/modules/opportunity/opportunity.routes.js";
 import dashboardRoutes from "./src/api/modules/dashboard/dashboard.routes.js";
 import adminPanelRoutes from "./src/api/modules/adminpanel/adminpanel.routes.js";
 
 
+import errorHandler from "./src/api/middleware/errorHandler.js";
+import pickupRoutes from "./src/api/modules/pickup/pickup.routes.js"; // <-- Pickup routes
 
 dotenv.config();
 const app = express();
@@ -29,76 +32,22 @@ const limiter = rateLimit({
 app.use("/api/", limiter);
 
 // -------------------- ROUTES --------------------
-// Mount user routes under /api/v1/users
+// User routes
 app.use("/api/v1", authRoutes);
 
 // Health Check
 app.get("/api/v1/health", (req, res) => {
   res.json({ status: "ok", uptime: process.uptime() });
 });
-const client = new MongoClient(process.env.DB_URI);
-let db;
-client.connect()
-  .then(() => {
-    db = client.db("atlas"); // use your DB name here
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
-// CREATE
-app.post('/api/opportunities', async (req, res) => {
-  try {
-    const result = await db.collection("opportunities").insertOne(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
-// READ all
-app.get('/api/opportunities', async (req, res) => {
-  try {
-    const opportunities = await db.collection("opportunities").find().toArray();
-    res.json(opportunities);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Opportunity routes
+app.use("/api/opportunities", opportunityRoutes);
 
-// READ one by ID
-app.get('/api/opportunities/:id', async (req, res) => {
-  try {
-    const opportunity = await db.collection("opportunities").findOne({ _id: new ObjectId(req.params.id) });
-    if (!opportunity) return res.status(404).json({ message: "Not found" });
-    res.json(opportunity);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Pickup routes
+app.use("/api/pickup", pickupRoutes);  // <-- Added Schedule Pickup API
 
-// UPDATE
-app.put('/api/opportunities/:id', async (req, res) => {
-  try {
-    const result = await db.collection("opportunities").updateOne(
-      { _id: new ObjectId(req.params.id) },
-      { $set: req.body }
-    );
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// DELETE
-app.delete('/api/opportunities/:id', async (req, res) => {
-  try {
-    const result = await db.collection("opportunities").deleteOne({ _id: new ObjectId(req.params.id) });
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Dashboard routes
+app.use("/api/v1", dashboardRoutes);
 
 // -------------------- ERROR HANDLER --------------------
 app.use(errorHandler);

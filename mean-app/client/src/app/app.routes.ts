@@ -1,33 +1,28 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     loadComponent: () => import('./features/waste-recycle/waste-recycle')
       .then(m => m.WasteRecycle)
   },
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     loadComponent: () => import('./features/login/login')
-      .then(m => m.Login) 
+      .then(m => m.Login)
   },
-  { 
-    path: 'register', 
+  {
+    path: 'register',
     loadComponent: () => import('./features/register/register')
-      .then(m => m.Register) 
+      .then(m => m.Register)
   },
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     loadComponent: () => import('./features/dashboard/dashboard')
-      .then(m => m.Dashboard) 
+      .then(m => m.Dashboard)
   },
-  { 
-    path: 'opportunities', 
-    loadComponent: () => import('./features/view-opportunities/opportunities')
-      .then(m => m.Opportunities) 
-  },
-  { 
-    path: '**', 
-    redirectTo: '' 
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
