@@ -1,0 +1,46 @@
+.login-block{
+  float:left;
+  width:100%;
+  padding : 50px 0;
+}
+
+/* Updated for Green Theme */
+.container{
+  background: var(--bg-light); /* Using light background color for container */
+  border-radius: 10px; 
+  width: 40%; 
+  height: 40%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+}
+.login-sec{
+  padding: 50px 30px; 
+  position:relative;
+}
+.login-sec h2{
+  margin-bottom:30px; 
+  font-weight:800; 
+  font-size:30px; 
+  color: var(--green-primary); /* Primary Green */
+}
+.login-sec h2:after{
+  content:" "; 
+  width:100px; 
+  height:5px; 
+  background: var(--green-light); /* Light Green accent */
+  display:block; 
+  margin-top:20px; 
+  border-radius:3px; 
+  margin-left:auto;
+  margin-right:auto
+}
+.btn-login{
+  background: var(--green-primary); /* Primary Green button */
+  color:var(--text-light); 
+  font-weight:600;
+  border: none;
+  transition: background 0.3s ease;
+}
+
+.btn-login:hover {
+  background: var(--green-dark); /* Darker Green on hover */
+}
