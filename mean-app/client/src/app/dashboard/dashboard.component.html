@@ -1,56 +1,101 @@
 <div class="dashboard-root">
   <!-- Sidebar/Navbar -->
   <aside class="sidebar">
-    <div class="logo">WasteZero</div>
-    <div class="main-menu">
-      <div class="menu-user">venu<br /><span class="user-role">Admin</span></div>
-      <ul>
-        <li><i class="icon icon-dashboard"></i> Dashboard</li>
-        <li><i class="icon icon-pickup"></i> Schedule Pickup</li>
-        <li><i class="icon icon-opportunities"></i> Opportunities</li>
-        <li><i class="icon icon-messages"></i> Messages</li>
-        <li><i class="icon icon-impact"></i> My Impact</li>
-      </ul>
-      <div class="settings-header">SETTINGS</div>
-      <ul>
-        <li><i class="icon icon-profile"></i> My Profile</li>
-        <li><i class="icon icon-settings"></i> Settings</li>
-        <li><i class="icon icon-help"></i> Help & Support</li>
-        <li><i class="icon icon-admin"></i> Admin Panel</li>
-      </ul>
+    <div class="logo">
+      <h3>WasteZero</h3>
+      <small>Admin</small>
+    </div>
+    <ul class="menu">
+      <li><a routerLink="/dashboard">📊 Dashboard</a></li>
+      <li><a routerLink="/schedule">🚚 Schedule Pickup</a></li>
+      <li><a routerLink="/opportunities">💡 Volunteer Opportunities</a></li>
+      <li><a routerLink="/messages">✉️ Inbox</a></li>
+      <li><a routerLink="/impact">🌍 My Impact Score</a></li>
+      <li><a routerLink="/profile">⚙️ Profile Settings</a></li>
+      <li><a routerLink="/settings">🔧 App Preferences</a></li>
+      <li><a routerLink="/help">❓ Help & Support</a></li>
+      <li><a routerLink="/admin">🛠️ Admin Panel</a></li>
+    </ul>
+
+    <div class="theme-toggle">
+      <button (click)="toggleTheme()">
+        {{ isDarkTheme ? "🌙 Dark Mode" : "☀️ Light Mode" }}
+      </button>
     </div>
   </aside>
 
   <!-- Main content -->
+
   <main class="dashboard-main">
     <h2>Admin Dashboard</h2>
-    <span class="dashboard-sub">Manage platform users, monitor activity, and generate reports</span>
+
+    <span class="dashboard-sub"
+      >Manage platform users, monitor activity, and generate reports</span
+    >
 
     <div class="stat-cards-row">
-      <div class="stat-card"><span class="stat-label">Total Users</span><span class="stat-num">{{totalUsers}}</span></div>
-      <div class="stat-card completed"><span class="stat-label">Completed Pickups</span><span class="stat-num">{{completedPickups}}</span></div>
-      <div class="stat-card pending"><span class="stat-label">Pending Pickups</span><span class="stat-num">{{pendingPickups}}</span></div>
-      <div class="stat-card active"><span class="stat-label">Active Opportunities</span><span class="stat-num">{{activeOpportunities}}</span></div>
+      <div class="stat-card">
+        <span class="stat-label">Total Users</span
+        ><span class="stat-num">{{ totalUsers }}</span>
+      </div>
+
+      <div class="stat-card completed">
+        <span class="stat-label">Completed Pickups</span
+        ><span class="stat-num">{{ completedPickups }}</span>
+      </div>
+
+      <div class="stat-card pending">
+        <span class="stat-label">Pending Pickups</span
+        ><span class="stat-num">{{ pendingPickups }}</span>
+      </div>
+
+      <div class="stat-card active">
+        <span class="stat-label">Active Opportunities</span
+        ><span class="stat-num">{{ activeOpportunities }}</span>
+      </div>
     </div>
 
     <section class="reports-section">
       <h3>Generate Reports</h3>
+
       <p>Download platform statistics and activity reports</p>
+
       <div class="report-buttons">
-        <button (click)="onReportDownload('Users')" class="btn report-btn">Users Report</button>
-        <button (click)="onReportDownload('Pickups')" class="btn report-btn">Pickups Report</button>
-        <button (click)="onReportDownload('Opportunities')" class="btn report-btn">Opportunities Report</button>
-        <button (click)="onReportDownload('Full Activity')" class="btn report-btn">Full Activity Report</button>
+        <button (click)="onReportDownload('Users')" class="btn report-btn">
+          Users Report
+        </button>
+
+        <button (click)="onReportDownload('Pickups')" class="btn report-btn">
+          Pickups Report
+        </button>
+        <button
+          (click)="onReportDownload('Opportunities')"
+          class="btn report-btn"
+        >
+          Opportunities Report
+        </button>
+
+        <button
+          (click)="onReportDownload('Full Activity')"
+          class="btn report-btn"
+        >
+          Full Activity Report
+        </button>
       </div>
+
       <div class="manage-row">
-        <button (click)="onManageUsers()" class="btn manage-btn">Manage Users</button>
+        <button (click)="onManageUsers()" class="btn manage-btn">
+          Manage Users
+        </button>
         <button class="btn admin-logs-btn">Admin Logs</button>
       </div>
     </section>
 
     <section class="users-section">
       <h3>Users</h3>
+
       <p>Manage user accounts and permissions</p>
+
       <input type="text" placeholder="Search users..." class="user-search" />
     </section>
   </main>
