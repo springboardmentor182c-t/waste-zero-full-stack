@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const pickupSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -9,4 +9,6 @@ const pickupSchema = new mongoose.Schema({
     status: { type: String, default: 'Scheduled' } // Scheduled / Completed / Cancelled
 }, { timestamps: true });
 
-module.exports = mongoose.model('Pickup', pickupSchema);
+const Pickup = mongoose.models.Pickup || mongoose.model("Pickup", pickupSchema);
+
+export default Pickup;
