@@ -1,0 +1,28 @@
+<%- include('layout', { title: 'Edit Opportunity', body: `
+  <h2>Edit Volunteering Opportunity</h2>
+  <form action="/opportunities/edit/${opportunity._id}" method="POST" class="edit-form">
+    <label>Title:</label>
+    <input type="text" name="title" value="${opportunity.title}" required>
+
+    <label>Description:</label>
+    <textarea name="description">${opportunity.description}</textarea>
+
+    <label>Required Skills (comma separated):</label>
+    <input type="text" name="required_skills" value="${opportunity.required_skills.join(', ')}">
+
+    <label>Duration:</label>
+    <input type="text" name="duration" value="${opportunity.duration}">
+
+    <label>Location:</label>
+    <input type="text" name="location" value="${opportunity.location}">
+
+    <label>Status:</label>
+    <select name="status">
+      <option value="open" ${opportunity.status === 'open' ? 'selected' : ''}>Open</option>
+      <option value="closed" ${opportunity.status === 'closed' ? 'selected' : ''}>Closed</option>
+      <option value="in-progress" ${opportunity.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
+    </select>
+
+    <button type="submit">Update Opportunity</button>
+  </form>
+` }) %>
