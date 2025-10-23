@@ -1,0 +1,52 @@
+<div class="chat-area" [class.dark]="darkMode">
+  <div class="chat-header" *ngIf="selectedMessage">
+    <div class="chat-user-info">
+      <div class="avatar">U</div>
+      <span>{{ selectedMessage.sender }}</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="1" fill="currentColor"/>
+          <circle cx="12" cy="6" r="1" fill="currentColor"/>
+          <circle cx="12" cy="18" r="1" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="chat-messages" *ngIf="selectedMessage">
+    <div 
+      *ngFor="let chat of chatMessages" 
+      class="chat-message"
+      [class.sent]="chat.isSent"
+      [class.received]="!chat.isSent">
+      <div class="message-bubble">
+        {{ chat.text }}
+      </div>
+      <div class="message-time">{{ chat.time }}</div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!selectedMessage">
+    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2"/>
+      <path d="M3 9H21" stroke-width="2"/>
+    </svg>
+    <h3>Select a message</h3>
+    <p>Choose a conversation from the list to start chatting</p>
+  </div>
+
+  <div class="chat-input" *ngIf="selectedMessage">
+    <input 
+      type="text" 
+      [(ngModel)]="newMessage"
+      (keyup.enter)="onSendMessage()"
+      placeholder="This is user1...">
+    <button (click)="onSendMessage()" class="send-button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>

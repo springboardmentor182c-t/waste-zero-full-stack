@@ -1,0 +1,98 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input 
+          type="text" 
+          placeholder="Search pickups, opportunities..." 
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()">
+      </div>
+      <div class="header-actions">
+        <button mat-icon-button>
+          <mat-icon>notifications</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+      <div class="page-title">
+        <h1>Admin Dashboard</h1>
+        <p>Manage platform users, monitor activity, and generate reports</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <app-dashboard-cards></app-dashboard-cards>
+
+      <!-- Generate Reports Section -->
+      <div class="reports-section">
+        <h2>Generate Reports</h2>
+        <p class="section-subtitle">Download platform statistics and activity reports</p>
+        
+        <div class="report-buttons">
+          <button mat-stroked-button (click)="generateReport('Users Report')">
+            <mat-icon>people</mat-icon>
+            Users Report
+          </button>
+          <button mat-stroked-button (click)="generateReport('Pickup Report')">
+            <mat-icon>local_shipping</mat-icon>
+            Pickup Report
+          </button>
+          <button mat-stroked-button (click)="generateReport('Opportunities Report')">
+            <mat-icon>description</mat-icon>
+            Opportunities Report
+          </button>
+          <button mat-stroked-button (click)="generateReport('Full Activity Report')">
+            <mat-icon>download</mat-icon>
+            Full Activity Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Manage Users Section -->
+      <div class="users-section">
+        <mat-tab-group>
+          <mat-tab label="Manage Users">
+            <div class="tab-content">
+              <h2>Users</h2>
+              <p class="section-subtitle">Manage user accounts and permissions</p>
+              
+              <div class="search-bar-users">
+                <mat-icon>search</mat-icon>
+                <input 
+                  type="text" 
+                  placeholder="Search users..." 
+                  [(ngModel)]="userSearchQuery"
+                  (keyup)="searchUsers()">
+              </div>
+
+              <div class="users-table">
+                <p *ngIf="filteredUsers.length === 0" class="no-users">
+                  No users found. User data will appear here.
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+          
+          <mat-tab label="Admin Logs">
+            <div class="tab-content">
+              <h2>Admin Activity Logs</h2>
+              <p class="section-subtitle">View recent admin actions and system events</p>
+              <p class="no-users">No logs available yet.</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

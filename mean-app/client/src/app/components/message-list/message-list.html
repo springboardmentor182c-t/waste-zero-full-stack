@@ -1,0 +1,71 @@
+<!-- <div class="message-list" [class.dark]="darkMode">
+  <div class="message-header">
+    <input 
+      type="text" 
+      placeholder="Search pictures, opportunities..." 
+      class="search-input"
+      [(ngModel)]="searchText">
+  </div>
+
+  <div class="messages-section">
+    <h2>Messages</h2>
+    <p class="subtitle">Chat with volunteers, NGOs, and waste management partners</p>
+
+    <input 
+      type="text" 
+      placeholder="Search messages..." 
+      class="search-box"
+      [(ngModel)]="searchText">
+
+    <div class="message-items">
+      <div 
+        *ngFor="let msg of messages" 
+        class="message-item"
+        [class.selected]="selectedMessage?.id === msg.id"
+        (click)="onSelectMessage(msg)">
+        <div class="message-avatar">{{msg.avatar}}</div>
+        <div class="message-content">
+          <div class="message-sender">{{msg.sender}}</div>
+          <div class="message-preview">{{msg.preview}}</div>
+        </div>
+        <div class="message-date">{{msg.date}}</div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="message-list" [class.dark]="darkMode">
+  <div class="message-header">
+    <input 
+      type="text" 
+      placeholder="Search pictures, opportunities..." 
+      class="search-input"
+      [(ngModel)]="searchText">
+  </div>
+
+  <div class="messages-section">
+    <h2>Messages</h2>
+    <p class="subtitle">Chat with volunteers, NGOs, and waste management partners</p>
+
+    <input 
+      type="text" 
+      placeholder="Search messages..." 
+      class="search-box"
+      [(ngModel)]="searchText">
+
+    <div class="message-items">
+      <div 
+        *ngFor="let msg of messages" 
+        class="message-item"
+        [class.selected]="selectedMessage?.sender_id === msg.sender_id"
+        (click)="onSelectMessage(msg)">
+        <div class="message-avatar">{{msg.avatar}}</div>
+        <div class="message-content">
+          <div class="message-sender">{{msg.sender}}</div>
+          <div class="message-preview">{{msg.preview}}</div>
+        </div>
+        <div class="message-date">{{msg.date}}</div>
+      </div>
+    </div>
+  </div>
+</div>

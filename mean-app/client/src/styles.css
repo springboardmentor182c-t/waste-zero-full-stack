@@ -1,0 +1,233 @@
+/* ================================
+   🌙 GLOBAL DARK MODE STYLES
+   ================================ */
+:root {
+  --green-primary: #4CAF50;    /* Primary Green (e.g., buttons, accents) */
+  --green-dark: #1B5E20;       /* Dark Green (e.g., dark mode sidebar, primary buttons) */
+  --green-light: #8BC34A;      /* Light Green (e.g., secondary accents) */
+  --text-dark: #212121;        /* Dark Text */
+  --text-light: #FAFAFA;       /* Light Text (for dark backgrounds) */
+  --bg-light: #F7F7F7;         /* Light Background (off-white paper look) */
+  --bg-dark: #212d33;          /* Dark Background (dark slate/charcoal) */
+  --bg-secondary-light: #E8F5E9; /* Very light green */
+  --link-color: var(--green-primary);
+}
+
+/* Light Theme (Default, Earthy) */
+.light-theme {
+  --sidebar-bg: var(--bg-light);
+  --sidebar-color: var(--text-dark);
+  --content-bg: var(--bg-light);
+  --text-color: var(--text-dark);
+}
+
+/* Dark Theme (Forest) */
+.dark-theme {
+  --sidebar-bg: var(--green-dark);
+  --sidebar-color: var(--text-light);
+  --content-bg: var(--bg-dark);
+  --text-color: var(--text-light);
+}
+
+/* Apply variables globally */
+body {
+  background: var(--content-bg);
+  color: #06402b;
+  transition: all 0.3s ease;
+}
+
+.sidebar {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-color);
+}
+
+/* Update sidebar link styles for better visibility in both themes */
+.sidebar a {
+  color: var(--text-color); /* Inherit color, will be dark in light, light in dark */
+  padding: 8px 0;
+  border-radius: 4px;
+}
+
+.sidebar a:hover {
+  background-color: rgba(76, 175, 80, 0.2); /* Semi-transparent green hover */
+  color: var(--green-primary);
+}
+
+.profile-container {
+  background: var(--content-bg);
+  color: var(--text-color);
+}
+
+/* --- Global Bootstrap Overrides for Green Theme --- */
+
+/* Navbar background */
+.navbar.bg-dark {
+    background-color: var(--green-dark) !important;
+}
+
+/* Text primary (used for buttons, links, etc.) */
+.text-primary {
+    color: var(--green-primary) !important;
+}
+
+/* Primary Button Overrides (Main Action) */
+.btn-primary {
+  color: var(--text-light);
+  background-color: var(--green-primary);
+  border-color: var(--green-primary);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+/* Warning Button Overrides (Secondary Action/Change Password in Profile) */
+.btn-warning {
+  background-color: var(--green-light);
+  border-color: var(--green-light);
+  color: var(--text-dark); /* Ensure text is dark on light green */
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-warning:hover {
+  background-color: var(--green-primary);
+  border-color: var(--green-primary);
+  color: var(--text-light);
+}
+
+/* Success Alert (Used in Profile Component) */
+.alert-success {
+    background-color: var(--bg-secondary-light);
+    border-color: var(--green-primary);
+    color: var(--green-dark);
+}
+
+/* Login/Register Specific Styles (Using global variables) */
+.login-block .container,
+.register-sec {
+    background-color: var(--bg-light);
+}
+
+.login-sec h2,
+.register-sec h2 {
+    color: var(--green-primary);
+}
+
+.login-sec h2:after {
+    background: var(--green-light);
+}
+
+.login-block .btn-login {
+    background: var(--green-primary);
+}
+
+.login-block .btn-login:hover {
+    background: var(--green-dark);
+}
+/* =============================== */
+/* 🌙 Global Dark Mode Overrides   */
+/* =============================== */
+
+body.dark-mode {
+  background-color: #121212 !important;
+  color: #eaeaea !important;
+}
+
+/* --- Dashboard --- */
+body.dark-mode .dashboard-root {
+  background-color: #121212 !important;
+  color: #eaeaea !important;
+}
+body.dark-mode .sidebar {
+  background-color: #0d3c0d !important;
+  color: #d8d8d8 !important;
+}
+body.dark-mode .stat-card,
+body.dark-mode .reports-section,
+body.dark-mode .users-section {
+  background-color: #1e1e1e !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.dark-mode .user-search,
+body.dark-mode input {
+  background: #2b2b2b !important;
+  color: #eaeaea !important;
+  border: 1px solid #444 !important;
+}
+
+/* --- Login --- */
+body.dark-mode .container {
+  background: #1e1e1e !important;
+  color: #eaeaea !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+}
+body.dark-mode .btn-login {
+  background: #2e7d32 !important;
+  color: #fff !important;
+}
+
+/* --- Opportunities Page --- */
+body.dark-mode .opportunity-page,
+body.dark-mode .opportunity-card {
+  background-color: #1e1e1e !important;
+  color: #f5f5f5 !important;
+  border-color: #333 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+body.dark-mode .btn-primary {
+  background: #3a7d32 !important;
+  color: #fff !important;
+}
+
+/* --- Opportunity Detail --- */
+body.dark-mode .opportunity-detail-layout {
+  background-color: #121212 !important;
+  color: #eaeaea !important;
+}
+body.dark-mode .detail-card {
+  background-color: #1e1e1e !important;
+  color: #eaeaea !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.dark-mode .btn-primary {
+  background: #2e7d32 !important;
+}
+body.dark-mode .btn-danger {
+  background: #b71c1c !important;
+}
+
+/* --- Profile --- */
+body.dark-mode .profile-container {
+  background: #1e1e1e !important;
+  color: #eaeaea !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+body.dark-mode .sidebar {
+  background-color: #0d3c0d !important;
+}
+body.dark-mode h2 {
+  color: #8bc34a !important;
+}
+body.dark-mode button {
+  background-color: #2e7d32 !important;
+  color: #fff !important;
+}
+
+/* --- Create Opportunity --- */
+body.dark-mode .create-opportunity-container {
+  background: #1e1e1e !important;
+  color: #eaeaea !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.dark-mode input,
+body.dark-mode textarea {
+  background-color: #2b2b2b !important;
+  color: #eaeaea !important;
+  border: 1px solid #444 !important;
+}
+body.dark-mode button.btn-success {
+  background-color: #2e7d32 !important;
+}
