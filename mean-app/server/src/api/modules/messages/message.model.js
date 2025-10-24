@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const messageSchema = new mongoose.Schema(
   {
     sender_id: {
@@ -30,7 +31,7 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound index for fast querying
+      // Compound index for fast querying
 messageSchema.index({ sender_id: 1, receiver_id: 1, timestamp: -1 });
 
 module.exports = mongoose.model("Message", messageSchema);

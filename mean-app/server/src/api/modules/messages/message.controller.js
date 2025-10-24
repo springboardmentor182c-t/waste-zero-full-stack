@@ -1,8 +1,7 @@
 const Message = require("./message.model");
 const io = require("../../bin/www"); 
 
-
-//  Send a message
+                  //Send a message
 exports.sendMessage = async (req, res) => {
   try {
     const { sender_id, receiver_id, content } = req.body;
@@ -39,7 +38,8 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-//Get conversation between two users
+
+  //Get conversation between two users
 exports.getConversation = async (req, res) => {
   try {
     const { user1_id, user2_id } = req.params;
@@ -67,7 +67,7 @@ exports.getConversation = async (req, res) => {
   }
 };
 
-//Get all conversations for a user
+    //Get all conversations for a user
 exports.getUserConversations = async (req, res) => {
   try {
     const { user_id } = req.params;
@@ -98,7 +98,7 @@ exports.getUserConversations = async (req, res) => {
   }
 };
 
-//Mark messages as read
+     //Mark messages as read
 exports.markAsRead = async (req, res) => {
   try {
     const { sender_id, receiver_id } = req.body;
@@ -128,7 +128,7 @@ exports.markAsRead = async (req, res) => {
   }
 };
 
-//Delete a message
+     //Delete a message
 exports.deleteMessage = async (req, res) => {
   try {
     const { messageId } = req.params;

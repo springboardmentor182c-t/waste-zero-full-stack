@@ -1,23 +1,17 @@
 #!/usr/bin/env node
 
-/**
-* Module dependencies.
-  */
+/*Module dependencies.*/
 var app = require('../app');
 var debug = require('debug')('yourapp:server');
 var http = require('http');
 var { Server } = require('socket.io');
 var Message = require('../modules/message/message.model');      //Use model directly
 
-/**
- * Get port from environment and store in Express.
- */
+/*Get port from environment and store in Express*/
 var port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+/*Create HTTP server*/
 var server = http.createServer(app);
 
 /**
@@ -25,7 +19,7 @@ var server = http.createServer(app);
  */
 var io = new Server(server, {
   cors: {
-    origin: '*',                           // Change this to your frontend URL later
+    origin: '*',                           // Change this to our frontend URL later
     methods: ['GET', 'POST']
   }
 });
@@ -50,7 +44,7 @@ io.on('connection', (socket) => {
         return;
       }
 
-      // Save message to DB
+        // Save message to DB
       const message = new Message({
         sender_id,
         receiver_id,
@@ -76,9 +70,7 @@ io.on('connection', (socket) => {
   });
 });
 
-/**
- * Listen on provided port
- */
+/* Listen on provided port*/
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -111,5 +103,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-//Export io instance so controllers can use it later if needed
+    //Export io instance so controllers can use it later if needed
 module.exports = io;
