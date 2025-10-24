@@ -9,6 +9,6 @@ const router = express.Router();
  */
 router.post("/pickups/schedule", PickupController.create);
 router.get("/pickups/user/:userId", PickupController.getUserPickups);
-router.put("/pickups/:pickupId/status", PickupController.updateStatus);
+router.put("/pickups/:pickupId/status", PickupController.updateStatus);  
 
 export default router;
