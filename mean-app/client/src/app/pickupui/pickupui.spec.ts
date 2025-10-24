@@ -14,7 +14,7 @@ describe('Pickupui', () => {
 
     fixture = TestBed.createComponent(Pickupui);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.detectChanges();   
   });
 
   it('should create', () => {
