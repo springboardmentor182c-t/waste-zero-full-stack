@@ -2,7 +2,9 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-
+/**
+ * Schedule Pickup Schema
+ */
 const PickupSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -24,5 +26,5 @@ const PickupSchema = new Schema(
   { timestamps: true }
 );
 
-// Export the model
 export const Pickup = model("Pickup", PickupSchema);
+
