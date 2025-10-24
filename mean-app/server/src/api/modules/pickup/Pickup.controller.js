@@ -1,10 +1,8 @@
 import express from "express";
-import Pickup from "../../models/pickup/Pickup.js";
+import  Pickup  from "../pickup/Pickup.model.js";
 
-const router = express.Router();
 
-// Schedule a new pickup
-router.post("/schedule", async (req, res) => {
+ export const createPickup = async (req, res) => {
   try {
     const { name, address, contactNumber, pickupDate, items } = req.body;
 
@@ -20,10 +18,10 @@ router.post("/schedule", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-});
+}
 
 // Get all pickups (for admin)
-router.get("/all", async (req, res) => {
+export const getAllPickups =  async (req, res) => {
   try {
     const pickups = await Pickup.find().sort({ pickupDate: 1 });
     res.json(pickups);
@@ -31,6 +29,4 @@ router.get("/all", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-});
-
-export default router;
+};
