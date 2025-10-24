@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router'; // (for api)
+import { PickupService } from '../services/pickup.service'; // adjust path if needed(for api)
+
 
 @Component({
   selector: 'app-pickupui',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule], // ✅ Add RouterModule for api
   templateUrl: './pickupui.html',
   styleUrl: './pickupui.css'
 })
 
 export class Pickupui {
+  constructor(private pickupService: PickupService) {}  //for api
 activeTab = 'newPickup';
   currentStep = 1;
   searchQuery: string = '';
@@ -72,16 +76,43 @@ activeTab = 'newPickup';
     else this.pickupData.wasteTypes.push(type);
   }
 
-  submitPickup() {
-    alert('Pickup scheduled successfully!');
-    this.pickupHistory.push({
-      date: this.pickupData.date,
-      address: this.pickupData.address,
-      city: this.pickupData.city,
-      timeSlot: this.pickupData.timeSlot
-    });
-    this.pickupData = { address: '', city: '', date: '', timeSlot: '', wasteTypes: [], notes: '' };
-    this.currentStep = 1;
+  //(below code is for API integ)
+ submitPickup() {
+  const payload = {
+    user: '652f1a2b8c9d4e0012345678', // Replace with dynamic ID if needed
+    address: this.pickupData.address,
+    // city: this.pickupData.city,
+    pickupDate: this.pickupData.date,       // ✅ renamed
+    pickupTime: this.pickupData.timeSlot,   // ✅ renamed
+    wasteType: this.pickupData.wasteTypes[0]?.toLowerCase(),  // ✅ ensures lowercase match
+    additionalNotes: this.pickupData.notes
+  };
+  if (!payload.address || !payload.pickupDate || !payload.pickupTime || !payload.wasteType) {
+    alert('Please fill all required fields.');
+    return;
   }
+
+
+console.log('📤 Sending payload:', payload); // ✅ Add this here
+
+
+  this.pickupService.schedulePickup(payload).subscribe({
+    next: (res) => {
+      alert('✅ Pickup scheduled successfully!');
+      this.pickupHistory.push({
+        date: this.pickupData.date,
+        address: this.pickupData.address,
+        city: this.pickupData.city,
+        timeSlot: this.pickupData.timeSlot
+      });
+      this.pickupData = { address: '', city: '', date: '', timeSlot: '', wasteTypes: [], notes: '' };
+      this.currentStep = 1;
+    },
+    error: (err) => {
+      console.error('❌ Error scheduling pickup:', err);
+      alert('Failed to schedule pickup. Please try again.');
+    }
+  });
 }
 
+}
