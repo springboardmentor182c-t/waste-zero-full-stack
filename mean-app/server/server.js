@@ -39,6 +39,18 @@ app.use("/api/v1", authRoutes);
 app.get("/api/v1/health", (req, res) => {
   res.json({ status: "ok", uptime: process.uptime() });
 });
+const client = new MongoClient(process.env.DB_URI);
+let db;
+client.connect()
+  .then(() => {
+    db = client.db("atlas"); // use your DB name here
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
+
+// Register opportunity routes
 
 // Opportunity routes
 app.use("/api/opportunities", opportunityRoutes);
