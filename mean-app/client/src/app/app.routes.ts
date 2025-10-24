@@ -22,6 +22,11 @@ export const routes: Routes = [
       .then(m => m.Dashboard)
   },
   {
+    path: 'admin',
+    loadComponent: () => import('./features/admin-panel/admin-panel')
+      .then(m => m.AdminPanel)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

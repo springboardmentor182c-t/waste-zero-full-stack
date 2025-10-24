@@ -1,15 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Observable, forkJoin } from 'rxjs';
 
-// standalone components
-import { OpportunitiesComponent } from '../opportunities/opportunities.component';
-import { OpportunityDetailComponent } from '../opportunities/opportunity-detail/opportunity-detail.component';
-import { OpportunityFormComponent } from '../opportunities/opportunity-form/opportunity-form.component';
-
-// Admin Panel Interfaces
 export interface DashboardStats {
   totalUsers: number;
   completedPickups: number;
@@ -30,6 +24,33 @@ export interface User {
   updatedAt: string;
 }
 
+export interface Pickup {
+  _id: string;
+  name: string;
+  address: string;
+  contactNumber: string;
+  pickupDate: string;
+  items: string;
+  status: 'Scheduled' | 'Completed' | 'Cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Opportunity {
+  _id: string;
+  ngo_id: number;
+  title: string;
+  description: string;
+  required_skills: string[];
+  duration: string;
+  location: string;
+  status: 'Open' | 'Closed';
+  date: string;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminLog {
   _id: string;
   action: string;
@@ -46,30 +67,13 @@ export interface Report {
 }
 
 @Component({
-  selector: 'dashboard',
-  standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, OpportunitiesComponent, OpportunityDetailComponent, OpportunityFormComponent],
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css']
+  selector: 'app-admin-panel',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './admin-panel.html',
+  styleUrl: './admin-panel.css'
 })
-export class Dashboard implements OnInit {
-  activeMenu: string = 'dashboard'; // default page
-  activeProfileTab: string = 'profile'; // Profile tab default
-  userProfile = {
-    name: '',
-    email: '',
-    location: '',
-    skills: [] as string[]
-  };
-  skillsString: string = '';
-  passwordData = {
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  };
-
-  // Admin Panel Properties
-  private adminApiUrl = 'http://localhost:5000/api/v1/admin';
+export class AdminPanel implements OnInit {
+  private apiUrl = 'http://localhost:5000/api/v1/admin';
   
   // Dashboard data
   dashboardStats: DashboardStats = {
@@ -90,185 +94,26 @@ export class Dashboard implements OnInit {
   adminLogs: AdminLog[] = [];
   
   // UI state
-  activeAdminTab: 'users' | 'logs' = 'users';
+  activeTab: 'users' | 'logs' = 'users';
   isLoading: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
+  
+  // Dark mode
+  isDarkMode: boolean = false;
 
-  pages: Record<string, string> = {
-    dashboard: "Welcome to your WasteZero dashboard. Track pickups, opportunities, and your impact here.",
-    schedule: "Your next pickup is scheduled for <b>Friday, 20th September 2025</b>. You can manage or reschedule here.",
-    messages: `Recyclable items can be dropped at:
-      <ul>
-        <li>City Recycling Center</li>
-        <li>Main Street Pickup Point</li>
-        <li>Community Eco Hub</li>
-      </ul>`,
-    impact: "You have recycled <b>120kg</b> of waste and saved <b>85kg CO₂</b> this year. Keep going!",
-    profile: "",
-    settings: "",
-    support: `
-      <h1>Help & Support</h1>
-      <p>If you need assistance, you can:</p>
-      <ul>
-        <li>Check the <b>FAQ section</b> in the documentation</li>
-        <li>Contact us at <b>support@wastezero.com</b></li>
-        <li>Call our 24/7 helpline: <b>+91-9876543210</b></li>
-      </ul>`,
-    admin: "" // Admin panel will be handled separately
-  };
-
-  // Opportunities sub-view state
-  opportunityView: 'list' | 'create' | 'details' = 'list';
-  selectedOpportunityId: string | null = null;
-
-  constructor(private http: HttpClient, private router: Router) {
-    this.getUserProfile(); // fetch profile on load
-  }
-
-  /**
-   * Show opportunities sub-view. ALWAYS switch to dashboard's opportunities tab
-   * so back returns to dashboard with opportunities open.
-   */
-  setOpportunityView(view: 'list' | 'create' | 'details', opportunityId: string | null = null) {
-    this.activeMenu = 'opportunities';
-    this.opportunityView = view;
-    this.selectedOpportunityId = opportunityId;
-  }
-
-  setActive(menu: string) {
-    this.activeMenu = menu;
-    // when user clicks the Opportunities item, ensure sub-view resets to list
-    if (menu === 'opportunities') {
-      this.opportunityView = 'list';
-      this.selectedOpportunityId = null;
-    }
-    // when user clicks the Admin Panel, load admin data
-    if (menu === 'admin') {
-      this.loadAdminData();
-    }
-  }
-
-  toggleTheme() {
-    document.body.classList.toggle('dark');
-  }
-
-  setProfileTab(tab: string) {
-    this.activeProfileTab = tab;
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.getUserProfile();
-  }
-
-  getAuthHeaders() {
-    const token = localStorage.getItem('authToken');
-    return { Authorization: `Bearer ${token}` };
-  }
-
-  getUserProfile() {
-    this.http.get<{ success: boolean, user: any }>(
-      'http://localhost:5000/api/v1/profile',
-      { headers: this.getAuthHeaders() }
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.userProfile = res.user;
-          this.skillsString = (res.user.skills || []).join(', ');
-        }
-      },
-      error: (err) => console.error('Error fetching profile', err)
-    });
-  }
-
-  updateProfile() {
-    const payload = {
-      ...this.userProfile,
-      skills: this.skillsString.split(',').map(s => s.trim()).filter(Boolean)
-    };
-
-    this.http.put<{ success: boolean, user: any }>(
-      'http://localhost:5000/api/v1/profile',
-      payload,
-      { headers: this.getAuthHeaders() }
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert('Profile updated successfully!');
-          this.userProfile = res.user;
-          this.skillsString = res.user.skills.join(', ');
-        }
-      },
-      error: (err) => console.error('Error updating profile', err)
-    });
-  }
-
-  deleteProfile() {
-    if (!confirm('Are you sure you want to delete your profile?')) return;
-
-    this.http.delete<{ success: boolean, message: string }>(
-      'http://localhost:5000/api/v1/profile',
-      { headers: this.getAuthHeaders() }
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert(res.message);
-          this.userProfile = { name: '', email: '', location: '', skills: [] };
-          this.skillsString = '';
-          this.router.navigate(['/']);
-        }
-      },
-      error: (err) => {
-        console.error('Error deleting profile', err);
-        alert('Failed to delete profile');
-      }
-    });
-  }
-
-  updatePassword() {
-    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      alert("New password and confirm password do not match!");
-      return;
-    }
-
-    const payload = {
-      currentPassword: this.passwordData.currentPassword,
-      newPassword: this.passwordData.newPassword
-    };
-
-    this.http.put<{ success: boolean, message: string }>(
-      'http://localhost:5000/api/v1/profile/password',
-      payload,
-      { headers: this.getAuthHeaders() }
-    ).subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert(res.message || "Password updated successfully!");
-          this.passwordData = { currentPassword: '', newPassword: '', confirmPassword: '' };
-        }
-      },
-      error: (err) => console.error("Error updating password", err)
-    });
-  }
-
-  scrollTo(elementId: string) {
-    const el = document.getElementById(elementId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  // Admin Panel Methods
-  loadAdminData() {
-    this.loadDashboardStats();
+    this.loadDashboardData();
     this.loadUsers();
     this.loadAdminLogs();
   }
 
-  // Dashboard statistics
-  loadDashboardStats() {
+  // Dashboard methods
+  loadDashboardData() {
     this.isLoading = true;
-    this.http.get<DashboardStats>(`${this.adminApiUrl}/stats`).subscribe({
+    this.http.get<DashboardStats>(`${this.apiUrl}/stats`).subscribe({
       next: (stats) => {
         this.dashboardStats = stats;
         this.isLoading = false;
@@ -284,7 +129,7 @@ export class Dashboard implements OnInit {
   // User management methods
   loadUsers() {
     this.isLoading = true;
-    this.http.get<User[]>(`${this.adminApiUrl}/users`).subscribe({
+    this.http.get<User[]>(`${this.apiUrl}/users`).subscribe({
       next: (users) => {
         this.users = users;
         this.filteredUsers = users;
@@ -322,7 +167,7 @@ export class Dashboard implements OnInit {
     if (!this.selectedUser) return;
     
     this.isLoading = true;
-    this.http.put<User>(`${this.adminApiUrl}/users/${this.selectedUser._id}`, this.selectedUser).subscribe({
+    this.http.put<User>(`${this.apiUrl}/users/${this.selectedUser._id}`, this.selectedUser).subscribe({
       next: (updatedUser) => {
         const index = this.users.findIndex(u => u._id === updatedUser._id);
         if (index !== -1) {
@@ -347,7 +192,7 @@ export class Dashboard implements OnInit {
     if (!confirm(`Are you sure you want to delete ${user.name}?`)) return;
     
     this.isLoading = true;
-    this.http.delete(`${this.adminApiUrl}/users/${user._id}`).subscribe({
+    this.http.delete(`${this.apiUrl}/users/${user._id}`).subscribe({
       next: () => {
         this.users = this.users.filter(u => u._id !== user._id);
         this.filteredUsers = [...this.users];
@@ -370,7 +215,7 @@ export class Dashboard implements OnInit {
 
   // Admin logs methods
   loadAdminLogs() {
-    this.http.get<AdminLog[]>(`${this.adminApiUrl}/logs`).subscribe({
+    this.http.get<AdminLog[]>(`${this.apiUrl}/logs`).subscribe({
       next: (logs) => {
         this.adminLogs = logs;
       },
@@ -384,7 +229,7 @@ export class Dashboard implements OnInit {
   // Report generation methods
   generateUsersReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/users`).subscribe({
+    this.http.get<Report>(`${this.apiUrl}/reports/users`).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
@@ -399,7 +244,7 @@ export class Dashboard implements OnInit {
 
   generatePickupsReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/pickups`).subscribe({
+    this.http.get<Report>(`${this.apiUrl}/reports/pickups`).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
@@ -414,7 +259,7 @@ export class Dashboard implements OnInit {
 
   generateOpportunitiesReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/opportunities`).subscribe({
+    this.http.get<Report>(`${this.apiUrl}/reports/opportunities`).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
@@ -429,7 +274,7 @@ export class Dashboard implements OnInit {
 
   generateFullActivityReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/full-activity`).subscribe({
+    this.http.get<Report>(`${this.apiUrl}/reports/full-activity`).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
@@ -456,10 +301,12 @@ export class Dashboard implements OnInit {
   // Sample data creation
   createSampleData() {
     this.isLoading = true;
-    this.http.post(`${this.adminApiUrl}/sample-data`, {}).subscribe({
+    this.http.post(`${this.apiUrl}/sample-data`, {}).subscribe({
       next: (result: any) => {
         this.successMessage = 'Sample data created successfully!';
-        this.loadAdminData();
+        this.loadDashboardData();
+        this.loadUsers();
+        this.loadAdminLogs();
         this.isLoading = false;
         setTimeout(() => this.successMessage = '', 5000);
       },
@@ -472,8 +319,13 @@ export class Dashboard implements OnInit {
   }
 
   // UI methods
-  setActiveAdminTab(tab: 'users' | 'logs') {
-    this.activeAdminTab = tab;
+  setActiveTab(tab: 'users' | 'logs') {
+    this.activeTab = tab;
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    document.body.classList.toggle('dark-mode', this.isDarkMode);
   }
 
   clearMessages() {

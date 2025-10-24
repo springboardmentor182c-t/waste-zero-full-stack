@@ -44,7 +44,7 @@
     </div>
 
     <!-- Dynamic content -->
-    <section *ngIf="activeMenu !== 'profile'" [innerHTML]="pages[activeMenu]"></section>
+    <section *ngIf="activeMenu !== 'profile' && activeMenu !== 'admin'" [innerHTML]="pages[activeMenu]"></section>
     <!-- Opportunities container (embedded components) -->
     <section *ngIf="activeMenu === 'opportunities'">
       <!-- List -->
@@ -142,6 +142,240 @@
         <h3>Data Preferences</h3>
         <button id="downloadData">Download My Data</button>
         <button id="clearCache">Clear Cache</button>
+      </div>
+    </section>
+
+    <!-- Admin Panel Section -->
+    <section *ngIf="activeMenu === 'admin'" class="admin-section">
+      <!-- Messages -->
+      <div class="messages" *ngIf="errorMessage || successMessage">
+        <div class="error-message" *ngIf="errorMessage" (click)="clearMessages()">
+          {{ errorMessage }}
+          <button class="close-btn">×</button>
+        </div>
+        <div class="success-message" *ngIf="successMessage" (click)="clearMessages()">
+          {{ successMessage }}
+          <button class="close-btn">×</button>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard Header -->
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p>Manage platform users, monitor activity, and generate reports</p>
+        <!-- <button class="btn btn-secondary" (click)="createSampleData()" [disabled]="isLoading">
+          Create Sample Data
+        </button> -->
+      </div>
+
+      <!-- Dashboard Statistics Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h3>{{ dashboardStats.totalUsers }}</h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon completed">✅</div>
+          <div class="stat-content">
+            <h3>{{ dashboardStats.completedPickups }}</h3>
+            <p>Completed Pickups</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon pending">⏰</div>
+          <div class="stat-content">
+            <h3>{{ dashboardStats.pendingPickups }}</h3>
+            <p>Pending Pickups</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon opportunities">📄</div>
+          <div class="stat-content">
+            <h3>{{ dashboardStats.activeOpportunities }}</h3>
+            <p>Active Opportunities</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate Reports Section -->
+      <div class="reports-section">
+        <div class="section-header">
+          <h2>Generate Reports</h2>
+          <p>Download platform statistics and activity reports</p>
+        </div>
+        
+        <div class="report-buttons">
+          <button class="report-btn" (click)="generateUsersReport()" [disabled]="isLoading">
+            <i class="report-icon">👤</i>
+            <span>Users Report</span>
+          </button>
+          
+          <button class="report-btn" (click)="generatePickupsReport()" [disabled]="isLoading">
+            <i class="report-icon">✅</i>
+            <span>Pickups Report</span>
+          </button>
+          
+          <button class="report-btn" (click)="generateOpportunitiesReport()" [disabled]="isLoading">
+            <i class="report-icon">📄</i>
+            <span>Opportunities Report</span>
+          </button>
+          
+          <button class="report-btn" (click)="generateFullActivityReport()" [disabled]="isLoading">
+            <i class="report-icon">📥</i>
+            <span>Full Activity Report</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <div class="tabs">
+          <button class="tab" [class.active]="activeAdminTab === 'users'" (click)="setActiveAdminTab('users')">
+            Manage Users
+          </button>
+          <button class="tab" [class.active]="activeAdminTab === 'logs'" (click)="setActiveAdminTab('logs')">
+            Admin Logs
+          </button>
+        </div>
+
+        <!-- Users Tab Content -->
+        <div class="tab-content" *ngIf="activeAdminTab === 'users'">
+          <div class="section-header">
+            <h2>Users</h2>
+            <p>Manage user accounts and permissions</p>
+          </div>
+          
+          <div class="search-container">
+            <input 
+              type="text" 
+              placeholder="Search users..." 
+              [(ngModel)]="userSearchTerm"
+              (input)="searchUsers()"
+              class="search-input">
+            <i class="search-icon">🔍</i>
+          </div>
+
+          <!-- User Edit Modal -->
+          <div class="modal-overlay" *ngIf="isEditingUser" (click)="cancelEdit()">
+            <div class="modal" (click)="$event.stopPropagation()">
+              <div class="modal-header">
+                <h3>Edit User</h3>
+                <button class="close-btn" (click)="cancelEdit()">×</button>
+              </div>
+              <div class="modal-body" *ngIf="selectedUser">
+                <form (ngSubmit)="saveUser()">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" [(ngModel)]="selectedUser.name" name="name" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" [(ngModel)]="selectedUser.email" name="email" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Role</label>
+                    <select [(ngModel)]="selectedUser.role" name="role">
+                      <option value="user">User</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" [(ngModel)]="selectedUser.location" name="location">
+                  </div>
+                  <div class="form-group">
+                    <label>Bio</label>
+                    <textarea [(ngModel)]="selectedUser.bio" name="bio" rows="3"></textarea>
+                  </div>
+                  <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoading">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Users Table -->
+          <div class="table-container">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Location</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredUsers">
+                  <td>
+                    <div class="user-info">
+                      <div class="user-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+                      <span>{{ user.name }}</span>
+                    </div>
+                  </td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="role-badge" [class.admin]="user.role === 'admin'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td>{{ user.location || 'N/A' }}</td>
+                  <td>{{ formatDate(user.createdAt) }}</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn btn-sm btn-primary" (click)="editUser(user)">
+                        Edit
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="deleteUser(user)">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div class="no-data" *ngIf="filteredUsers.length === 0">
+              <p>No users found</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Logs Tab Content -->
+        <div class="tab-content" *ngIf="activeAdminTab === 'logs'">
+          <div class="section-header">
+            <h2>Admin Logs</h2>
+            <p>View recent admin actions and system logs</p>
+          </div>
+          
+          <div class="logs-container">
+            <div class="log-item" *ngFor="let log of adminLogs">
+              <div class="log-icon">📝</div>
+              <div class="log-content">
+                <div class="log-action">{{ log.action }}</div>
+                <div class="log-details">
+                  <span class="log-target">Target ID: {{ log.target_id }}</span>
+                  <span class="log-admin">Admin ID: {{ log.admin_id }}</span>
+                  <span class="log-time">{{ formatDate(log.timestamp) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="no-data" *ngIf="adminLogs.length === 0">
+              <p>No admin logs found</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
