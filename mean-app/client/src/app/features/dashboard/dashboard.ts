@@ -9,6 +9,68 @@ import { OpportunitiesComponent } from '../opportunities/opportunities.component
 import { OpportunityDetailComponent } from '../opportunities/opportunity-detail/opportunity-detail.component';
 import { OpportunityFormComponent } from '../opportunities/opportunity-form/opportunity-form.component';
 
+// Dashboard Data Interfaces
+export interface DashboardData {
+  totalPickups: number;
+  pickupsChangePercent: number;
+  totalRecycledItems: number;
+  recycledItemsChangePercent: number;
+  totalCO2SavedKg: number;
+  co2SavedChangePercent: number;
+  totalVolunteerHours: number;
+  volunteerHoursChangePercent: number;
+  upcomingPickups: UpcomingPickup[];
+  recyclingBreakdown: Record<string, number>;
+}
+
+export interface UpcomingPickup {
+  address: string;
+  pickupDate: string;
+  time: string;
+}
+
+// Messages Interfaces
+export interface Message {
+  _id: string;
+  sender_id: string;
+  receiver_id: string;
+  content: string;
+  timestamp: string;
+  isRead: boolean;
+}
+
+export interface Conversation {
+  _id: string;
+  sender_id: string;
+  receiver_id: string;
+  content: string;
+  timestamp: string;
+  isRead: boolean;
+}
+
+// Pickup Interfaces
+export interface PickupRequest {
+  name: string;
+  address: string;
+  city: string;
+  contactNumber: string;
+  pickupDate: string;
+  timeSlot: string;
+  wasteTypes: string[];
+  additionalNotes: string;
+}
+
+export interface PickupHistory {
+  _id: string;
+  name: string;
+  address: string;
+  contactNumber: string;
+  pickupDate: string;
+  items: string;
+  status: string;
+  createdAt: string;
+}
+
 // Admin Panel Interfaces
 export interface DashboardStats {
   totalUsers: number;
@@ -56,10 +118,12 @@ export class Dashboard implements OnInit {
   activeMenu: string = 'dashboard'; // default page
   activeProfileTab: string = 'profile'; // Profile tab default
   userProfile = {
+    _id: '',
     name: '',
     email: '',
     location: '',
-    skills: [] as string[]
+    skills: [] as string[],
+    role: 'user' as 'user' | 'admin'
   };
   skillsString: string = '';
   passwordData = {
@@ -68,10 +132,26 @@ export class Dashboard implements OnInit {
     confirmPassword: ''
   };
 
-  // Admin Panel Properties
+  // API URLs
   private adminApiUrl = 'http://localhost:5000/api/v1/admin';
+  private dashboardApiUrl = 'http://localhost:5000/api/v1/dashboard';
+  private messagesApiUrl = 'http://localhost:5000/api/v1/messages';
+  private pickupApiUrl = 'http://localhost:5000/api/v1/pickup';
   
   // Dashboard data
+  dashboardData: DashboardData = {
+    totalPickups: 0,
+    pickupsChangePercent: 0,
+    totalRecycledItems: 0,
+    recycledItemsChangePercent: 0,
+    totalCO2SavedKg: 0,
+    co2SavedChangePercent: 0,
+    totalVolunteerHours: 0,
+    volunteerHoursChangePercent: 0,
+    upcomingPickups: [],
+    recyclingBreakdown: {}
+  };
+  
   dashboardStats: DashboardStats = {
     totalUsers: 0,
     completedPickups: 0,
@@ -88,6 +168,41 @@ export class Dashboard implements OnInit {
   
   // Admin logs
   adminLogs: AdminLog[] = [];
+  
+  // Messages data
+  conversations: Conversation[] = [];
+  selectedConversation: Conversation | null = null;
+  messages: Message[] = [];
+  newMessage: string = '';
+  messageSearchTerm: string = '';
+  showNewConversationForm: boolean = false;
+  newConversationUserId: string = '';
+  newConversationMessage: string = '';
+  
+  // Pickup data
+  pickupRequest: PickupRequest = {
+    name: '',
+    address: '',
+    city: '',
+    contactNumber: '',
+    pickupDate: '',
+    timeSlot: '',
+    wasteTypes: [],
+    additionalNotes: ''
+  };
+  pickupHistory: PickupHistory[] = [];
+  activePickupTab: 'schedule' | 'history' = 'schedule';
+  availableTimeSlots = [
+    '9:00 AM - 11:00 AM',
+    '11:00 AM - 1:00 PM',
+    '1:00 PM - 3:00 PM',
+    '3:00 PM - 5:00 PM',
+    '5:00 PM - 7:00 PM'
+  ];
+  wasteTypeOptions = [
+    'Plastic', 'Paper', 'Glass', 'Metal', 
+    'Electronic Waste', 'Organic Waste', 'Other'
+  ];
   
   // UI state
   activeAdminTab: 'users' | 'logs' = 'users';
@@ -132,12 +247,25 @@ export class Dashboard implements OnInit {
    */
   setOpportunityView(view: 'list' | 'create' | 'details', opportunityId: string | null = null) {
     this.activeMenu = 'opportunities';
+    
+    // Check permissions for create/edit access
+    if (view === 'create' && !this.canCreateOpportunities()) {
+      // Non-admin trying to create - show access denied
+      this.opportunityView = 'create'; // This will trigger the access denied message
+      this.selectedOpportunityId = opportunityId;
+      return;
+    }
+    
     this.opportunityView = view;
     this.selectedOpportunityId = opportunityId;
   }
 
   setActive(menu: string) {
     this.activeMenu = menu;
+    // Clear any existing error messages when switching menus
+    this.errorMessage = '';
+    this.successMessage = '';
+    
     // when user clicks the Opportunities item, ensure sub-view resets to list
     if (menu === 'opportunities') {
       this.opportunityView = 'list';
@@ -146,6 +274,18 @@ export class Dashboard implements OnInit {
     // when user clicks the Admin Panel, load admin data
     if (menu === 'admin') {
       this.loadAdminData();
+    }
+    // when user clicks Dashboard, load dashboard data
+    if (menu === 'dashboard') {
+      this.loadDashboardData();
+    }
+    // when user clicks Messages, load messages data
+    if (menu === 'messages') {
+      this.loadMessagesData();
+    }
+    // when user clicks Schedule Pickup, load pickup data
+    if (menu === 'schedule') {
+      this.loadPickupData();
     }
   }
 
@@ -158,7 +298,78 @@ export class Dashboard implements OnInit {
   }
 
   ngOnInit() {
+    // Check if user is authenticated
+    if (!this.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     this.getUserProfile();
+    this.loadDashboardData(); // Load dashboard data by default
+  }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('authToken');
+    // Only check for token, userId will be set after profile is loaded
+    return !!token;
+  }
+
+  isAdmin(): boolean {
+    return this.userProfile.role === 'admin';
+  }
+
+  isUser(): boolean {
+    return this.userProfile.role === 'user';
+  }
+
+  canCreateOpportunities(): boolean {
+    return this.isAdmin();
+  }
+
+  canSchedulePickup(): boolean {
+    return this.isUser() || this.isAdmin();
+  }
+
+  logout() {
+    // Clear authentication data
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    
+    // Reset user profile
+    this.userProfile = {
+      _id: '',
+      name: '',
+      email: '',
+      location: '',
+      skills: [],
+      role: 'user'
+    };
+    
+    // Clear all data
+    this.conversations = [];
+    this.selectedConversation = null;
+    this.messages = [];
+    this.pickupHistory = [];
+    this.dashboardData = {
+      totalPickups: 0,
+      pickupsChangePercent: 0,
+      totalRecycledItems: 0,
+      recycledItemsChangePercent: 0,
+      totalCO2SavedKg: 0,
+      co2SavedChangePercent: 0,
+      totalVolunteerHours: 0,
+      volunteerHoursChangePercent: 0,
+      upcomingPickups: [],
+      recyclingBreakdown: {}
+    };
+    
+    // Show success message
+    this.successMessage = 'Logged out successfully!';
+    
+    // Redirect to login after a short delay
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1500);
   }
 
   getAuthHeaders() {
@@ -175,9 +386,18 @@ export class Dashboard implements OnInit {
         if (res.success) {
           this.userProfile = res.user;
           this.skillsString = (res.user.skills || []).join(', ');
+          
+          // Store userId if not already stored
+          if (res.user._id && !localStorage.getItem('userId')) {
+            localStorage.setItem('userId', res.user._id);
+          }
         }
       },
-      error: (err) => console.error('Error fetching profile', err)
+      error: (err) => {
+        console.error('Error fetching profile', err);
+        // If profile fetch fails, redirect to login
+        this.router.navigate(['/login']);
+      }
     });
   }
 
@@ -213,7 +433,7 @@ export class Dashboard implements OnInit {
       next: (res) => {
         if (res.success) {
           alert(res.message);
-          this.userProfile = { name: '', email: '', location: '', skills: [] };
+          this.userProfile = { _id: '', name: '', email: '', location: '', skills: [], role: 'user' };
           this.skillsString = '';
           this.router.navigate(['/']);
         }
@@ -258,6 +478,288 @@ export class Dashboard implements OnInit {
     }
   }
 
+  // Dashboard Methods
+  loadDashboardData() {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.http.get<DashboardData>(this.dashboardApiUrl, { headers: this.getAuthHeaders() }).subscribe({
+      next: (data) => {
+        this.dashboardData = data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading dashboard data:', error);
+        this.errorMessage = 'Failed to load dashboard data. Please check your connection and try again.';
+        this.isLoading = false;
+        // Reset to empty state
+        this.dashboardData = {
+          totalPickups: 0,
+          pickupsChangePercent: 0,
+          totalRecycledItems: 0,
+          recycledItemsChangePercent: 0,
+          totalCO2SavedKg: 0,
+          co2SavedChangePercent: 0,
+          totalVolunteerHours: 0,
+          volunteerHoursChangePercent: 0,
+          upcomingPickups: [],
+          recyclingBreakdown: {}
+        };
+      }
+    });
+  }
+
+  // Messages Methods
+  loadMessagesData() {
+    this.loadConversations();
+  }
+
+  loadConversations() {
+    const userId = localStorage.getItem('userId') || this.userProfile._id;
+    if (!userId) {
+      this.errorMessage = 'User not authenticated. Please log in.';
+      return;
+    }
+
+    this.http.get<{success: boolean, data: Conversation[]}>(`${this.messagesApiUrl}/conversations/${userId}`, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.conversations = response.data;
+        } else {
+          this.errorMessage = 'Failed to load conversations.';
+          this.conversations = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading conversations:', error);
+        this.errorMessage = 'Failed to load conversations. Please check your connection and try again.';
+        this.conversations = [];
+      }
+    });
+  }
+
+  selectConversation(conversation: Conversation) {
+    this.selectedConversation = conversation;
+    this.loadMessages(conversation.sender_id, conversation.receiver_id);
+  }
+
+  loadMessages(user1Id: string, user2Id: string) {
+    this.http.get<{success: boolean, data: Message[]}>(`${this.messagesApiUrl}/conversation/${user1Id}/${user2Id}`, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messages = response.data;
+        } else {
+          this.errorMessage = 'Failed to load messages.';
+          this.messages = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading messages:', error);
+        this.errorMessage = 'Failed to load messages. Please check your connection and try again.';
+        this.messages = [];
+      }
+    });
+  }
+
+  sendMessage() {
+    if (!this.newMessage.trim() || !this.selectedConversation) return;
+
+    const userId = localStorage.getItem('userId') || this.userProfile._id;
+    if (!userId) {
+      this.errorMessage = 'User not authenticated. Please log in.';
+      return;
+    }
+
+    const otherUserId = this.selectedConversation.sender_id === userId ? 
+      this.selectedConversation.receiver_id : this.selectedConversation.sender_id;
+
+    const messageData = {
+      sender_id: userId,
+      receiver_id: otherUserId,
+      content: this.newMessage.trim()
+    };
+
+    this.http.post<{success: boolean, data: Message}>(`${this.messagesApiUrl}/send`, messageData, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messages.push(response.data);
+          this.newMessage = '';
+          // Update conversation list
+          this.loadConversations();
+        } else {
+          this.errorMessage = 'Failed to send message.';
+        }
+      },
+      error: (error) => {
+        console.error('Error sending message:', error);
+        this.errorMessage = 'Failed to send message. Please check your connection and try again.';
+      }
+    });
+  }
+
+  searchMessages() {
+    if (!this.messageSearchTerm.trim()) {
+      this.loadConversations();
+      return;
+    }
+    // Filter conversations based on search term
+    const searchTerm = this.messageSearchTerm.toLowerCase();
+    this.conversations = this.conversations.filter(conv => 
+      conv.content.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  startNewConversation() {
+    this.showNewConversationForm = true;
+    this.selectedConversation = null;
+    this.messages = [];
+  }
+
+  cancelNewConversation() {
+    this.showNewConversationForm = false;
+    this.newConversationUserId = '';
+    this.newConversationMessage = '';
+  }
+
+  sendFirstMessage() {
+    if (!this.newConversationUserId.trim() || !this.newConversationMessage.trim()) {
+      this.errorMessage = 'Please enter both user ID and message.';
+      return;
+    }
+
+    const userId = localStorage.getItem('userId') || this.userProfile._id;
+    if (!userId) {
+      this.errorMessage = 'User not authenticated. Please log in.';
+      return;
+    }
+
+    const messageData = {
+      sender_id: userId,
+      receiver_id: this.newConversationUserId.trim(),
+      content: this.newConversationMessage.trim()
+    };
+
+    this.http.post<{success: boolean, message: string, data: Message}>(`${this.messagesApiUrl}/send`, messageData, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.successMessage = 'Message sent! Conversation started.';
+          this.cancelNewConversation();
+          this.loadConversations(); // Refresh conversations list
+        } else {
+          this.errorMessage = response.message || 'Failed to send message.';
+        }
+      },
+      error: (error) => {
+        console.error('Send first message error:', error);
+        this.errorMessage = error.error?.message || 'Failed to send message.';
+      }
+    });
+  }
+
+  // Pickup Methods
+  loadPickupData() {
+    this.loadPickupHistory();
+  }
+
+  loadPickupHistory() {
+    this.http.get<PickupHistory[]>(`${this.pickupApiUrl}/all`, { headers: this.getAuthHeaders() }).subscribe({
+      next: (history) => {
+        this.pickupHistory = history;
+      },
+      error: (error) => {
+        console.error('Error loading pickup history:', error);
+        this.errorMessage = 'Failed to load pickup history. Please check your connection and try again.';
+        this.pickupHistory = [];
+      }
+    });
+  }
+
+  toggleWasteType(type: string) {
+    const index = this.pickupRequest.wasteTypes.indexOf(type);
+    if (index > -1) {
+      this.pickupRequest.wasteTypes.splice(index, 1);
+    } else {
+      this.pickupRequest.wasteTypes.push(type);
+    }
+  }
+
+  schedulePickup() {
+    if (!this.validatePickupForm()) return;
+
+    const pickupData = {
+      name: this.pickupRequest.name,
+      address: `${this.pickupRequest.address}, ${this.pickupRequest.city}`,
+      contactNumber: this.pickupRequest.contactNumber,
+      pickupDate: this.pickupRequest.pickupDate,
+      items: this.pickupRequest.wasteTypes.join(', ')
+    };
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.http.post<{message: string, pickup: PickupHistory}>(`${this.pickupApiUrl}/schedule`, pickupData, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        this.successMessage = response.message || 'Pickup scheduled successfully!';
+        this.resetPickupForm();
+        this.loadPickupHistory();
+        this.isLoading = false;
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: (error) => {
+        console.error('Error scheduling pickup:', error);
+        this.errorMessage = 'Failed to schedule pickup. Please check your connection and try again.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  validatePickupForm(): boolean {
+    if (!this.pickupRequest.name.trim()) {
+      this.errorMessage = 'Name is required';
+      return false;
+    }
+    if (!this.pickupRequest.address.trim()) {
+      this.errorMessage = 'Address is required';
+      return false;
+    }
+    if (!this.pickupRequest.city.trim()) {
+      this.errorMessage = 'City is required';
+      return false;
+    }
+    if (!this.pickupRequest.contactNumber.trim()) {
+      this.errorMessage = 'Contact number is required';
+      return false;
+    }
+    if (!this.pickupRequest.pickupDate) {
+      this.errorMessage = 'Pickup date is required';
+      return false;
+    }
+    if (!this.pickupRequest.timeSlot) {
+      this.errorMessage = 'Time slot is required';
+      return false;
+    }
+    if (this.pickupRequest.wasteTypes.length === 0) {
+      this.errorMessage = 'Please select at least one waste type';
+      return false;
+    }
+    return true;
+  }
+
+  resetPickupForm() {
+    this.pickupRequest = {
+      name: '',
+      address: '',
+      city: '',
+      contactNumber: '',
+      pickupDate: '',
+      timeSlot: '',
+      wasteTypes: [],
+      additionalNotes: ''
+    };
+  }
+
+  setPickupTab(tab: 'schedule' | 'history') {
+    this.activePickupTab = tab;
+  }
+
   // Admin Panel Methods
   loadAdminData() {
     this.loadDashboardStats();
@@ -268,15 +770,21 @@ export class Dashboard implements OnInit {
   // Dashboard statistics
   loadDashboardStats() {
     this.isLoading = true;
-    this.http.get<DashboardStats>(`${this.adminApiUrl}/stats`).subscribe({
+    this.http.get<DashboardStats>(`${this.adminApiUrl}/stats`, { headers: this.getAuthHeaders() }).subscribe({
       next: (stats) => {
         this.dashboardStats = stats;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading dashboard stats:', error);
-        this.errorMessage = 'Failed to load dashboard statistics';
+        this.errorMessage = 'Failed to load dashboard statistics. Please check your connection and try again.';
         this.isLoading = false;
+        this.dashboardStats = {
+          totalUsers: 0,
+          completedPickups: 0,
+          pendingPickups: 0,
+          activeOpportunities: 0
+        };
       }
     });
   }
@@ -284,7 +792,7 @@ export class Dashboard implements OnInit {
   // User management methods
   loadUsers() {
     this.isLoading = true;
-    this.http.get<User[]>(`${this.adminApiUrl}/users`).subscribe({
+    this.http.get<User[]>(`${this.adminApiUrl}/users`, { headers: this.getAuthHeaders() }).subscribe({
       next: (users) => {
         this.users = users;
         this.filteredUsers = users;
@@ -292,8 +800,10 @@ export class Dashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error loading users:', error);
-        this.errorMessage = 'Failed to load users';
+        this.errorMessage = 'Failed to load users. Please check your connection and try again.';
         this.isLoading = false;
+        this.users = [];
+        this.filteredUsers = [];
       }
     });
   }
@@ -322,7 +832,8 @@ export class Dashboard implements OnInit {
     if (!this.selectedUser) return;
     
     this.isLoading = true;
-    this.http.put<User>(`${this.adminApiUrl}/users/${this.selectedUser._id}`, this.selectedUser).subscribe({
+    this.errorMessage = '';
+    this.http.put<User>(`${this.adminApiUrl}/users/${this.selectedUser._id}`, this.selectedUser, { headers: this.getAuthHeaders() }).subscribe({
       next: (updatedUser) => {
         const index = this.users.findIndex(u => u._id === updatedUser._id);
         if (index !== -1) {
@@ -337,7 +848,7 @@ export class Dashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error updating user:', error);
-        this.errorMessage = 'Failed to update user';
+        this.errorMessage = 'Failed to update user. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -347,7 +858,8 @@ export class Dashboard implements OnInit {
     if (!confirm(`Are you sure you want to delete ${user.name}?`)) return;
     
     this.isLoading = true;
-    this.http.delete(`${this.adminApiUrl}/users/${user._id}`).subscribe({
+    this.errorMessage = '';
+    this.http.delete(`${this.adminApiUrl}/users/${user._id}`, { headers: this.getAuthHeaders() }).subscribe({
       next: () => {
         this.users = this.users.filter(u => u._id !== user._id);
         this.filteredUsers = [...this.users];
@@ -357,7 +869,7 @@ export class Dashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting user:', error);
-        this.errorMessage = 'Failed to delete user';
+        this.errorMessage = 'Failed to delete user. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -370,13 +882,14 @@ export class Dashboard implements OnInit {
 
   // Admin logs methods
   loadAdminLogs() {
-    this.http.get<AdminLog[]>(`${this.adminApiUrl}/logs`).subscribe({
+    this.http.get<AdminLog[]>(`${this.adminApiUrl}/logs`, { headers: this.getAuthHeaders() }).subscribe({
       next: (logs) => {
         this.adminLogs = logs;
       },
       error: (error) => {
         console.error('Error loading admin logs:', error);
-        this.errorMessage = 'Failed to load admin logs';
+        this.errorMessage = 'Failed to load admin logs. Please check your connection and try again.';
+        this.adminLogs = [];
       }
     });
   }
@@ -384,14 +897,15 @@ export class Dashboard implements OnInit {
   // Report generation methods
   generateUsersReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/users`).subscribe({
+    this.errorMessage = '';
+    this.http.get<Report>(`${this.adminApiUrl}/reports/users`, { headers: this.getAuthHeaders() }).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error generating users report:', error);
-        this.errorMessage = 'Failed to generate users report';
+        this.errorMessage = 'Failed to generate users report. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -399,14 +913,15 @@ export class Dashboard implements OnInit {
 
   generatePickupsReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/pickups`).subscribe({
+    this.errorMessage = '';
+    this.http.get<Report>(`${this.adminApiUrl}/reports/pickups`, { headers: this.getAuthHeaders() }).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error generating pickups report:', error);
-        this.errorMessage = 'Failed to generate pickups report';
+        this.errorMessage = 'Failed to generate pickups report. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -414,14 +929,15 @@ export class Dashboard implements OnInit {
 
   generateOpportunitiesReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/opportunities`).subscribe({
+    this.errorMessage = '';
+    this.http.get<Report>(`${this.adminApiUrl}/reports/opportunities`, { headers: this.getAuthHeaders() }).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error generating opportunities report:', error);
-        this.errorMessage = 'Failed to generate opportunities report';
+        this.errorMessage = 'Failed to generate opportunities report. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -429,14 +945,15 @@ export class Dashboard implements OnInit {
 
   generateFullActivityReport() {
     this.isLoading = true;
-    this.http.get<Report>(`${this.adminApiUrl}/reports/full-activity`).subscribe({
+    this.errorMessage = '';
+    this.http.get<Report>(`${this.adminApiUrl}/reports/full-activity`, { headers: this.getAuthHeaders() }).subscribe({
       next: (report) => {
         this.downloadReport(report);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error generating full activity report:', error);
-        this.errorMessage = 'Failed to generate full activity report';
+        this.errorMessage = 'Failed to generate full activity report. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -456,7 +973,8 @@ export class Dashboard implements OnInit {
   // Sample data creation
   createSampleData() {
     this.isLoading = true;
-    this.http.post(`${this.adminApiUrl}/sample-data`, {}).subscribe({
+    this.errorMessage = '';
+    this.http.post(`${this.adminApiUrl}/sample-data`, {}, { headers: this.getAuthHeaders() }).subscribe({
       next: (result: any) => {
         this.successMessage = 'Sample data created successfully!';
         this.loadAdminData();
@@ -465,7 +983,7 @@ export class Dashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error creating sample data:', error);
-        this.errorMessage = 'Failed to create sample data';
+        this.errorMessage = 'Failed to create sample data. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -481,8 +999,29 @@ export class Dashboard implements OnInit {
     this.successMessage = '';
   }
 
+  // Utility methods for dashboard
+  formatChangePercent(percent: number): string {
+    const sign = percent >= 0 ? '+' : '';
+    return `${sign}${percent.toFixed(1)}%`;
+  }
+
+  getChangeColor(percent: number): string {
+    return percent >= 0 ? 'green' : 'red';
+  }
+
   formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  formatTime(dateString: string): string {
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
   getStatusColor(status: string): string {
@@ -498,5 +1037,41 @@ export class Dashboard implements OnInit {
       default:
         return 'gray';
     }
+  }
+
+  getRecyclingPercentage(material: string): number {
+    const total = Object.values(this.dashboardData.recyclingBreakdown).reduce((sum, val) => sum + val, 0);
+    const materialTotal = this.dashboardData.recyclingBreakdown[material] || 0;
+    return total > 0 ? (materialTotal / total) * 100 : 0;
+  }
+
+  // Message utility methods
+  getOtherUserId(conversation: Conversation): string {
+    const userId = localStorage.getItem('userId') || this.userProfile._id;
+    if (!userId) return 'Unknown';
+    return conversation.sender_id === userId ? conversation.receiver_id : conversation.sender_id;
+  }
+
+  isMessageFromCurrentUser(message: Message): boolean {
+    const userId = localStorage.getItem('userId') || this.userProfile._id;
+    if (!userId) return false;
+    return message.sender_id === userId;
+  }
+
+  formatMessageTime(timestamp: string): string {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+    
+    if (diffInHours < 24) {
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+  }
+
+  getTotalRecycledWeight(): number {
+    const total = Object.values(this.dashboardData.recyclingBreakdown).reduce((sum, val) => sum + val, 0);
+    return total;
   }
 }

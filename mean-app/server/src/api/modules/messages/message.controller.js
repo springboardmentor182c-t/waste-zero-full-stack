@@ -1,8 +1,8 @@
-const Message = require("./message.model");
-const io = require("../../bin/www"); 
+import Message from "./message.model.js";
+import { io } from "../../../../server.js";
 
-                  //Send a message
-exports.sendMessage = async (req, res) => {
+// Send a message
+export const sendMessage = async (req, res) => {
   try {
     const { sender_id, receiver_id, content } = req.body;
 
@@ -19,12 +19,6 @@ exports.sendMessage = async (req, res) => {
     io.to(receiver_id).emit("receiveMessage", message);
 
     res.status(201).json({
-     success: true,
-     message: "Message sent successfully",
-     data: message,
-     } );
-
-    res.status(201).json({
       success: true,
       message: "Message sent successfully",
       data: message,
@@ -38,9 +32,8 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-
-  //Get conversation between two users
-exports.getConversation = async (req, res) => {
+// Get conversation between two users
+export const getConversation = async (req, res) => {
   try {
     const { user1_id, user2_id } = req.params;
     const limit = parseInt(req.query.limit) || 50;
@@ -67,8 +60,8 @@ exports.getConversation = async (req, res) => {
   }
 };
 
-    //Get all conversations for a user
-exports.getUserConversations = async (req, res) => {
+// Get all conversations for a user
+export const getUserConversations = async (req, res) => {
   try {
     const { user_id } = req.params;
 
@@ -98,8 +91,8 @@ exports.getUserConversations = async (req, res) => {
   }
 };
 
-     //Mark messages as read
-exports.markAsRead = async (req, res) => {
+// Mark messages as read
+export const markAsRead = async (req, res) => {
   try {
     const { sender_id, receiver_id } = req.body;
 
@@ -128,8 +121,8 @@ exports.markAsRead = async (req, res) => {
   }
 };
 
-     //Delete a message
-exports.deleteMessage = async (req, res) => {
+// Delete a message
+export const deleteMessage = async (req, res) => {
   try {
     const { messageId } = req.params;
 
