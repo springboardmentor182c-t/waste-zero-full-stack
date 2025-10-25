@@ -20,28 +20,15 @@ activeTab = 'newPickup';
   
   pickupData = {
     address: '',
-    city: '',
+   // city: '',
     date: '',
     timeSlot: '',
     wasteTypes: [] as string[],
     notes: ''
   };
 
-  pickupHistory = [
-    { date: '2025-10-01', address: '45 Green Street', city: 'Mumbai', timeSlot: '10 AM – 12 PM' },
-    { date: '2025-09-28', address: '12 Hill Road', city: 'Pune', timeSlot: '2 PM – 4 PM' }
-  ];
+  pickupHistory = any[] = []; // now empty
 
-
-
-
- // New pickup form fields
-  newPickup = {
-    date: '',
-    address: '',
-    city: '',
-    timeSlot: ''
-  };
 
   // 🔍 Computed filtered data (includes new pickups automatically)
   get filteredHistory() {
