@@ -1,13 +1,8 @@
-<<<<<<< HEAD
-import { Component,signal } from '@angular/core';
+import { Component,signal, OnInit, Renderer2 } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 // import { AppComponent } from './app/app';
 
 import { bootstrapApplication } from '@angular/platform-browser';
-=======
-import { Component, OnInit, Renderer2 } from '@angular/core';
->>>>>>> origin/main-group-B
-
 @Component({
   selector: 'app-root',
    standalone: true,
@@ -15,13 +10,8 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-<<<<<<< HEAD
-export class AppComponent {
- protected readonly title = 'myapp';
-=======
-export class AppComponent implements OnInit {
-  title = 'myapp';
-  isDarkMode = false;
+ protected readonly title = 'myapp'; // keep readonly if you want it fixed
+   isDarkMode = false;
 
   constructor(private renderer: Renderer2) {}
 
@@ -46,7 +36,7 @@ export class AppComponent implements OnInit {
       this.renderer.addClass(document.body, 'dark-mode');
     }
   }
->>>>>>> origin/main-group-B
+
 }
 bootstrapApplication(AppComponent)
   .catch(err => console.error(err));
