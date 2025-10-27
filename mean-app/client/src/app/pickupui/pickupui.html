@@ -1,0 +1,147 @@
+<div class="eco-bg">
+    <div class="overlay"></div>
+
+    <header class="hero">
+        <img src="assets/wastezero-logo.png" alt="WasteZero Logo" class="logo">
+        <h1>Let’s Clean the Earth Together</h1>
+        <p class="subtext">Join WasteZero in building a cleaner, greener, and zero-waste future.</p>
+    </header>
+
+
+    <!-- for searchbar -->
+
+    <div class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search by address, city, or time..."
+                [(ngModel)]="searchQuery" />
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="results">
+            <table *ngIf="filteredHistory.length; else noResults">
+
+
+            </table>
+
+            <ng-template #noResults>
+                <p class="no-results">No matching records found.</p>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- searchbar close -->
+
+
+    <div class="page">
+        <div class="tabs">
+            <button [class.active]="activeTab==='newPickup'" (click)="setTab('newPickup')">Schedule New Pickup</button>
+            <button [class.active]="activeTab==='history'" (click)="setTab('history')">Pickup History</button>
+        </div>
+
+        <!-- Step 1 -->
+        <section *ngIf="activeTab==='newPickup' && currentStep===1" class="card">
+            <h3>Schedule Waste Pickup</h3>
+            <p>Fill in the details to schedule a pickup for your recyclable waste</p>
+
+            <form>
+                <div class="form-group">
+                    <label>
+                        <h4>Address</h4>
+                    </label>
+                    <input type="text" [(ngModel)]="pickupData.address" name="address"
+                        placeholder="Enter your street address" required>
+                </div>
+
+                <div class="row">
+                    <!-- <div class="form-group half">
+                        <label>
+                            <h4>City</h4>
+                        </label>
+                        <input type="text" [(ngModel)]="pickupData.city" name="city" placeholder="Enter your city"
+                            required>
+                    </div> -->
+                    <div class="form-group half">
+                        <label>
+                            <h4>Pickup Date</h4>
+                        </label>
+                        <input type="date" [(ngModel)]="pickupData.date" name="pickupDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <h4>Preferred Time Slot</h4>
+                    </label>
+                    <select [(ngModel)]="pickupData.timeSlot" name="timeSlot" required>
+                        <option value="">Select a time slot</option>
+                        <option>8 AM – 10 AM</option>
+                        <option>10 AM – 12 PM</option>
+                        <option>2 PM – 4 PM</option>
+                        <option>4 PM – 6 PM</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn next" (click)="nextStep()">Next Step</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Step 2 -->
+        <section *ngIf="activeTab==='newPickup' && currentStep===2" class="card">
+            <h3>Waste Details</h3>
+            <p>Select the types of waste you want to recycle and add any special notes.</p>
+
+            <div class="form-group">
+                <label>
+                    <h4>Waste Types</h4>
+                </label>
+                <div class="checkbox-grid">
+                    <label><input type="checkbox" (change)="toggleWasteType('Plastic')"> Plastic</label>
+                    <label><input type="checkbox" (change)="toggleWasteType('Glass')"> Glass</label>
+                    <label><input type="checkbox" (change)="toggleWasteType('Electronic Waste')"> Electronic
+                        Waste</label>
+                    <label><input type="checkbox" (change)="toggleWasteType('Paper')"> Paper</label>
+                    <label><input type="checkbox" (change)="toggleWasteType('Metal')"> Metal</label>
+                    <label><input type="checkbox" (change)="toggleWasteType('Organic Waste')"> Organic Waste</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <h4>Additional Notes</h4>
+                </label>
+                <textarea [(ngModel)]="pickupData.notes" name="notes"
+                    placeholder="Any special instructions about your waste"></textarea>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn back" (click)="prevStep()">Previous Step</button>
+                <button type="button" class="btn next" (click)="submitPickup()">Schedule Pickup</button>
+            </div>
+        </section>
+
+        <!-- History -->
+        <section *ngIf="activeTab==='history'" class="card history">
+            <h3>Pickup History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Time Slot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of pickupHistory">
+                        <td>{{p.date}}</td>
+                        <td>{{p.address}}</td>
+                        <td>{{p.city}}</td>
+                        <td>{{p.timeSlot}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>

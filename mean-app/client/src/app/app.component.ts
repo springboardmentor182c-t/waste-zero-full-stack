@@ -1,13 +1,17 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component,signal, OnInit, Renderer2 } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+// import { AppComponent } from './app/app';
 
+import { bootstrapApplication } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
+   standalone: true,
+   imports: [RouterLink, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'myapp';
-  isDarkMode = false;
+ protected readonly title = 'myapp'; // keep readonly if you want it fixed
+   isDarkMode = false;
 
   constructor(private renderer: Renderer2) {}
 
@@ -32,4 +36,7 @@ export class AppComponent implements OnInit {
       this.renderer.addClass(document.body, 'dark-mode');
     }
   }
+
 }
+bootstrapApplication(AppComponent)
+  .catch(err => console.error(err));

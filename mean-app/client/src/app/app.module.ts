@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -15,6 +16,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { OpportunitiesComponent } from './opportunities/opportunities.component';
 import { CreateoppComponent } from './create-opp/createopp.component';
 import { OpportunityDetailComponent } from './opportunity-detail/opportunity-detail.component';
+import { Pickupui } from './pickupui/pickupui';
 
 // Routes
 const routes: Routes = [
@@ -26,7 +28,9 @@ const routes: Routes = [
   { path: 'opportunities', component: OpportunitiesComponent },
   { path: 'opportunities/createopp', component: CreateoppComponent },
   { path: 'opportunities/:id', component: OpportunityDetailComponent },
+  {path:  'pickupui', component:Pickupui},
   { path: '**', redirectTo: '' }
+   
 ];
 
 @NgModule({
@@ -52,4 +56,12 @@ const routes: Routes = [
   providers: [DatePipe],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+    providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideHttpClient() // ✅ Thisis for the api
+
+  ]
+};
