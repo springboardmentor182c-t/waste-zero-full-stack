@@ -133,6 +133,7 @@
 }
 .form-group {
   margin-bottom: 15px;
+  position: relative;
 }
 .form-group label {
   display: block;
@@ -683,9 +684,33 @@ body.dark button {
   color: #c53030;
 }
 
+.role-badge.volunteer {
+  background: #c6f6d5;
+  color: #2f855a;
+}
+
 .action-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-view {
+  background: #2196f3;
+  color: white;
+}
+
+.btn-view:hover {
+  background: #1976d2;
+}
+
+.btn-cancel {
+  background: #f44336;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: #d32f2f;
 }
 
 /* Buttons */
@@ -2140,4 +2165,259 @@ body.dark .logout-item {
 body.dark .logout-item:hover {
   background-color: #2d2d2d;
   color: #ff5252 !important;
+}
+
+/* User Dropdown Styles */
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.user-option:hover {
+  background-color: #f8f9fa;
+}
+
+.user-option:last-child {
+  border-bottom: none;
+}
+
+.user-option.no-results {
+  color: #666;
+  cursor: default;
+}
+
+.user-option-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.user-option-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-option-name {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.user-option-email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.selected-user {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #e8f5e8;
+  border-radius: 6px;
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
+/* Dark mode for user dropdown */
+body.dark .user-dropdown {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+body.dark .user-option {
+  border-bottom-color: #4a5568;
+}
+
+body.dark .user-option:hover {
+  background-color: #1a202c;
+}
+
+body.dark .user-option-name {
+  color: #f0f0f0;
+}
+
+body.dark .user-option-email {
+  color: #a0aec0;
+}
+
+body.dark .user-option.no-results {
+  color: #a0aec0;
+}
+
+body.dark .selected-user {
+  background: #1b2d1b;
+  color: #51cf66;
+}
+
+/* Pickup Modal Styles */
+.pickup-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.pickup-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pickup-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8f9fa;
+}
+
+.pickup-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2e7d32;
+}
+
+.pickup-modal-body {
+  padding: 24px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.pickup-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pickup-detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #666;
+  min-width: 140px;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: #333;
+  text-align: right;
+  font-size: 0.9rem;
+  word-break: break-word;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.pickup-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8f9fa;
+}
+
+.pickup-modal-footer button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.pickup-modal-footer .btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.pickup-modal-footer .btn-secondary:hover {
+  background: #5a6268;
+}
+
+.pickup-modal-footer .btn-primary {
+  background: #4caf50;
+  color: white;
+}
+
+.pickup-modal-footer .btn-primary:hover {
+  background: #45a049;
+}
+
+/* Dark mode for pickup modal */
+body.dark .pickup-modal {
+  background: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark .pickup-modal-header {
+  background: #2d3748;
+  border-bottom-color: #4a5568;
+}
+
+body.dark .pickup-modal-header h2 {
+  color: #4caf50;
+}
+
+body.dark .pickup-modal-body {
+  background: #1e1e1e;
+}
+
+body.dark .pickup-detail-row {
+  border-bottom-color: #4a5568;
+}
+
+body.dark .detail-label {
+  color: #a0aec0;
+}
+
+body.dark .detail-value {
+  color: #f0f0f0;
+}
+
+body.dark .pickup-modal-footer {
+  background: #2d3748;
+  border-top-color: #4a5568;
 }

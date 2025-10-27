@@ -62,6 +62,7 @@ export interface PickupRequest {
 
 export interface PickupHistory {
   _id: string;
+  userId: string;
   name: string;
   address: string;
   contactNumber: string;
@@ -69,6 +70,7 @@ export interface PickupHistory {
   items: string;
   status: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 // Admin Panel Interfaces
@@ -87,7 +89,7 @@ export interface User {
   location?: string;
   skills: string[];
   avatar?: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'volunteer';
   createdAt: string;
   updatedAt: string;
 }
@@ -123,7 +125,7 @@ export class Dashboard implements OnInit {
     email: '',
     location: '',
     skills: [] as string[],
-    role: 'user' as 'user' | 'admin'
+    role: 'user' as 'user' | 'admin' | 'volunteer'
   };
   skillsString: string = '';
   passwordData = {
@@ -179,6 +181,10 @@ export class Dashboard implements OnInit {
   newConversationUserId: string = '';
   newConversationMessage: string = '';
   
+  // Available users for messaging
+  availableUsers: User[] = [];
+  searchUserTerm: string = '';
+  
   // Pickup data
   pickupRequest: PickupRequest = {
     name: '',
@@ -209,6 +215,10 @@ export class Dashboard implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
+  
+  // Pickup modal state
+  showPickupModal: boolean = false;
+  selectedPickup: PickupHistory | null = null;
 
   pages: Record<string, string> = {
     dashboard: "Welcome to your WasteZero dashboard. Track pickups, opportunities, and your impact here.",
@@ -322,12 +332,16 @@ export class Dashboard implements OnInit {
     return this.userProfile.role === 'user';
   }
 
+  isVolunteer(): boolean {
+    return this.userProfile.role === 'volunteer';
+  }
+
   canCreateOpportunities(): boolean {
     return this.isAdmin();
   }
 
   canSchedulePickup(): boolean {
-    return this.isUser() || this.isAdmin();
+    return this.isUser() || this.isAdmin() || this.isVolunteer();
   }
 
   logout() {
@@ -612,17 +626,53 @@ export class Dashboard implements OnInit {
     this.showNewConversationForm = true;
     this.selectedConversation = null;
     this.messages = [];
+    this.loadAvailableUsers();
+  }
+
+  loadAvailableUsers() {
+    this.http.get<{success: boolean, data: User[]}>(`${this.messagesApiUrl}/users`, { headers: this.getAuthHeaders() }).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.availableUsers = response.data;
+        } else {
+          this.availableUsers = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.errorMessage = 'Failed to load users. Please check your connection.';
+        this.availableUsers = [];
+      }
+    });
+  }
+
+  getFilteredUsers(): User[] {
+    if (!this.searchUserTerm.trim()) {
+      return this.availableUsers;
+    }
+    const searchTerm = this.searchUserTerm.toLowerCase();
+    return this.availableUsers.filter(user => 
+      user.name.toLowerCase().includes(searchTerm) ||
+      user.email.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  selectUserForConversation(user: User) {
+    this.newConversationUserId = user._id;
+    this.searchUserTerm = `${user.name} (${user.email})`;
   }
 
   cancelNewConversation() {
     this.showNewConversationForm = false;
     this.newConversationUserId = '';
     this.newConversationMessage = '';
+    this.searchUserTerm = '';
+    this.availableUsers = [];
   }
 
   sendFirstMessage() {
     if (!this.newConversationUserId.trim() || !this.newConversationMessage.trim()) {
-      this.errorMessage = 'Please enter both user ID and message.';
+      this.errorMessage = 'Please select a user and enter a message.';
       return;
     }
 
@@ -661,7 +711,7 @@ export class Dashboard implements OnInit {
   }
 
   loadPickupHistory() {
-    this.http.get<PickupHistory[]>(`${this.pickupApiUrl}/all`, { headers: this.getAuthHeaders() }).subscribe({
+    this.http.get<PickupHistory[]>(`${this.pickupApiUrl}/my`, { headers: this.getAuthHeaders() }).subscribe({
       next: (history) => {
         this.pickupHistory = history;
       },
@@ -693,10 +743,15 @@ export class Dashboard implements OnInit {
       items: this.pickupRequest.wasteTypes.join(', ')
     };
 
+    console.log('Sending pickup data:', pickupData);
+    console.log('Headers:', this.getAuthHeaders());
+
     this.isLoading = true;
     this.errorMessage = '';
     this.http.post<{message: string, pickup: PickupHistory}>(`${this.pickupApiUrl}/schedule`, pickupData, { headers: this.getAuthHeaders() }).subscribe({
       next: (response) => {
+        console.log('Pickup created response:', response);
+        console.log('Pickup object:', response.pickup);
         this.successMessage = response.message || 'Pickup scheduled successfully!';
         this.resetPickupForm();
         this.loadPickupHistory();
@@ -705,7 +760,8 @@ export class Dashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error scheduling pickup:', error);
-        this.errorMessage = 'Failed to schedule pickup. Please check your connection and try again.';
+        console.error('Error details:', error.error);
+        this.errorMessage = error.error?.message || 'Failed to schedule pickup. Please check your connection and try again.';
         this.isLoading = false;
       }
     });
@@ -1009,19 +1065,50 @@ export class Dashboard implements OnInit {
     return percent >= 0 ? 'green' : 'red';
   }
 
-  formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+  formatDate(dateString: string | undefined | null): string {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid Date';
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return 'Invalid Date';
+    }
   }
 
-  formatTime(dateString: string): string {
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  formatTime(dateString: string | undefined | null): string {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid Time';
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return 'Invalid Time';
+    }
+  }
+
+  formatFullDateTime(dateString: string | undefined | null): string {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid Date';
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return 'Invalid Date';
+    }
   }
 
   getStatusColor(status: string): string {
@@ -1073,5 +1160,58 @@ export class Dashboard implements OnInit {
   getTotalRecycledWeight(): number {
     const total = Object.values(this.dashboardData.recyclingBreakdown).reduce((sum, val) => sum + val, 0);
     return total;
+  }
+
+  // Pickup view and cancel methods
+  viewPickup(pickup: PickupHistory) {
+    this.selectedPickup = pickup;
+    this.showPickupModal = true;
+  }
+
+  closePickupModal() {
+    this.showPickupModal = false;
+    this.selectedPickup = null;
+  }
+
+  cancelPickup(pickup: PickupHistory) {
+    if (pickup.status === 'Completed') {
+      alert('Cannot cancel completed pickup');
+      return;
+    }
+    
+    if (pickup.status === 'Cancelled') {
+      alert('Pickup is already cancelled');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to cancel this pickup scheduled for ${this.formatDate(pickup.pickupDate)}?`)) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    
+    this.http.put<{success: boolean, message: string, pickup: PickupHistory}>(
+      `${this.pickupApiUrl}/cancel/${pickup._id}`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.successMessage = response.message || 'Pickup cancelled successfully!';
+          this.loadPickupHistory();
+          this.isLoading = false;
+          setTimeout(() => this.successMessage = '', 3000);
+        } else {
+          this.errorMessage = 'Failed to cancel pickup.';
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error cancelling pickup:', error);
+        this.errorMessage = error.error?.message || 'Failed to cancel pickup. Please try again.';
+        this.isLoading = false;
+      }
+    });
   }
 }

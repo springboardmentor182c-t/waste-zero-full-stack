@@ -1,7 +1,11 @@
 import express from "express";
 import * as adminController from "./adminpanel.controller.js";
+import auth from "../../middleware/auth.js";
 
 const router = express.Router();
+
+// All admin routes require authentication
+router.use(auth);
 
 // Dashboard statistics
 router.get("/stats", adminController.getDashboardStats);
