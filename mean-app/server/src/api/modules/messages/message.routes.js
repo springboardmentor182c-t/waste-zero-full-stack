@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import * as messagesController from "./message.controller.js";
 const router = express.Router();
-const messagesController = require("./message.controller");
+
 
   //Send a message
 router.post("/send", messagesController.sendMessage);
@@ -17,4 +18,5 @@ router.put("/mark-read", messagesController.markAsRead);
   //Delete a message
 router.delete("/:messageId", messagesController.deleteMessage);
 
-module.exports = router;
+export default router;
+

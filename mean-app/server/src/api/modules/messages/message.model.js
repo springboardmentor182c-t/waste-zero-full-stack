@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 
 const messageSchema = new mongoose.Schema(
@@ -34,4 +34,6 @@ const messageSchema = new mongoose.Schema(
       // Compound index for fast querying
 messageSchema.index({ sender_id: 1, receiver_id: 1, timestamp: -1 });
 
-module.exports = mongoose.model("Message", messageSchema);
+const Pickup = mongoose.models.Message || mongoose.model("Message", messageSchema);
+
+export default Pickup;
