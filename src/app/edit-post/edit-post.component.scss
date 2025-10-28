@@ -1,0 +1,14 @@
+:host { display:block; }
+h2 { margin-top:0; }
+label { display:block; margin:12px 0 6px; font-weight:600; }
+input[type="text"], textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:8px; font-size:14px; }
+.row-inline { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.actions { margin-top:16px; display:flex; gap:10px; }
+button { padding:10px 14px; border-radius:8px; border:none; cursor:pointer; background:#111827; color:#fff; }
+button[disabled] { opacity:0.6; cursor:not-allowed; }
+.error { color:#b91c1c; margin-top:12px; }
+.success { color:#065f46; margin-top:12px; }
+.preview { margin-top:18px; padding:12px; border-radius:8px; background:#f8fafc; }
+.snippet { color:#374151; margin-top:6px; }
+.tags span { background:#e6f4ea; padding:4px 8px; margin-right:6px; border-radius:6px; display:inline-block; }
+.hint small { color:#b91c1c; }

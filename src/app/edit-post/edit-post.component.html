@@ -1,0 +1,50 @@
+<div *ngIf="loading">Loading post…</div>
+
+<div *ngIf="!loading && form">
+  <h2>Edit Post</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <label>
+      Title
+      <input type="text" formControlName="title" />
+    </label>
+    <div class="hint" *ngIf="f.title.touched && f.title.invalid">
+      <small *ngIf="f.title.errors?.required">Title is required.</small>
+      <small *ngIf="f.title.errors?.minlength">Title must be at least 5 characters.</small>
+    </div>
+
+    <label>
+      Content
+      <textarea rows="8" formControlName="content"></textarea>
+    </label>
+    <div class="hint" *ngIf="f.content.touched && f.content.invalid">
+      <small *ngIf="f.content.errors?.required">Content is required.</small>
+      <small *ngIf="f.content.errors?.minlength">Content must be at least 10 characters.</small>
+    </div>
+
+    <label>
+      Tags (comma separated)
+      <input type="text" formControlName="tags" />
+    </label>
+
+    <label class="row-inline">
+      <input type="checkbox" formControlName="published" /> Published
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">Save changes</button>
+      <button type="button" (click)="form.reset(originalPost)">Reset</button>
+    </div>
+  </form>
+
+  <div *ngIf="error" class="error">{{error}}</div>
+  <div *ngIf="successMessage" class="success">{{successMessage}}</div>
+
+  <section class="preview" *ngIf="form.valid">
+    <h3>Live preview</h3>
+    <div><strong>{{preview()?.title}}</strong></div>
+    <div class="snippet">{{preview()?.contentSnippet}}…</div>
+    <div class="tags">Tags: <span *ngFor="let t of preview()?.tags">{{t}} </span></div>
+    <div>Status: {{preview()?.published ? 'Published' : 'Draft'}}</div>
+  </section>
+</div>

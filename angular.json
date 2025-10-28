@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/angular/cli/main/packages/angular/cli/lib/config/schema.json",
+  "version": 1,
+  "projects": {
+    "edit-post-ui": {
+      "projectType": "application",
+      "root": "src",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server"
+        }
+      }
+    }
+  },
+  "defaultProject": "edit-post-ui"
+}
