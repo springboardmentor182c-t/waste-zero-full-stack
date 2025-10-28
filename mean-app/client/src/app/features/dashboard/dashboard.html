@@ -15,7 +15,11 @@
     <div class="profile">
       <img src="https://i.ibb.co/PGv8ZzG/user.png" alt="User Profile" />
       <h3>{{userProfile.name || 'User'}}</h3>
-      <p class="user-role">{{userProfile.role === 'admin' ? 'Administrator' : 'User'}}</p>
+      <p class="user-role">
+        <span *ngIf="userProfile.role === 'admin'">Administrator</span>
+        <span *ngIf="userProfile.role === 'volunteer'">Volunteer</span>
+        <span *ngIf="userProfile.role === 'user'">User</span>
+      </p>
     </div>
 
     <nav class="menu">
@@ -133,7 +137,9 @@
                   <td>{{formatDate(pickup.pickupDate)}} {{pickup.time}}</td>
                   <td>{{pickup.address}}</td>
                   <td><span class="status scheduled">Scheduled</span></td>
-                  <td><button class="btn-small">View</button></td>
+                  <td>
+                    <button class="btn-small" (click)="setActive('schedule')">Manage</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -270,12 +276,34 @@
           
           <div class="form-content">
             <div class="form-group">
-              <label for="userId">User ID to message:</label>
+              <label for="userSearch">Select user to message:</label>
               <input 
                 type="text" 
-                id="userId"
-                placeholder="Enter user ID (e.g., 507f1f77bcf86cd799439011)"
-                [(ngModel)]="newConversationUserId">
+                id="userSearch"
+                placeholder="Search by name or email..."
+                [(ngModel)]="searchUserTerm">
+              
+              <!-- User Dropdown -->
+              <div class="user-dropdown" *ngIf="searchUserTerm">
+                <div 
+                  *ngFor="let user of getFilteredUsers()" 
+                  class="user-option"
+                  (click)="selectUserForConversation(user)">
+                  <div class="user-option-avatar">{{user.name.charAt(0).toUpperCase()}}</div>
+                  <div class="user-option-info">
+                    <div class="user-option-name">{{user.name}}</div>
+                    <div class="user-option-email">{{user.email}}</div>
+                  </div>
+                </div>
+                <div *ngIf="getFilteredUsers().length === 0" class="user-option no-results">
+                  No users found
+                </div>
+              </div>
+              
+              <!-- Selected User Display -->
+              <div *ngIf="newConversationUserId" class="selected-user">
+                <span>✓ Selected: {{searchUserTerm}}</span>
+              </div>
             </div>
             
             <div class="form-group">
@@ -408,8 +436,12 @@
                     </span>
                   </td>
                   <td>
-                    <button class="btn-small" *ngIf="pickup.status === 'Scheduled'">Cancel</button>
-                    <button class="btn-small">View</button>
+                    <div class="action-buttons">
+                      <button class="btn-small btn-view" (click)="viewPickup(pickup)">View</button>
+                      <button class="btn-small btn-cancel" *ngIf="pickup.status === 'Scheduled'" (click)="cancelPickup(pickup)">
+                        Cancel
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -685,6 +717,7 @@
                     <label>Role</label>
                     <select [(ngModel)]="selectedUser.role" name="role">
                       <option value="user">User</option>
+                      <option value="volunteer">Volunteer</option>
                       <option value="admin">Admin</option>
                     </select>
                   </div>
@@ -728,8 +761,10 @@
                   </td>
                   <td>{{ user.email }}</td>
                   <td>
-                    <span class="role-badge" [class.admin]="user.role === 'admin'">
-                      {{ user.role }}
+                    <span class="role-badge" 
+                          [class.admin]="user.role === 'admin'"
+                          [class.volunteer]="user.role === 'volunteer'">
+                      {{ user.role === 'admin' ? 'Admin' : user.role === 'volunteer' ? 'Volunteer' : 'User' }}
                     </span>
                   </td>
                   <td>{{ user.location || 'N/A' }}</td>
@@ -790,6 +825,56 @@
         <button class="btn-primary" (click)="setActive('dashboard')">Back to Dashboard</button>
       </div>
     </section>
+
+    <!-- Pickup Details Modal -->
+    <div class="pickup-modal-overlay" *ngIf="showPickupModal" (click)="closePickupModal()">
+      <div class="pickup-modal" (click)="$event.stopPropagation()" *ngIf="selectedPickup">
+        <div class="pickup-modal-header">
+          <h2>📦 Pickup Details</h2>
+          <button class="close-btn" (click)="closePickupModal()">×</button>
+        </div>
+        <div class="pickup-modal-body">
+          <div class="pickup-detail-row">
+            <span class="detail-label">Name:</span>
+            <span class="detail-value">{{selectedPickup.name || 'N/A'}}</span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Address:</span>
+            <span class="detail-value">{{selectedPickup.address || 'N/A'}}</span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Contact Number:</span>
+            <span class="detail-value">{{selectedPickup.contactNumber || 'N/A'}}</span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Pickup Date:</span>
+            <span class="detail-value">{{formatDate(selectedPickup.pickupDate)}}</span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Items:</span>
+            <span class="detail-value">{{selectedPickup.items || 'N/A'}}</span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value">
+              <span class="status" [class]="getStatusColor(selectedPickup.status)">
+                {{selectedPickup.status || 'N/A'}}
+              </span>
+            </span>
+          </div>
+          <div class="pickup-detail-row">
+            <span class="detail-label">Created:</span>
+            <span class="detail-value">{{formatDate(selectedPickup.createdAt)}}</span>
+          </div>
+        </div>
+        <div class="pickup-modal-footer">
+          <button class="btn-secondary" (click)="closePickupModal()">Close</button>
+          <button class="btn-primary" (click)="closePickupModal()">
+            {{selectedPickup.status === 'Scheduled' ? 'Manage Pickup' : 'OK'}}
+          </button>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 <footer class="page-footer">

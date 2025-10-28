@@ -1,4 +1,5 @@
 import Message from "./message.model.js";
+import User from "../user/user.model.js";
 import { io } from "../../../../server.js";
 
 // Send a message
@@ -143,6 +144,36 @@ export const deleteMessage = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to delete message",
+    });
+  }
+};
+
+// Get all users for messaging (returns user list excluding current user)
+export const getAvailableUsers = async (req, res) => {
+  try {
+    const currentUserId = req.user?.id;
+    
+    if (!currentUserId) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated",
+      });
+    }
+
+    // Get all users except current user
+    const users = await User.find({ _id: { $ne: currentUserId } })
+      .select('_id name email role bio location skills avatar')
+      .sort({ name: 1 });
+
+    res.status(200).json({
+      success: true,
+      data: users,
+    });
+  } catch (error) {
+    console.error("Get available users error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
     });
   }
 };

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const pickupSchema = new mongoose.Schema({
+    userId: { type: String }, // User who created the pickup (optional for backward compatibility)
     name: { type: String, required: true },
     address: { type: String, required: true },
     contactNumber: { type: String, required: true },

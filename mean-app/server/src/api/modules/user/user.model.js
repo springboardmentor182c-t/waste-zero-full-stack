@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   location: { type: String },                   // city/country
   skills: { type: [String], default: [] },      // array of skills
   avatar: { type: String },                     // profile picture URL
-  role: { type: String, enum: ["user", "admin"], default: "user" } // optional for admin features
+  role: { type: String, enum: ["user", "admin","volunteer"], default: "user" } // optional for admin features
 }, 
 { timestamps: true });
 

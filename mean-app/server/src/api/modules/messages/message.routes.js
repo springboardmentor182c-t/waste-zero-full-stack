@@ -1,9 +1,13 @@
 import express from "express";
 import * as messagesController from "./message.controller.js";
+import auth from "../../middleware/auth.js";
+
 const router = express.Router();
 
+// Get available users for messaging - requires auth
+router.get("/users", auth, messagesController.getAvailableUsers);
 
-  //Send a message
+//Send a message
 router.post("/send", messagesController.sendMessage);
 
   //Get conversation between two users
