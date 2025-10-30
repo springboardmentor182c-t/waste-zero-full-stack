@@ -179,7 +179,6 @@
         <p>Loading dashboard data...</p>
       </div>
     </section>
-
     <!-- Messages Section -->
     <section *ngIf="activeMenu === 'messages'" class="messages-section">
       <div class="messages-header">
@@ -325,7 +324,6 @@
         </div>
       </div>
     </section>
-
     <!-- Schedule Pickup Section -->
     <section *ngIf="activeMenu === 'schedule'" class="schedule-section">
       <div class="schedule-header">
@@ -464,7 +462,17 @@
 
     <!-- Other sections (impact, settings, support) -->
     <section *ngIf="activeMenu === 'impact'" [innerHTML]="pages[activeMenu]"></section>
-    <section *ngIf="activeMenu === 'settings'" [innerHTML]="pages[activeMenu]"></section>
+
+    <!-- Simplified Settings Section (removed dummy controls) -->
+    <section *ngIf="activeMenu === 'settings'" class="settings-section">
+      <div class="settings-form">
+        <h1>Settings</h1>
+        <h3>Theme</h3>
+        <p>Toggle the application theme (light / dark)</p>
+        <button class="btn-primary" (click)="toggleTheme()">Toggle Theme</button>
+      </div>
+    </section>
+
     <section *ngIf="activeMenu === 'support'" [innerHTML]="pages[activeMenu]"></section>
     <!-- Opportunities container (embedded components) -->
     <section *ngIf="activeMenu === 'opportunities'">
@@ -550,34 +558,6 @@
 
       </div>
 
-    </section>
-
-
-    <section *ngIf="activeMenu === 'settings'" class="settings-section">
-      <div class="settings-form">
-        <h1>Settings</h1>
-        <h3>General</h3>
-        <label><input type="checkbox" id="notifToggle"> Enable Notifications</label>
-        <label>Language
-          <select id="languageSelect">
-            <option>English</option>
-            <option>Spanish</option>
-            <option>French</option>
-            <option>German</option>
-          </select>
-        </label>
-        <h3>Privacy</h3>
-        <label><input type="checkbox" id="profileVisibility"> Make Profile Public</label>
-        <h3>Theme</h3>
-        <select id="themeOption">
-          <option>Light</option>
-          <option>Dark</option>
-          <option>Auto</option>
-        </select>
-        <h3>Data Preferences</h3>
-        <button id="downloadData">Download My Data</button>
-        <button id="clearCache">Clear Cache</button>
-      </div>
     </section>
 
     <!-- Admin Panel Section -->
