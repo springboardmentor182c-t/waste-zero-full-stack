@@ -1,0 +1,279 @@
+/* Sidebar (imported from dashboard.css) */
+.sidebar {
+  width: 260px;
+  background: #2e7d32;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+  min-height: 100vh;
+}
+
+.sidebar h2 {
+  margin-left: 40px;
+  margin-bottom: 16px;
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar ul li:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar ul li span {
+  display: inline-block;
+}
+
+.profile {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.profile img {
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+}
+
+.user-role {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Page layout */
+.dashboard-wrapper {
+  display: flex;
+}
+
+/* About Page Styles */
+.about-page {
+  flex: 1;
+  padding: 2rem;
+  background: #f9f9f9;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Hero section */
+.hero-section {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  color: white;
+  padding: 4rem 2rem;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero-section p {
+  max-width: 700px;
+  margin: 1rem auto;
+  font-size: 1.2rem;
+}
+
+/* Mission */
+.mission-section {
+  margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.mission-content {
+  flex: 1 1 400px;
+}
+
+.mission-content h2 {
+  color: #1b5e20;
+  margin-bottom: 1rem;
+}
+
+.mission-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mission-content li {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.mission-image {
+  flex: 1 1 300px;
+  border-radius: 12px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Team Section */
+.team-section {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.team-section h2 {
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+}
+
+/* CTA Section */
+.cta-section {
+  margin-top: 4rem;
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: white;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.cta-section button {
+  margin-top: 1rem;
+  background: white;
+  color: #2e7d32;
+  font-weight: 600;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cta-section button:hover {
+  background: #c8e6c9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  .about-page {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .mission-section {
+    flex-direction: column;
+  }
+  /* --- Sidebar --- */
+.sidebar {
+  width: 260px;
+  background: #2e7d32;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+  min-height: 100vh;
+}
+
+.sidebar h4 {
+  margin-left: 40px;
+  margin-bottom: 12px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0 20px;
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Top Bar --- */
+.top-bar {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  border-radius: 20px;
+  padding: 5px 15px;
+}
+
+.search-bar input {
+  border: none;
+  background: none;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+}
+
+.theme-toggle {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle:hover {
+  background: #43a047;
+}
+
+/* --- Layout --- */
+.about-wrapper {
+  display: flex;
+}
+
+.about-page {
+  flex: 1;
+  padding: 2rem;
+  background: #f9f9f9;
+  font-family: "Poppins", sans-serif;
+}
+
+/* --- Reuse your Hero, Mission, CTA sections from before --- */
+/* (Paste all your existing hero-section, mission-section, team-section, and cta-section CSS here) */
+
+}

@@ -1,0 +1,49 @@
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-card {
+    background: #f8fafc;
+    padding: 24px 28px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 2px 20px #00000033;
+    text-align: center;
+}
+
+.modal-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #2186eb;
+}
+
+.modal-card p {
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background: #ccc;
+    color: #212121;
+    border-radius: 5px;
+    padding: 6px 18px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.btn-secondary:hover {
+    background: #b5b5b5;
+}

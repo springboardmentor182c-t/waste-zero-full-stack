@@ -1,0 +1,11 @@
+<section class="services-container">
+  <h2>Our Services</h2>
+  <div class="services-grid">
+    <div class="service-card" *ngFor="let s of services">
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.description }}</p>
+    </div>
+  </div>
+
+  <a routerLink="/" class="back-btn">← Back to Home</a>
+</section>

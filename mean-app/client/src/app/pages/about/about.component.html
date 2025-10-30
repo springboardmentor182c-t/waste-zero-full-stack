@@ -1,0 +1,87 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile">
+      <img src="https://i.ibb.co/PGv8ZzG/user.png" alt="User Profile" />
+      <h3>{{ userProfile.name || 'User' }}</h3>
+      <p class="user-role">
+        <span *ngIf="userProfile.role === 'admin'">Administrator</span>
+        <span *ngIf="userProfile.role === 'volunteer'">Volunteer</span>
+        <span *ngIf="userProfile.role === 'user'">User</span>
+      </p>
+    </div>
+
+    <nav class="menu">
+      <h4>Main Menu</h4>
+      <ul>
+        <li routerLink="/dashboard">🏠 Dashboard</li>
+        <li *ngIf="canSchedulePickup()">🚚 Schedule Pickup</li>
+        <li routerLink="/opportunities">🤝 Opportunities</li>
+        <li routerLink="/messages">💬 Messages</li>
+        <li routerLink="/impact">🌍 My Impact</li>
+      </ul>
+
+      <h4>Settings</h4>
+      <ul>
+        <li routerLink="/profile">👤 My Profile</li>
+        <li routerLink="/settings">⚙️ Settings</li>
+        <li routerLink="/support">🆘 Help & Support</li>
+        <li *ngIf="isAdmin()">🛠️ Admin Panel</li>
+
+        <li class="theme-toggle-item" (click)="toggleTheme()">🌓 Switch Theme</li>
+        <li class="logout-item" (click)="logout()">🚪 Logout</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- About Content -->
+  <div class="about-page">
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Transforming Waste into Sustainable Resources ♻️</h1>
+        <p>
+          At WasteZero, we are on a mission to convert waste into renewable
+          energy and valuable materials — creating a cleaner and more
+          sustainable future for everyone.
+        </p>
+      </div>
+    </section>
+
+    <section class="mission-section">
+      <div class="mission-content">
+        <h2>Our Mission</h2>
+        <p>
+          We're dedicated to minimizing landfill waste and carbon emissions by
+          converting organic waste into eco-friendly solutions like biogas and
+          fertilizers. Through innovation and community-driven action, we aim to
+          achieve zero waste.
+        </p>
+        <ul>
+          <li>🌿 Reduce landfill waste and pollution</li>
+          <li>⚡ Convert waste into renewable energy</li>
+          <li>💧 Promote sustainable water and soil practices</li>
+        </ul>
+      </div>
+      <img
+        src="https://i.ibb.co/t8ZMNfV/waste-recycling.jpg"
+        alt="Waste Recycling"
+        class="mission-image"
+      />
+    </section>
+
+    <section class="team-section">
+      <h2>Meet Our Sustainable Innovation Team</h2>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Join the Movement for a Waste-Free Future!</h2>
+        <p>
+          Partner with us to make sustainability a reality. Together, we can
+          turn today’s waste into tomorrow’s resource.
+        </p>
+        <button routerLink="/contact">Contact Us 🌍</button>
+      </div>
+    </section>
+  </div>
+</div>
