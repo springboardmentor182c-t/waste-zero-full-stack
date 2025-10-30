@@ -1,0 +1,146 @@
+.about-page {
+  margin-left: 260px; /* adjust based on your sidebar width */
+  padding: 2rem;
+  background: #f9f9f9;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Hero section */
+.hero-section {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  color: white;
+  padding: 4rem 2rem;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero-section p {
+  max-width: 700px;
+  margin: 1rem auto;
+  font-size: 1.2rem;
+}
+
+/* Mission */
+.mission-section {
+  margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.mission-content {
+  flex: 1 1 400px;
+}
+
+.mission-content h2 {
+  color: #1b5e20;
+  margin-bottom: 1rem;
+}
+
+.mission-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mission-content li {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.mission-image {
+  flex: 1 1 300px;
+  border-radius: 12px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Team Section */
+.team-section {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.team-section h2 {
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+}
+
+.team-card img {
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+/* CTA Section */
+.cta-section {
+  margin-top: 4rem;
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: white;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.cta-section button {
+  margin-top: 1rem;
+  background: white;
+  color: #2e7d32;
+  font-weight: 600;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cta-section button:hover {
+  background: #c8e6c9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-page {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .mission-section {
+    flex-direction: column;
+  }
+}
