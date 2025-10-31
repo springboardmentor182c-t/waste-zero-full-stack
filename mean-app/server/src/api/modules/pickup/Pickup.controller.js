@@ -128,3 +128,32 @@ export const cancelPickup = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Delete pickup (permanent removal)
+export const deletePickup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    const pickup = await Pickup.findById(id);
+    if (!pickup) {
+      return res.status(404).json({ message: "Pickup not found" });
+    }
+
+    // Ensure user owns this pickup if userId is present on the document
+    if (pickup.userId && pickup.userId !== userId) {
+      return res.status(403).json({ message: "You can only delete your own pickups" });
+    }
+
+    if (pickup.status === 'Completed') {
+      return res.status(400).json({ message: "Cannot delete completed pickup" });
+    }
+
+    await Pickup.findByIdAndDelete(id);
+
+    res.json({ success: true, message: "Pickup deleted successfully" });
+  } catch (error) {
+    console.error('Error deleting pickup:', error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
