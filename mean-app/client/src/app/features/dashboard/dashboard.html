@@ -3,20 +3,15 @@
     <img src="assets/logo-img.png" alt="WasteZero Logo" class="logo-img" />
     <span>WasteZero</span>
   </div>
-<nav class="nav-links">
-  <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">HOME</a>
-  <a routerLink="/about" routerLinkActive="active">ABOUT</a>
-  <a routerLink="/services" routerLinkActive="active">SERVICES</a>
-
-  <a (click)="scrollTo('footer-contact')">CONTACT</a>
-</nav>
-
+  <nav class="nav-links">
+    <a href="#">HOME</a>
+  </nav>
 </header>
 <div class="dashboard-wrapper">
   <aside class="sidebar">
     <div class="profile">
       <img src="https://i.ibb.co/PGv8ZzG/user.png" alt="User Profile" />
-      <h3>{{ userProfile.name || 'User' }}</h3>
+      <h3>{{userProfile.name || 'User'}}</h3>
       <p class="user-role">
         <span *ngIf="userProfile.role === 'admin'">Administrator</span>
         <span *ngIf="userProfile.role === 'volunteer'">Volunteer</span>
@@ -27,29 +22,31 @@
     <nav class="menu">
       <h4>Main Menu</h4>
       <ul>
-        <li [class.active]="activeMenu === 'dashboard'" (click)="setActive('dashboard')">🏠 Dashboard</li>
-        <li *ngIf="canSchedulePickup()" [class.active]="activeMenu === 'schedule'" (click)="setActive('schedule')">🚚 Schedule Pickup</li>
-        <li [class.active]="activeMenu === 'opportunities'" (click)="setActive('opportunities')">🤝 Opportunities</li>
-        <li [class.active]="activeMenu === 'messages'" (click)="setActive('messages')">💬 Messages</li>
-        <li [class.active]="activeMenu === 'impact'" (click)="setActive('impact')">🌍 My Impact</li>
+        <li [class.active]="activeMenu === 'dashboard'" (click)="setActive('dashboard')">Dashboard</li>
+        <li *ngIf="canSchedulePickup()" [class.active]="activeMenu === 'schedule'" (click)="setActive('schedule')">Schedule Pickup</li>
+        <li [class.active]="activeMenu === 'opportunities'" (click)="setActive('opportunities')">Opportunities</li>
+        <li [class.active]="activeMenu === 'messages'" (click)="setActive('messages')">Messages</li>
+        <li [class.active]="activeMenu === 'impact'" (click)="setActive('impact')">My Impact</li>
       </ul>
 
       <h4>Settings</h4>
       <ul>
-        <li [class.active]="activeMenu === 'profile'" (click)="setActive('profile')">👤 My Profile</li>
-        <li [class.active]="activeMenu === 'settings'" (click)="setActive('settings')">⚙️ Settings</li>
-        <li [class.active]="activeMenu === 'support'" (click)="setActive('support')">🆘 Help & Support</li>
-        <li *ngIf="isAdmin()" [class.active]="activeMenu === 'admin'" (click)="setActive('admin')">🛠️ Admin Panel</li>
-
-        <li class="theme-toggle-item" (click)="toggleTheme()">🌓 Switch Theme</li>
-        <li class="logout-item" (click)="logout()">🚪 Logout</li>
+        <li [class.active]="activeMenu === 'profile'" (click)="setActive('profile')">My Profile</li>
+        <li [class.active]="activeMenu === 'settings'" (click)="setActive('settings')">Settings</li>
+        <li [class.active]="activeMenu === 'support'" (click)="setActive('support')">Help & Support</li>
+        <li *ngIf="isAdmin()" [class.active]="activeMenu === 'admin'" (click)="setActive('admin')">Admin Panel</li>
+        <li class="logout-item" (click)="logout()">
+          <span>🚪</span> Logout
+        </li>
       </ul>
     </nav>
   </aside>
 
-
   <main class="main-content">
-    
+    <div class="top-bar">
+      <input type="text" placeholder="Search pickups, opportunities..." />
+      <button class="theme-toggle" (click)="toggleTheme()">Switch Theme</button>
+    </div>
 
     <!-- Error and Success Messages -->
     <div *ngIf="errorMessage" class="error-message" (click)="clearMessages()">
@@ -441,6 +438,9 @@
                       <button class="btn-small btn-cancel" *ngIf="pickup.status === 'Scheduled'" (click)="cancelPickup(pickup)">
                         Cancel
                       </button>
+                      <button class="btn-small btn-delete" *ngIf="pickup.status !== 'Completed'" (click)="deletePickup(pickup)">
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -501,6 +501,7 @@
     <!-- Profile Section -->
     <!-- Profile Section -->
     <section class="profile-section" *ngIf="activeMenu === 'profile'">
+      
       <h1>My Profile</h1>
       <p>Manage your account information and settings</p>
 
@@ -877,44 +878,3 @@
     </div>
   </main>
 </div>
-<footer class="page-footer">
-  <div class="footer-container">
-    <div class="footer-col">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Services</a></li>
-      </ul>
-    </div>
-    <div class="footer-col" id="footer-about">
-      <h4>About Us</h4>
-      <p>
-        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to
-        streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner
-        communities through intelligent pickup scheduling and comprehensive waste management solutions.
-      </p>
-    </div>
-    <div class="footer-col" id="footer-services">
-      <h4>Services</h4>
-      <ul>
-        <li><a href="#">Smart Pickup Scheduling</a></li>
-        <li><a href="#">Community Recycling</a></li>
-        <li><a href="#">Volunteer Coordination</a></li>
-        <li><a href="#">Waste Analytics</a></li>
-        <li><a href="#">NGO Partnerships</a></li>
-      </ul>
-    </div>
-    <div class="footer-col" id="footer-contact">
-      <h4>Contact Us</h4>
-      <p>123 AI Street, Tech City, 12345</p>
-      <div class="footer-social">
-        <a href="#" title="Facebook"><span class="footer-icon">📘</span></a>
-        <a href="#" title="Twitter"><span class="footer-icon">🐦</span></a>
-        <a href="#" title="Instagram"><span class="footer-icon">📸</span></a>
-        <a href="#" title="LinkedIn"><span class="footer-icon">💼</span></a>
-      </div>
-    </div>
-  </div>
-</footer>
