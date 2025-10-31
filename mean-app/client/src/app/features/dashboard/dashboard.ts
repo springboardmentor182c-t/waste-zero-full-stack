@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 
 // standalone components
 import { OpportunitiesComponent } from '../opportunities/opportunities.component';
@@ -113,7 +112,7 @@ export interface Report {
 @Component({
   selector: 'dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, OpportunitiesComponent, RouterLink, RouterLinkActive,OpportunityDetailComponent, OpportunityFormComponent],
+  imports: [CommonModule, HttpClientModule, FormsModule, OpportunitiesComponent, OpportunityDetailComponent, OpportunityFormComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -744,24 +743,22 @@ export class Dashboard implements OnInit {
       items: this.pickupRequest.wasteTypes.join(', ')
     };
 
-    console.log('Sending pickup data:', pickupData);
-    console.log('Headers:', this.getAuthHeaders());
-
     this.isLoading = true;
     this.errorMessage = '';
     this.http.post<{message: string, pickup: PickupHistory}>(`${this.pickupApiUrl}/schedule`, pickupData, { headers: this.getAuthHeaders() }).subscribe({
       next: (response) => {
-        console.log('Pickup created response:', response);
-        console.log('Pickup object:', response.pickup);
-        this.successMessage = response.message || 'Pickup scheduled successfully!';
+        this.successMessage = 'Pickup is scheduled successfully';
         this.resetPickupForm();
         this.loadPickupHistory();
         this.isLoading = false;
-        setTimeout(() => this.successMessage = '', 3000);
+        
+        // Redirect to history tab after short delay
+        setTimeout(() => {
+          this.setPickupTab('history');
+          this.successMessage = '';
+        }, 2000);
       },
       error: (error) => {
-        console.error('Error scheduling pickup:', error);
-        console.error('Error details:', error.error);
         this.errorMessage = error.error?.message || 'Failed to schedule pickup. Please check your connection and try again.';
         this.isLoading = false;
       }
@@ -1176,12 +1173,14 @@ export class Dashboard implements OnInit {
 
   cancelPickup(pickup: PickupHistory) {
     if (pickup.status === 'Completed') {
-      alert('Cannot cancel completed pickup');
+      this.errorMessage = 'Cannot cancel completed pickup';
+      setTimeout(() => this.errorMessage = '', 2000);
       return;
     }
     
     if (pickup.status === 'Cancelled') {
-      alert('Pickup is already cancelled');
+      this.errorMessage = 'Pickup is already cancelled';
+      setTimeout(() => this.errorMessage = '', 2000);
       return;
     }
 
@@ -1199,19 +1198,58 @@ export class Dashboard implements OnInit {
     ).subscribe({
       next: (response) => {
         if (response.success) {
-          this.successMessage = response.message || 'Pickup cancelled successfully!';
+          this.successMessage = 'Cancelled successfully';
           this.loadPickupHistory();
           this.isLoading = false;
-          setTimeout(() => this.successMessage = '', 3000);
+          setTimeout(() => this.successMessage = '', 2000);
         } else {
           this.errorMessage = 'Failed to cancel pickup.';
           this.isLoading = false;
+          setTimeout(() => this.errorMessage = '', 2000);
         }
       },
       error: (error) => {
-        console.error('Error cancelling pickup:', error);
         this.errorMessage = error.error?.message || 'Failed to cancel pickup. Please try again.';
         this.isLoading = false;
+        setTimeout(() => this.errorMessage = '', 2000);
+      }
+    });
+  }
+
+  deletePickup(pickup: PickupHistory) {
+    if (pickup.status === 'Completed') {
+      this.errorMessage = 'Cannot delete completed pickup';
+      setTimeout(() => this.errorMessage = '', 2000);
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete this pickup scheduled for ${this.formatDate(pickup.pickupDate)}?`)) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.http.delete<{success: boolean, message: string}>(
+      `${this.pickupApiUrl}/${pickup._id}`,
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.successMessage = 'Deleted successfully';
+          this.loadPickupHistory();
+          this.isLoading = false;
+          setTimeout(() => this.successMessage = '', 2000);
+        } else {
+          this.errorMessage = response.message || 'Failed to delete pickup.';
+          this.isLoading = false;
+          setTimeout(() => this.errorMessage = '', 2000);
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.error?.message || 'Failed to delete pickup. Please try again.';
+        this.isLoading = false;
+        setTimeout(() => this.errorMessage = '', 2000);
       }
     });
   }
