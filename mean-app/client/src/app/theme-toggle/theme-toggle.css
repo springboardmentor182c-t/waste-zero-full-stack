@@ -1,0 +1,17 @@
+.theme-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #aaa;
+  z-index: 1000;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: #ccc;
+  transform: scale(1.1);
+}
