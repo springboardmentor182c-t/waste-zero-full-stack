@@ -7,6 +7,8 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import http from "http";
 import { Server } from "socket.io";
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
 
 import authRoutes from "./src/api/modules/user/user.routes.js";
 import opportunityRoutes from "./src/api/modules/opportunity/opportunity.routes.js";
@@ -19,6 +21,42 @@ import pickupRoutes from "./src/api/modules/pickup/pickup.routes.js"; // <-- Pic
 
 dotenv.config();
 const app = express();
+
+// Swagger Configuration
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Waste Zero API Documentation',
+      version: '1.0.0',
+      description: 'Documentation for the Waste Zero application API',
+    },
+    servers: [
+      {
+        url: 'http://localhost:5000',
+        description: 'Development server',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+  },
+  apis: [
+    './src/api/modules/**/*.js',  // Path to the API routes
+    './server.js',                // Main server file
+  ],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Expose raw OpenAPI JSON for debugging (visit /api-docs.json)
+app.get('/api-docs.json', (req, res) => res.json(swaggerSpec));
 
 // -------------------- MIDDLEWARES --------------------
 app.use(express.json());
@@ -37,20 +75,27 @@ app.use("/api/", limiter);
 // User routes
 app.use("/api/v1", authRoutes);
 
-// Health Check
-app.get("/api/v1/health", (req, res) => {
-  res.json({ status: "ok", uptime: process.uptime() });
-});
-const client = new MongoClient(process.env.DB_URI);
+// ---------- DATABASE (optional) ----------
+
+const dbUri = process.env.DB_URI;
 let db;
-client.connect()
-  .then(() => {
-    db = client.db("atlas"); // use your DB name here
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
+if (dbUri) {
+  try {
+    const client = new MongoClient(dbUri);
+    client.connect()
+      .then(() => {
+        db = client.db("atlas"); // use your DB name here
+        console.log("Connected to MongoDB");
+      })
+      .catch((error) => {
+        console.error("Error connecting to MongoDB:", error);
+      });
+  } catch (err) {
+    console.error('MongoClient creation failed:', err);
+  }
+} else {
+  console.warn('DB_URI is not set. Skipping MongoDB client connection. Set DB_URI in .env to enable DB.');
+}
 
 // Register opportunity routes
 
@@ -70,10 +115,16 @@ app.use("/api/v1/dashboard", dashboardRoutes);
 app.use(errorHandler);
 
 // -------------------- DATABASE CONNECTION --------------------
-mongoose
-  .connect(process.env.DB_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ DB Connection Error:", err));
+// Only connect mongoose if DB_URI is present to avoid startup failure when
+// the environment variable is missing.
+if (process.env.DB_URI) {
+  mongoose
+    .connect(process.env.DB_URI)
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch((err) => console.error("❌ DB Connection Error:", err));
+} else {
+  console.warn('DB_URI is not set. Skipping mongoose.connect.');
+}
 
 app.use("/api/v1/admin", adminPanelRoutes);
 
