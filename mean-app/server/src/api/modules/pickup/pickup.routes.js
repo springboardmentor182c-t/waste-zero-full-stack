@@ -1,5 +1,5 @@
 import express from "express";
-import { createPickup, getUserPickups, getAllPickups, getPickupById, cancelPickup } from "./Pickup.controller.js";
+import { createPickup, getUserPickups, getAllPickups, getPickupById, cancelPickup, deletePickup } from "./Pickup.controller.js";
 import auth from "../../../api/middleware/auth.js";
 
 const router = express.Router();
@@ -15,6 +15,9 @@ router.get("/all", auth, getAllPickups);
 
 // Cancel pickup - Must be before /:id to avoid conflicts - requires auth
 router.put("/cancel/:id", auth, cancelPickup);
+
+// Delete pickup - permanent removal (requires auth)
+router.delete("/:id", auth, deletePickup);
 
 // Get pickup by ID - Keep this last to avoid route conflicts
 router.get("/:id", getPickupById);
