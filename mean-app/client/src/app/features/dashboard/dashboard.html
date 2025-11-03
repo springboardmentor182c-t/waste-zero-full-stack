@@ -176,7 +176,6 @@
         <p>Loading dashboard data...</p>
       </div>
     </section>
-
     <!-- Messages Section -->
     <section *ngIf="activeMenu === 'messages'" class="messages-section">
       <div class="messages-header">
@@ -322,7 +321,6 @@
         </div>
       </div>
     </section>
-
     <!-- Schedule Pickup Section -->
     <section *ngIf="activeMenu === 'schedule'" class="schedule-section">
       <div class="schedule-header">
@@ -464,7 +462,17 @@
 
     <!-- Other sections (impact, settings, support) -->
     <section *ngIf="activeMenu === 'impact'" [innerHTML]="pages[activeMenu]"></section>
-    <section *ngIf="activeMenu === 'settings'" [innerHTML]="pages[activeMenu]"></section>
+
+    <!-- Simplified Settings Section (removed dummy controls) -->
+    <section *ngIf="activeMenu === 'settings'" class="settings-section">
+      <div class="settings-form">
+        <h1>Settings</h1>
+        <h3>Theme</h3>
+        <p>Toggle the application theme (light / dark)</p>
+        <button class="btn-primary" (click)="toggleTheme()">Toggle Theme</button>
+      </div>
+    </section>
+
     <section *ngIf="activeMenu === 'support'" [innerHTML]="pages[activeMenu]"></section>
     <!-- Opportunities container (embedded components) -->
     <section *ngIf="activeMenu === 'opportunities'">
@@ -551,34 +559,6 @@
 
       </div>
 
-    </section>
-
-
-    <section *ngIf="activeMenu === 'settings'" class="settings-section">
-      <div class="settings-form">
-        <h1>Settings</h1>
-        <h3>General</h3>
-        <label><input type="checkbox" id="notifToggle"> Enable Notifications</label>
-        <label>Language
-          <select id="languageSelect">
-            <option>English</option>
-            <option>Spanish</option>
-            <option>French</option>
-            <option>German</option>
-          </select>
-        </label>
-        <h3>Privacy</h3>
-        <label><input type="checkbox" id="profileVisibility"> Make Profile Public</label>
-        <h3>Theme</h3>
-        <select id="themeOption">
-          <option>Light</option>
-          <option>Dark</option>
-          <option>Auto</option>
-        </select>
-        <h3>Data Preferences</h3>
-        <button id="downloadData">Download My Data</button>
-        <button id="clearCache">Clear Cache</button>
-      </div>
     </section>
 
     <!-- Admin Panel Section -->
@@ -877,4 +857,47 @@
       </div>
     </div>
   </main>
+</div>
+<footer class="page-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-about">
+      <h4>About Us</h4>
+      <p>
+        WasteZero is a smart waste management platform that connects volunteers, NGOs, and local administration to
+        streamline waste collection and promote sustainable recycling practices. Together, we're building cleaner
+        communities through intelligent pickup scheduling and comprehensive waste management solutions.
+      </p>
+    </div>
+    <div class="footer-col" id="footer-services">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Smart Pickup Scheduling</a></li>
+        <li><a href="#">Community Recycling</a></li>
+        <li><a href="#">Volunteer Coordination</a></li>
+        <li><a href="#">Waste Analytics</a></li>
+        <li><a href="#">NGO Partnerships</a></li>
+      </ul>
+    </div>
+    <div class="footer-col" id="footer-contact">
+      <h4>Contact Us</h4>
+      <p>123 AI Street, Tech City, 12345</p>
+      <div class="footer-social">
+        <a href="#" title="Facebook"><span class="footer-icon">📘</span></a>
+        <a href="#" title="Twitter"><span class="footer-icon">🐦</span></a>
+        <a href="#" title="Instagram"><span class="footer-icon">📸</span></a>
+        <a href="#" title="LinkedIn"><span class="footer-icon">💼</span></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </div>

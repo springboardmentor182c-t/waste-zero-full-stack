@@ -1,6 +1,6 @@
 <div class="opportunity-detail-layout" *ngIf="!loading; else loadingTpl">
   <div *ngIf="opportunity; else notFound">
-    <div class="opportunity-detail-main">
+    <div class="opportunity-detail-main">  
       <a class="back-link" (click)="goBack()">&larr; Back to Opportunities</a>
       <h1>{{ opportunity.title }}</h1>
       <span class="subtitle">Volunteer opportunity details</span>
