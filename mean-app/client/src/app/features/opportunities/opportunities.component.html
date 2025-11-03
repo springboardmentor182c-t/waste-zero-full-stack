@@ -19,17 +19,18 @@
     <ng-container *ngIf="filteredOpportunities.length > 0; else emptyState">
       <div *ngFor="let opp of filteredOpportunities" class="opportunity-card">
         <h3>{{ opp.title }}</h3>
+
         <div class="opportunity-meta">
-          <span class="opp-status"><strong>Status:</strong> {{ opp.status }}</span>
+          <span><strong>Status:</strong> {{ opp.status }}</span>
           <span><strong>ID:</strong> {{ opp._id || opp.id }}</span>
         </div>
+
         <p><strong>Description:</strong> {{ opp.description }}</p>
-        <p><strong>Required Skills:</strong> {{ (opp.required_skills || []).join(', ') }}</p>
-        <p><strong>Duration:</strong> {{ opp.duration }}</p>
+        <p><strong>Skills:</strong> {{ (opp.required_skills || []).join(', ') }}</p>
         <p><strong>Location:</strong> {{ opp.location }}</p>
 
         <div class="action-row">
-          <button class="btn btn-view" (click)="onView((opp._id || opp.id)?.toString())">
+          <button class="btn-view" (click)="onView((opp._id || opp.id)?.toString())">
             👁 View
           </button>
         </div>
@@ -38,16 +39,16 @@
 
     <ng-template #emptyState>
       <div class="empty-state">
-        <p>No opportunities found matching your criteria.</p>
-        <small class="text-muted">Check back later for new opportunities.</small>
+        <p>No opportunities found.</p>
       </div>
     </ng-template>
   </div>
+
   <app-confirm-modal
     [title]="'Delete Opportunity'"
     [message]="'Are you sure you want to delete this opportunity?'"
     [(visible)]="showConfirmModal"
     (onConfirm)="confirmDelete()"
     (onCancel)="cancelDelete()"
-></app-confirm-modal>
+  ></app-confirm-modal>
 </div>
